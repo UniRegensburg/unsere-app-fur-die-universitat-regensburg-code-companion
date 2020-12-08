@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/CodeCompanion.iml" filepath="$PROJECT_DIR$/.idea/CodeCompanion.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/WebRTCApp.iml" filepath="$PROJECT_DIR$/.idea/modules/WebRTCApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/WebRTCApp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/WebRTCApp.app.iml" />
     </modules>
   </component>
 </project>
