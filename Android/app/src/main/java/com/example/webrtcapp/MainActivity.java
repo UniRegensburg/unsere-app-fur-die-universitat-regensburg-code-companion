@@ -1,5 +1,6 @@
 package com.example.webrtcapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView state;
     private TextView lastMessage;
     private Button send;
+    private Button qr;
     private EditText input;
 
     private PeerConnection peerConnection;
@@ -61,12 +67,29 @@ public class MainActivity extends AppCompatActivity {
         lastMessage = findViewById(R.id.message);
         send = findViewById(R.id.send);
         input = findViewById(R.id.input);
+        qr = findViewById(R.id.qr);
 
        send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 sendData(input.getText().toString());
             }
         });
+
+        qr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+                integrator.setPrompt("Scan");
+                integrator.setCameraId(0);
+                integrator.setOrientationLocked(true);
+                integrator.setBeepEnabled(false);
+                integrator.setBarcodeImageEnabled(false);
+                integrator.initiateScan();
+            }
+        });
+
         PeerConnectionFactory.InitializationOptions initializationOptions =  PeerConnectionFactory.InitializationOptions.builder(this)
                 .createInitializationOptions();
         PeerConnectionFactory.initialize(initializationOptions);
@@ -140,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
         start();
     }
 
@@ -263,12 +285,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendData(final String data) {
-
         ByteBuffer buffer = ByteBuffer.wrap(data.getBytes());
         dc.send(new DataChannel.Buffer(buffer, false));
-
-
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Log.d("Scan", "Cancelled scan");
+            } else {
+                Log.d("Scan", "Scanned: " + result.getContents());
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 
 }

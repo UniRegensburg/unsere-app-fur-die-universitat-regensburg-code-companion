@@ -49,4 +49,10 @@
         android:ems="10"
         android:inputType="text" />
 
+    <Button
+        android:id="@+id/qr"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:text="Scan QR" />
+
 </LinearLayout>
