@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 .createPeerConnectionFactory();
         List<PeerConnection.IceServer> iceServers = new ArrayList<>();
         iceServers.add(PeerConnection.IceServer.builder("stun:stun2.1.google.com:19302").createIceServer());
+        iceServers.add(PeerConnection.IceServer.builder("turn:nrg-esport.de:3478").setUsername("codeCompanion").setPassword("codeCompanion2020").createIceServer());
         PeerConnection.RTCConfiguration rtcConfig =   new PeerConnection.RTCConfiguration(iceServers);
         constraints = new MediaConstraints();
 
