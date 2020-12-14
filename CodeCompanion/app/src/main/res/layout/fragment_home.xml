@@ -14,16 +14,36 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp">
 
-        <View
-            android:id="@+id/view2"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="421dp" />
+            android:layout_height="404dp"
+            android:layout_margin="@dimen/margin"
+            android:background="@drawable/color_gradient"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="212dp"
+                android:layout_height="220dp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:background="@drawable/user_icon_big" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button4"
+                android:layout_width="143dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:background="@drawable/small_button"
+                android:text="View" />
+        </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/connect_button"
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_size"
-            android:layout_margin="8dp"
+            android:layout_margin="16dp"
             android:layout_marginEnd="0dp"
             android:background="@drawable/button"
             android:text="Connect" />
@@ -36,25 +56,25 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/compiler_button"
-                android:layout_width="wrap_content"
-                android:layout_height="125dp"
-                android:layout_margin="8dp"
+                android:layout_width="@dimen/small_button_size"
+                android:layout_height="@dimen/small_button_size"
+                android:layout_margin="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/button" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/tasks_button"
-                android:layout_width="wrap_content"
-                android:layout_height="125dp"
-                android:layout_margin="8dp"
+                android:layout_width="@dimen/small_button_size"
+                android:layout_height="@dimen/small_button_size"
+                android:layout_margin="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/button" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/settings_button"
-                android:layout_width="wrap_content"
-                android:layout_height="125dp"
-                android:layout_margin="8dp"
+                android:layout_width="@dimen/small_button_size"
+                android:layout_height="@dimen/small_button_size"
+                android:layout_margin="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/button" />
         </LinearLayout>
