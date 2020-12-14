@@ -4,13 +4,13 @@ com/example/codecompanion/BuildConfig.java
  com.example.codecompanion.BuildConfig
 com/example/codecompanion/ui/home/HomeFragment.java
  com.example.codecompanion.ui.home.HomeFragment
-com/example/codecompanion/MainActivity.java
- com.example.codecompanion.MainActivity
+com/example/codecompanion/ui/compiler/CompilerFragment.java
+ com.example.codecompanion.ui.compiler.CompilerFragment
 com/example/codecompanion/ui/compiler/CompilerViewModel.java
  com.example.codecompanion.ui.compiler.CompilerViewModel
 com/example/codecompanion/ui/tasks/TasksFragment.java
  com.example.codecompanion.ui.tasks.TasksFragment
 com/example/codecompanion/ui/tasks/TasksViewModel.java
  com.example.codecompanion.ui.tasks.TasksViewModel
-com/example/codecompanion/ui/compiler/CompilerFragment.java
- com.example.codecompanion.ui.compiler.CompilerFragment
+com/example/codecompanion/MainActivity.java
+ com.example.codecompanion.MainActivity

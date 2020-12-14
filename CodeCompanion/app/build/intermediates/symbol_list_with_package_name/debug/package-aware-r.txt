@@ -1699,6 +1699,7 @@ id action_bar_title
 id action_container
 id action_context_bar
 id action_divider
+id action_favorite
 id action_image
 id action_menu_divider
 id action_menu_presenter
@@ -2169,6 +2170,7 @@ layout text_view_with_line_height_from_style
 layout text_view_with_theme_line_height
 layout text_view_without_line_height
 menu activity_main_drawer
+menu toolbar_connection_state
 mipmap ic_launcher
 mipmap ic_launcher_round
 navigation mobile_navigation
