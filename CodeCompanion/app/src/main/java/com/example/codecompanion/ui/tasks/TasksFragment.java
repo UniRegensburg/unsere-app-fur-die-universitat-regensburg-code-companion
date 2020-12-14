@@ -23,13 +23,6 @@ public class TasksFragment extends Fragment {
         tasksViewModel =
                 new ViewModelProvider(this).get(TasksViewModel.class);
         View root = inflater.inflate(R.layout.fragment_tasks, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        tasksViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
         return root;
     }
 }

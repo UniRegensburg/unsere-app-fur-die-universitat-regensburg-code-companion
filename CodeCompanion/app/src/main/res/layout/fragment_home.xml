@@ -27,7 +27,7 @@
                 android:layout_height="220dp"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
-                android:background="@drawable/user_icon_big" />
+                android:background="@drawable/user_icon_img" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button4"
@@ -35,8 +35,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
-                android:background="@drawable/small_button"
-                android:text="View" />
+                android:background="@drawable/button_small"
+                android:text="View"
+                android:textColor="@color/white" />
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -45,8 +46,10 @@
             android:layout_height="@dimen/button_size"
             android:layout_margin="16dp"
             android:layout_marginEnd="0dp"
-            android:background="@drawable/button"
-            android:text="Connect" />
+            android:background="@drawable/button_middle"
+            android:backgroundTint="@color/green"
+            android:text="Connect"
+            android:textColor="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,7 +63,9 @@
                 android:layout_height="@dimen/small_button_size"
                 android:layout_margin="16dp"
                 android:layout_weight="1"
-                android:background="@drawable/button" />
+                android:background="@drawable/button_middle"
+                android:text="@string/menu_compiler"
+                android:textColor="@color/white" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/tasks_button"
@@ -68,7 +73,9 @@
                 android:layout_height="@dimen/small_button_size"
                 android:layout_margin="16dp"
                 android:layout_weight="1"
-                android:background="@drawable/button" />
+                android:background="@drawable/button_middle"
+                android:text="@string/menu_tasks"
+                android:textColor="@color/white" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/settings_button"
@@ -76,7 +83,9 @@
                 android:layout_height="@dimen/small_button_size"
                 android:layout_margin="16dp"
                 android:layout_weight="1"
-                android:background="@drawable/button" />
+                android:background="@drawable/button_middle"
+                android:text="@string/menu_settings"
+                android:textColor="@color/white" />
         </LinearLayout>
 
     </LinearLayout>
