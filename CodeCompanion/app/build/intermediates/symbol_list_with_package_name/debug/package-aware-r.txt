@@ -1741,6 +1741,7 @@ id auto
 id autoComplete
 id autoCompleteToEnd
 id autoCompleteToStart
+id background_view
 id barrier
 id baseline
 id beginOnFirstDraw
@@ -1748,7 +1749,6 @@ id beginning
 id blocking
 id bottom
 id bounce
-id button4
 id buttonPanel
 id cache_measures
 id cancel_button
@@ -2046,7 +2046,8 @@ id uniform
 id unlabeled
 id up
 id useLogo
-id view
+id user_icon
+id view_button
 id view_offset_helper
 id visible
 id visible_removing_fragment_view_tag

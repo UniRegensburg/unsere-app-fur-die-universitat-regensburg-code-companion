@@ -7,86 +7,101 @@
     android:background="@color/dark_grey"
     tools:context=".ui.home.HomeFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp">
+    <View
+        android:id="@+id/background_view"
+        android:layout_width="0dp"
+        android:layout_height="448dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/color_gradient"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="404dp"
-            android:layout_margin="@dimen/margin"
-            android:background="@drawable/color_gradient"
-            android:orientation="vertical">
+    <View
+        android:id="@+id/user_icon"
+        android:layout_width="212dp"
+        android:layout_height="220dp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin"
+        android:background="@drawable/user_icon_img"
+        app:layout_constraintBottom_toBottomOf="@+id/background_view"
+        app:layout_constraintEnd_toEndOf="@+id/background_view"
+        app:layout_constraintStart_toStartOf="@+id/background_view"
+        app:layout_constraintTop_toTopOf="@+id/background_view"
+        app:layout_constraintVertical_bias="0.26" />
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="212dp"
-                android:layout_height="220dp"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/margin"
-                android:background="@drawable/user_icon_img" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/view_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="120dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_small"
+        android:text="View"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/background_view"
+        app:layout_constraintEnd_toEndOf="@+id/background_view"
+        app:layout_constraintStart_toStartOf="@+id/background_view" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button4"
-                android:layout_width="143dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/margin"
-                android:background="@drawable/button_small"
-                android:text="View"
-                android:textColor="@color/white" />
-        </LinearLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/connect_button"
+        android:layout_width="0dp"
+        android:layout_height="71dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_middle"
+        android:backgroundTint="@color/green"
+        android:text="Connect"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/background_view" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/connect_button"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_size"
-            android:layout_margin="16dp"
-            android:layout_marginEnd="0dp"
-            android:background="@drawable/button_middle"
-            android:backgroundTint="@color/green"
-            android:text="Connect"
-            android:textColor="@color/white" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/tasks_button"
+        android:layout_width="0dp"
+        android:layout_height="121dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_middle"
+        android:text="@string/menu_tasks"
+        android:textColor="@color/white"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/settings_button"
+        app:layout_constraintStart_toEndOf="@+id/compiler_button"
+        app:layout_constraintTop_toBottomOf="@+id/connect_button" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/compiler_button"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_middle"
+        android:text="@string/menu_compiler"
+        android:textColor="@color/white"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connect_button" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/compiler_button"
-                android:layout_width="@dimen/small_button_size"
-                android:layout_height="@dimen/small_button_size"
-                android:layout_margin="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_middle"
-                android:text="@string/menu_compiler"
-                android:textColor="@color/white" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/settings_button"
+        android:layout_width="0dp"
+        android:layout_height="116dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_middle"
+        android:text="@string/menu_settings"
+        android:textColor="@color/white"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connect_button" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/tasks_button"
-                android:layout_width="@dimen/small_button_size"
-                android:layout_height="@dimen/small_button_size"
-                android:layout_margin="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_middle"
-                android:text="@string/menu_tasks"
-                android:textColor="@color/white" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/settings_button"
-                android:layout_width="@dimen/small_button_size"
-                android:layout_height="@dimen/small_button_size"
-                android:layout_margin="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_middle"
-                android:text="@string/menu_settings"
-                android:textColor="@color/white" />
-        </LinearLayout>
-
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
