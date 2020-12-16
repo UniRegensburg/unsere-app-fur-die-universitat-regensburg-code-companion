@@ -120,7 +120,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/button_middle"
         android:backgroundTint="@color/green"
-        android:text="Connect"
+        android:text="@string/connect"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/tasks_button"
         app:layout_constraintEnd_toEndOf="parent"
