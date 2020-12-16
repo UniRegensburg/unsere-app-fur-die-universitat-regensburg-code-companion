@@ -1,13 +1,7 @@
-#Wed Dec 16 14:57:35 CET 2020
-path.3=classes.dex
-path.2=classes.dex
+#Wed Dec 16 18:14:34 CET 2020
+base.0=C\:\\Users\\schil\\OneDrive\\Dokumente\\Github\\unsere-app-fur-die-universitat-regensburg-code-companion\\CodeCompanion\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 path.1=classes.dex
-path.0=classes.dex
-renamed.3=classes4.dex
-renamed.2=classes3.dex
 renamed.1=classes2.dex
+path.0=classes.dex
 renamed.0=classes.dex
-base.3=C\:\\Users\\schil\\OneDrive\\Dokumente\\Github\\unsere-app-fur-die-universitat-regensburg-code-companion\\CodeCompanion\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\classes.dex
-base.2=C\:\\Users\\schil\\OneDrive\\Dokumente\\Github\\unsere-app-fur-die-universitat-regensburg-code-companion\\CodeCompanion\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
-base.1=C\:\\Users\\Maxim\\Documents\\GitHub\\unsere-app-fur-die-universitat-regensburg-code-companion\\CodeCompanion\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\classes.dex
-base.0=C\:\\Users\\Maxim\\Documents\\GitHub\\unsere-app-fur-die-universitat-regensburg-code-companion\\CodeCompanion\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
+base.1=C\:\\Users\\schil\\OneDrive\\Dokumente\\Github\\unsere-app-fur-die-universitat-regensburg-code-companion\\CodeCompanion\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\classes.dex

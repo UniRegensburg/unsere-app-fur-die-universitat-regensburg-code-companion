@@ -61,7 +61,7 @@
 33-->[com.journeyapps:zxing-android-embedded:3.2.0] C:\Users\schil\.gradle\caches\transforms-2\files-2.1\9dac21824fb34bc9f0506fa53cca09d2\jetified-zxing-android-embedded-3.2.0\AndroidManifest.xml:43:9-33
 34
 35    <application
-35-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:10:5-32:19
+35-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:10:5-34:19
 36        android:allowBackup="true"
 36-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:11:9-35
 37        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -81,38 +81,42 @@
 45        android:usesCleartextTraffic="true" >
 45-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:16:9-44
 46        <activity
-46-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:18:9-27:20
+46-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:18:9-29:20
 47            android:name="com.example.codecompanion.MainActivity"
 47-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:19:13-41
-48            android:label="@string/app_name"
-48-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:20:13-45
-49            android:theme="@style/Theme.CodeCompanion.NoActionBar" >
-49-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:21:13-67
-50            <intent-filter>
-50-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:22:13-26:29
-51                <action android:name="android.intent.action.MAIN" />
-51-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:23:17-69
-51-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:23:25-66
-52
-53                <category android:name="android.intent.category.LAUNCHER" />
-53-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:25:17-77
-53-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:25:27-74
-54            </intent-filter>
-55        </activity>
-56        <activity
-56-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:28:9-31:49
-57            android:name="com.journeyapps.barcodescanner.CaptureActivity"
-57-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:29:13-74
-58            android:clearTaskOnLaunch="true"
-58-->[com.journeyapps:zxing-android-embedded:3.2.0] C:\Users\schil\.gradle\caches\transforms-2\files-2.1\9dac21824fb34bc9f0506fa53cca09d2\jetified-zxing-android-embedded-3.2.0\AndroidManifest.xml:48:13-45
-59            android:screenOrientation="fullSensor"
-59-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:30:13-51
-60            android:stateNotNeeded="true"
-60-->[com.journeyapps:zxing-android-embedded:3.2.0] C:\Users\schil\.gradle\caches\transforms-2\files-2.1\9dac21824fb34bc9f0506fa53cca09d2\jetified-zxing-android-embedded-3.2.0\AndroidManifest.xml:50:13-42
-61            android:theme="@style/zxing_CaptureTheme"
-61-->[com.journeyapps:zxing-android-embedded:3.2.0] C:\Users\schil\.gradle\caches\transforms-2\files-2.1\9dac21824fb34bc9f0506fa53cca09d2\jetified-zxing-android-embedded-3.2.0\AndroidManifest.xml:51:13-54
-62            android:windowSoftInputMode="stateAlwaysHidden" />
-62-->[com.journeyapps:zxing-android-embedded:3.2.0] C:\Users\schil\.gradle\caches\transforms-2\files-2.1\9dac21824fb34bc9f0506fa53cca09d2\jetified-zxing-android-embedded-3.2.0\AndroidManifest.xml:52:13-60
-63    </application>
-64
-65</manifest>
+48            android:configChanges="orientation"
+48-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:22:13-48
+49            android:label="@string/app_name"
+49-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:20:13-45
+50            android:screenOrientation="portrait"
+50-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:23:13-49
+51            android:theme="@style/Theme.CodeCompanion.NoActionBar" >
+51-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:21:13-67
+52            <intent-filter>
+52-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:24:13-28:29
+53                <action android:name="android.intent.action.MAIN" />
+53-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:25:17-69
+53-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:25:25-66
+54
+55                <category android:name="android.intent.category.LAUNCHER" />
+55-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:27:17-77
+55-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:27:27-74
+56            </intent-filter>
+57        </activity>
+58        <activity
+58-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:30:9-33:49
+59            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+59-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:31:13-74
+60            android:clearTaskOnLaunch="true"
+60-->[com.journeyapps:zxing-android-embedded:3.2.0] C:\Users\schil\.gradle\caches\transforms-2\files-2.1\9dac21824fb34bc9f0506fa53cca09d2\jetified-zxing-android-embedded-3.2.0\AndroidManifest.xml:48:13-45
+61            android:screenOrientation="fullSensor"
+61-->C:\Users\schil\OneDrive\Dokumente\Github\unsere-app-fur-die-universitat-regensburg-code-companion\CodeCompanion\app\src\main\AndroidManifest.xml:32:13-51
+62            android:stateNotNeeded="true"
+62-->[com.journeyapps:zxing-android-embedded:3.2.0] C:\Users\schil\.gradle\caches\transforms-2\files-2.1\9dac21824fb34bc9f0506fa53cca09d2\jetified-zxing-android-embedded-3.2.0\AndroidManifest.xml:50:13-42
+63            android:theme="@style/zxing_CaptureTheme"
+63-->[com.journeyapps:zxing-android-embedded:3.2.0] C:\Users\schil\.gradle\caches\transforms-2\files-2.1\9dac21824fb34bc9f0506fa53cca09d2\jetified-zxing-android-embedded-3.2.0\AndroidManifest.xml:51:13-54
+64            android:windowSoftInputMode="stateAlwaysHidden" />
+64-->[com.journeyapps:zxing-android-embedded:3.2.0] C:\Users\schil\.gradle\caches\transforms-2\files-2.1\9dac21824fb34bc9f0506fa53cca09d2\jetified-zxing-android-embedded-3.2.0\AndroidManifest.xml:52:13-60
+65    </application>
+66
+67</manifest>
