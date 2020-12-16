@@ -1,6 +1,0 @@
-QRCodeGenerator.java
- QRCodeGenerator
-WebRTCConnector.java
- WebRTCConnector
-QRPopupAction.java
- QRPopupAction
