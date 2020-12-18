@@ -5,8 +5,8 @@
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
         android:id="@+id/action_favorite"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/ic_baseline_phonelink_not_connected"
         android:title="@string/connection"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
 </menu>

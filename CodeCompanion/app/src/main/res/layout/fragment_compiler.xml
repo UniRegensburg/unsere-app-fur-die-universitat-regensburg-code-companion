@@ -9,8 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dark_grey"
+        android:background="@color/ios_dark_grey"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="88dp"
-        tools:layout_editor_absoluteY="116dp"></LinearLayout>
+        tools:layout_editor_absoluteY="116dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
