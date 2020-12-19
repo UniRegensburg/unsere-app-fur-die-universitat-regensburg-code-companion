@@ -23,43 +23,41 @@
         <View
             android:id="@+id/background_view"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/button_middle"
+            app:layout_constraintBottom_toTopOf="@+id/background_view3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/background_view3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/button_middle"
+            app:layout_constraintBottom_toTopOf="@+id/background_view4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/background_view" />
+
+        <View
+            android:id="@+id/background_view4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/button_middle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <View
-            android:id="@+id/user_icon"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/margin"
-            android:background="@drawable/user_icon_img"
-            app:layout_constraintBottom_toTopOf="@+id/view_button"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="@+id/background_view"
-            app:layout_constraintStart_toStartOf="@+id/background_view"
-            app:layout_constraintTop_toTopOf="@+id/background_view" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/view_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="120dp"
-            android:layout_marginEnd="120dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/button_small"
-            android:text="View"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/background_view"
-            app:layout_constraintEnd_toEndOf="@+id/background_view"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/background_view" />
+            app:layout_constraintTop_toBottomOf="@+id/background_view3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
