@@ -3,7 +3,6 @@ import dev.onvoid.webrtc.*;
 import dev.onvoid.webrtc.PeerConnectionFactory;
 import dev.onvoid.webrtc.RTCDataChannel;
 import dev.onvoid.webrtc.RTCPeerConnection;
-import dev.onvoid.webrtc.CreateSessionDescriptionObserver;
 
 
 import io.socket.client.IO;
