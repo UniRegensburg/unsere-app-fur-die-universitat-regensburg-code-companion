@@ -16,12 +16,8 @@ import com.example.codecompanion.R;
 
 public class CompilerFragment extends Fragment {
 
-    private CompilerViewModel compilerViewModel;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        compilerViewModel =
-                new ViewModelProvider(this).get(CompilerViewModel.class);
         View root = inflater.inflate(R.layout.fragment_compiler, container, false);
         return root;
     }

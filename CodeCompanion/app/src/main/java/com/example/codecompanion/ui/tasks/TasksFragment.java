@@ -16,12 +16,8 @@ import com.example.codecompanion.R;
 
 public class TasksFragment extends Fragment {
 
-    private TasksViewModel tasksViewModel;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        tasksViewModel =
-                new ViewModelProvider(this).get(TasksViewModel.class);
         View root = inflater.inflate(R.layout.fragment_tasks, container, false);
         return root;
     }
