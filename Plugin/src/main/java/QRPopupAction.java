@@ -22,6 +22,7 @@ public class QRPopupAction extends AnAction {
     private JMenuBar menuBar;
     private QRCodeGenerator qrGenerator;
     private int qrDimensions = 500;
+    private WebRTC webRTC;
 
     /**
      * Default method of intellij plugins
@@ -41,6 +42,8 @@ public class QRPopupAction extends AnAction {
         currentProject = event.getProject();
         qrGenerator = new QRCodeGenerator();
         menuBar = WindowManager.getInstance().getFrame(currentProject).getJMenuBar();
+        webRTC = new WebRTC();
+
 
 
         try {
