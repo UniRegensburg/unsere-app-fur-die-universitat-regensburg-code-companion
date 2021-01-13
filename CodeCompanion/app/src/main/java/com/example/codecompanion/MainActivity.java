@@ -48,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Scan", "Cancelled scan");
             } else {
                 Log.d("Scan", "Scanned: " + result.getContents());
-                webRTC.init(this);
+                String id = result.getContents();
+                webRTC.init(this,id);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

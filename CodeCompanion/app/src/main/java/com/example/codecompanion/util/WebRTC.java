@@ -41,8 +41,10 @@ public class WebRTC {
     private DataChannel dc;
     private MediaConstraints constraints;
     private DataChannel.Observer dcO;
+    private String id;
 
-    public void init(Context context){
+    public void init(Context context, String id){
+        this.id = id;
         PeerConnectionFactory.InitializationOptions initializationOptions =  PeerConnectionFactory.InitializationOptions.builder(context)
                 .createInitializationOptions();
         PeerConnectionFactory.initialize(initializationOptions);
@@ -119,7 +121,7 @@ public class WebRTC {
             socket = IO.socket("http://nrg-esport.de:3000/");
             socket.on(EVENT_CONNECT, args -> {
                 Log.d(TAG, "connectToSignallingServer: connect");
-                socket.emit("create or join", "foo");
+                socket.emit("create or join", id);
             }).on("created", args -> {
                 Log.d(TAG, "connectToSignallingServer: created");
                 isInitiator = true;
