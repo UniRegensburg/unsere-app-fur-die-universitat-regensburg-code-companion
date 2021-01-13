@@ -24,10 +24,11 @@ public class WebRTC {
     private RTCDataChannel dc;
     private RTCDataChannelObserver dcO;
     private boolean isInitiator;
+    private String id;
 
-    public void init(){
+    public void init(String id){
+        this.id = id;
         executor = Executors.newFixedThreadPool(1);
-
         RTCIceServer iceServer1 = new RTCIceServer();
         iceServer1.urls.add("stun:stun.l.google.com:19302");
 
@@ -106,7 +107,7 @@ public class WebRTC {
             socket = IO.socket("http://nrg-esport.de:3000/");
             socket.on(EVENT_CONNECT, args -> {
                 System.out.println("Connected to Signalling");
-                socket.emit("create or join", "foo");
+                socket.emit("create or join", id);
             }).on("created", args -> {
                 System.out.println("Room created");
                 isInitiator = true;

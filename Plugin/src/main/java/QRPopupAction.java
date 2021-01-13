@@ -42,12 +42,14 @@ public class QRPopupAction extends AnAction {
         currentProject = event.getProject();
         qrGenerator = new QRCodeGenerator();
         menuBar = WindowManager.getInstance().getFrame(currentProject).getJMenuBar();
+        double id = Math.random();
         webRTC = new WebRTC();
-
+        String stringId = Double.toString(id);
+        webRTC.init(stringId);
 
 
         try {
-            byte[] imageData = qrGenerator.getQRCodeImage("This is my first text", 350, 350);
+            byte[] imageData = qrGenerator.getQRCodeImage(stringId, 350, 350);
             ByteArrayInputStream bis = new ByteArrayInputStream(imageData);
             BufferedImage qrCodeImage = ImageIO.read(bis);
 
