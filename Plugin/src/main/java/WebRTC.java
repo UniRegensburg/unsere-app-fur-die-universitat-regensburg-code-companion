@@ -26,14 +26,18 @@ public class WebRTC {
     private boolean isInitiator;
     private String id;
 
+    private String stunServer = "stun:stun.l.google.com:19302";
+    private String turnServer = "turn:nrg-esport.de:3478";
+    private String socketUri = "http://nrg-esport.de:3000/";
+
     public void init(String id){
         this.id = id;
         executor = Executors.newFixedThreadPool(1);
         RTCIceServer iceServer1 = new RTCIceServer();
-        iceServer1.urls.add("stun:stun.l.google.com:19302");
+        iceServer1.urls.add(stunServer);
 
         RTCIceServer iceServer2 = new RTCIceServer();
-        iceServer2.urls.add("turn:nrg-esport.de:3478");
+        iceServer2.urls.add(turnServer);
         iceServer2.password = "codeCompanion";
         iceServer2.username = "codeCompanion2020";
 
@@ -104,7 +108,7 @@ public class WebRTC {
 
     public void connectSignaling(){
         try {
-            socket = IO.socket("http://nrg-esport.de:3000/");
+            socket = IO.socket(socketUri);
             socket.on(EVENT_CONNECT, args -> {
                 System.out.println("Connected to Signalling");
                 socket.emit("create or join", id);
