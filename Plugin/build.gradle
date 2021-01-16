@@ -3,6 +3,10 @@ plugins {
     id 'org.jetbrains.intellij' version '0.6.5'
 }
 
+tasks.buildSearchableOptions {
+    enabled = false
+}
+
 sourceCompatibility = 1.11
 
 group 'org.example'
@@ -26,7 +30,7 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '2020.3'
+    version '2020.2'
 }
 patchPluginXml {
     changeNotes """
