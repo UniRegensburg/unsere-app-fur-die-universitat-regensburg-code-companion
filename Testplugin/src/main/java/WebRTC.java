@@ -125,20 +125,23 @@ public class WebRTC {
                     System.out.println(args[0].toString());
                     JSONObject message = (JSONObject) args[0];
                     if (message.getString("type").equals("offer")) {
-                        peerConnection.setRemoteDescription(new RTCSessionDescription(RTCSdpType.OFFER, message.getString("sdp")),new SimpleSdpObserverSet());
-                        TimeUnit.SECONDS.sleep(2);
-                        peerConnection.createAnswer(new RTCAnswerOptions(), new SimpleSdpObserverCreate() {
+                        peerConnection.setRemoteDescription(new RTCSessionDescription(RTCSdpType.OFFER, message.getString("sdp")),new SimpleSdpObserverSet(){
                             @Override
-                            public void onSuccess(RTCSessionDescription sessionDescription) {
-                                peerConnection.setLocalDescription(sessionDescription, new SimpleSdpObserverSet());
-                                JSONObject message = new JSONObject();
-                                try {
-                                    message.put("type", "answer");
-                                    message.put("sdp", sessionDescription.sdp);
-                                    socket.emit("message", message);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                            public void onSuccess() {
+                                peerConnection.createAnswer(new RTCAnswerOptions(), new SimpleSdpObserverCreate() {
+                                    @Override
+                                    public void onSuccess(RTCSessionDescription sessionDescription) {
+                                        peerConnection.setLocalDescription(sessionDescription, new SimpleSdpObserverSet());
+                                        JSONObject message = new JSONObject();
+                                        try {
+                                            message.put("type", "answer");
+                                            message.put("sdp", sessionDescription.sdp);
+                                            socket.emit("message", message);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
                             }
                         });
                     }
@@ -150,7 +153,7 @@ public class WebRTC {
                         RTCIceCandidate candidate = new RTCIceCandidate(message.getString("id"), message.getInt("label"), message.getString("candidate"));
                         peerConnection.addIceCandidate(candidate);
                     }
-                } catch (JSONException | InterruptedException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }).on(EVENT_DISCONNECT, args -> {
