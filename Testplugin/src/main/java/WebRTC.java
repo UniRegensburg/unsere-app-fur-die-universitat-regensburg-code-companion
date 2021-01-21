@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static io.socket.client.Socket.EVENT_CONNECT;
 import static io.socket.client.Socket.EVENT_DISCONNECT;
@@ -23,7 +24,6 @@ public class WebRTC {
     private ExecutorService executor;
     private RTCDataChannel dc;
     private RTCDataChannelObserver dcO;
-    private boolean isInitiator;
     private String id;
 
     private String stunServer = "stun:stun.l.google.com:19302";
@@ -103,7 +103,6 @@ public class WebRTC {
                 }
             });
         });
-        connectSignaling();
     }
 
     public void connectSignaling(){
@@ -114,40 +113,10 @@ public class WebRTC {
                 socket.emit("create or join", id);
             }).on("created", args -> {
                 System.out.println("Room created");
-                isInitiator = true;
             }).on("full", args -> {
                 System.out.println("Room full");
             }).on("join", args -> {
                 System.out.println("Join Room");
-                if (isInitiator) {
-                    RTCDataChannelInit dcInit = new RTCDataChannelInit();
-                    dcInit.id = 1;
-                    dc = peerConnection.createDataChannel("TestChannel", dcInit);
-                    dc.registerObserver(dcO = new RTCDataChannelObserver() {
-                        @Override
-                        public void onBufferedAmountChange(long previousAmount) {
-                            System.out.println("Data channel buffered amount changed: " + dc.getLabel() + ": " + dc.getState());
-                        }
-
-                        @Override
-                        public void onStateChange() {
-                            System.out.println("Data channel state changed: " + dc.getLabel() + ": " + dc.getState());
-                        }
-
-                        @Override
-                        public void onMessage(RTCDataChannelBuffer buffer) {
-                            if (buffer.binary) {
-                                System.out.println("Received binary msg over " + dc);
-                                return;
-                            }
-                            ByteBuffer data = buffer.data;
-                            final byte[] bytes = new byte[data.capacity()];
-                            data.get(bytes);
-                            String strData = new String(bytes);
-                            System.out.println("Got msg: " + strData + " over " + dc);
-                        }
-                    });
-                }
             }).on("joined", args -> {
                 System.out.println("Joined Room");
             }).on("message", args -> {
@@ -157,6 +126,7 @@ public class WebRTC {
                     JSONObject message = (JSONObject) args[0];
                     if (message.getString("type").equals("offer")) {
                         peerConnection.setRemoteDescription(new RTCSessionDescription(RTCSdpType.OFFER, message.getString("sdp")),new SimpleSdpObserverSet());
+                        TimeUnit.SECONDS.sleep(2);
                         peerConnection.createAnswer(new RTCAnswerOptions(), new SimpleSdpObserverCreate() {
                             @Override
                             public void onSuccess(RTCSessionDescription sessionDescription) {
@@ -180,29 +150,12 @@ public class WebRTC {
                         RTCIceCandidate candidate = new RTCIceCandidate(message.getString("id"), message.getInt("label"), message.getString("candidate"));
                         peerConnection.addIceCandidate(candidate);
                     }
-                } catch (JSONException e) {
+                } catch (JSONException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }).on(EVENT_DISCONNECT, args -> {
             }).on("ready", args -> {
                 System.out.println("Room ready");
-                if(isInitiator){
-                    peerConnection.createOffer(new RTCOfferOptions(), new SimpleSdpObserverCreate() {
-                        @Override
-                        public void onSuccess(RTCSessionDescription sessionDescription) {
-                            System.out.println("onSuccess");
-                            peerConnection.setLocalDescription(sessionDescription,new SimpleSdpObserverSet());
-                            JSONObject message = new JSONObject();
-                            try {
-                                message.put("type", "offer");
-                                message.put("sdp", sessionDescription.sdp);
-                                socket.emit("message",message);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
             });
             socket.connect();
         } catch (URISyntaxException e) {

@@ -49,7 +49,7 @@ public class QRPopupAction extends AnAction {
 
 
         try {
-            byte[] imageData = qrGenerator.getQRCodeImage(stringId, 350, 350);
+            byte[] imageData = qrGenerator.getQRCodeImage(stringId, 150, 150);
             ByteArrayInputStream bis = new ByteArrayInputStream(imageData);
             BufferedImage qrCodeImage = ImageIO.read(bis);
 
@@ -58,6 +58,8 @@ public class QRPopupAction extends AnAction {
         } catch (WriterException | IOException e) {
             e.printStackTrace();
         }
+
+        webRTC.connectSignaling();
     }
 
     /**

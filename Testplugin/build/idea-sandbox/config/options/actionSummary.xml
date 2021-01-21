@@ -1,6 +1,9 @@
 <application>
   <component name="ActionsLocalSummary">
     <data>
+      <entry key="Resume">
+        <ActionSummary times="1" last="1611227201675" />
+      </entry>
       <entry key="WelcomeScreen.CreateNewProject">
         <ActionSummary times="1" last="1610804410280" />
       </entry>
