@@ -33,8 +33,6 @@ public class WebRTC {
     private static final String TAG = "WebRTC";
 
     private Socket socket;
-    private boolean isInitiator;
-
 
     private PeerConnection peerConnection;
     private PeerConnectionFactory factory;
@@ -124,13 +122,11 @@ public class WebRTC {
                 socket.emit("create or join", id);
             }).on("created", args -> {
                 Log.d(TAG, "connectToSignallingServer: created");
-                isInitiator = true;
             }).on("full", args -> {
                 Log.d(TAG, "connectToSignallingServer: full");
             }).on("join", args -> {
                 Log.d(TAG, "connectToSignallingServer: join");
                 Log.d(TAG, "connectToSignallingServer: Another peer made a request to join room");
-                if(isInitiator){
                     DataChannel.Init dcInit = new DataChannel.Init();
                     dcInit.id = 1;
                     dc = peerConnection.createDataChannel("TestChannel",dcInit);
@@ -155,7 +151,6 @@ public class WebRTC {
                             Log.d(TAG, "Got msg: " + strData + " over " + dc);
                         }
                     });
-                }
             }).on("joined", args -> {
                 Log.d(TAG, "connectToSignallingServer: joined");
             }).on("message", args -> {
@@ -195,7 +190,6 @@ public class WebRTC {
                 Log.d(TAG, "connectToSignallingServer: disconnect");
             }).on("ready", args -> {
                 Log.d(TAG,"READY");
-                if(isInitiator){
                     peerConnection.createOffer(new SimpleSdpObserver() {
                         @Override
                         public void onCreateSuccess(SessionDescription sessionDescription) {
@@ -211,7 +205,6 @@ public class WebRTC {
                             }
                         }
                     }, constraints);
-                }
             });
             socket.connect();
         } catch (URISyntaxException e) {
