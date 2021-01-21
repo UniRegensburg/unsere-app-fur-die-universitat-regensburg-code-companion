@@ -33,16 +33,16 @@ public class WebRTC {
     private static final String TAG = "WebRTC";
 
     private Socket socket;
-    private boolean isInitiator;
-
 
     private PeerConnection peerConnection;
     private PeerConnectionFactory factory;
     private DataChannel dc;
     private MediaConstraints constraints;
     private DataChannel.Observer dcO;
+    private String id;
 
-    public void init(Context context){
+    public void init(Context context, String id){
+        this.id = id;
         PeerConnectionFactory.InitializationOptions initializationOptions =  PeerConnectionFactory.InitializationOptions.builder(context)
                 .createInitializationOptions();
         PeerConnectionFactory.initialize(initializationOptions);
@@ -119,41 +119,14 @@ public class WebRTC {
             socket = IO.socket("http://nrg-esport.de:3000/");
             socket.on(EVENT_CONNECT, args -> {
                 Log.d(TAG, "connectToSignallingServer: connect");
-                socket.emit("create or join", "foo");
+                socket.emit("create or join", id);
             }).on("created", args -> {
                 Log.d(TAG, "connectToSignallingServer: created");
-                isInitiator = true;
             }).on("full", args -> {
                 Log.d(TAG, "connectToSignallingServer: full");
             }).on("join", args -> {
                 Log.d(TAG, "connectToSignallingServer: join");
                 Log.d(TAG, "connectToSignallingServer: Another peer made a request to join room");
-                if(isInitiator){
-                    DataChannel.Init dcInit = new DataChannel.Init();
-                    dcInit.id = 1;
-                    dc = peerConnection.createDataChannel("TestChannel",dcInit);
-                    dc.registerObserver(dcO = new DataChannel.Observer() {
-                        public void onBufferedAmountChange(long previousAmount) {
-                            Log.d(TAG, "Data channel buffered amount changed: " + dc.label() + ": " + dc.state());
-                        }
-                        @Override
-                        public void onStateChange() {
-                            Log.d(TAG, "Data channel state changed: " + dc.label() + ": " + dc.state());
-                        }
-                        @Override
-                        public void onMessage(final DataChannel.Buffer buffer) {
-                            if (buffer.binary) {
-                                Log.d(TAG, "Received binary msg over " + dc);
-                                return;
-                            }
-                            ByteBuffer data = buffer.data;
-                            final byte[] bytes = new byte[data.capacity()];
-                            data.get(bytes);
-                            String strData = new String(bytes);
-                            Log.d(TAG, "Got msg: " + strData + " over " + dc);
-                        }
-                    });
-                }
             }).on("joined", args -> {
                 Log.d(TAG, "connectToSignallingServer: joined");
             }).on("message", args -> {
@@ -193,8 +166,32 @@ public class WebRTC {
                 Log.d(TAG, "connectToSignallingServer: disconnect");
             }).on("ready", args -> {
                 Log.d(TAG,"READY");
-                if(isInitiator){
-                    peerConnection.createOffer(new SimpleSdpObserver() {
+                DataChannel.Init dcInit = new DataChannel.Init();
+                dcInit.id = 1;
+                dc = peerConnection.createDataChannel("TestChannel",dcInit);
+                dc.registerObserver(dcO = new DataChannel.Observer() {
+                    public void onBufferedAmountChange(long previousAmount) {
+                        Log.d(TAG, "Data channel buffered amount changed: " + dc.label() + ": " + dc.state());
+                    }
+                    @Override
+                    public void onStateChange() {
+                        Log.d(TAG, "Data channel state changed: " + dc.label() + ": " + dc.state());
+                    }
+                    @Override
+                    public void onMessage(final DataChannel.Buffer buffer) {
+                        if (buffer.binary) {
+                            Log.d(TAG, "Received binary msg over " + dc);
+                            return;
+                        }
+                        ByteBuffer data = buffer.data;
+                        final byte[] bytes = new byte[data.capacity()];
+                        data.get(bytes);
+                        String strData = new String(bytes);
+                        Log.d(TAG, "Got msg: " + strData + " over " + dc);
+                    }
+                });
+
+                peerConnection.createOffer(new SimpleSdpObserver() {
                         @Override
                         public void onCreateSuccess(SessionDescription sessionDescription) {
                             Log.d(TAG, "onCreateSuccess");
@@ -208,8 +205,7 @@ public class WebRTC {
                                 e.printStackTrace();
                             }
                         }
-                    }, constraints);
-                }
+                        }, constraints);
             });
             socket.connect();
         } catch (URISyntaxException e) {
