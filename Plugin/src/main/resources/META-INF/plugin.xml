@@ -13,13 +13,16 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="app.App" />
+        <applicationService serviceImplementation="app.services.application.ApplicationService"/>
+        <applicationService serviceImplementation="app.services.log.LogService"/>
         <!-- Add your extensions here -->
     </extensions>
 
     <actions>
-        <action id="QRPopupAction"
+        <action id="app.QRPopupAction"
                 icon="/icons/devices_icon_16x16.png"
-                class="QRPopupAction"
+                class="app.QRPopupAction"
                 text="Pop Up Dialog Action">
             <add-to-group group-id="NavBarToolBar" anchor="last"/>
         </action>

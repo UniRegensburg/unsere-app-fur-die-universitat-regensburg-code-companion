@@ -19,6 +19,7 @@ dependencies {
     implementation("dev.onvoid.webrtc:webrtc-java:0.2.0")
     implementation("dev.onvoid.webrtc:webrtc-java-windows-x86_64:0.1.0")
     implementation("org.scijava:native-lib-loader:2.3.4")
+    implementation(files("libs/PluginHelper.jar"))
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/

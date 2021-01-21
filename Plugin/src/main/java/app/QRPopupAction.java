@@ -1,3 +1,6 @@
+package app;
+
+import app.services.application.ApplicationService;
 import com.google.zxing.WriterException;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -46,6 +49,9 @@ public class QRPopupAction extends AnAction {
         webRTC = new WebRTC();
         String stringId = Double.toString(id);
         webRTC.init(stringId);
+
+        // start listening for IDE events
+        ApplicationService.getInstance().startSession();
 
 
         try {
