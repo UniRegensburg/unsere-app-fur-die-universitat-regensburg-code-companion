@@ -4,13 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/ios_dark_grey"
+    android:padding="8dp"
     tools:context=".ui.compiler.CompilerFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/ios_dark_grey"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="88dp"
-        tools:layout_editor_absoluteY="116dp"/>
+
+    <TextView
+        android:id="@+id/error_template"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:padding="8dp"
+        android:text="Error : 28 \nDescription for error"
+        android:textSize="18sp"
+        android:background="@drawable/message_error_template"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/warning_template"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:padding="8dp"
+        android:text="Warning : 28 \nDescription for warning"
+        android:textSize="18sp"
+        android:background="@drawable/message_warning_template"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/error_template" />
 </androidx.constraintlayout.widget.ConstraintLayout>
