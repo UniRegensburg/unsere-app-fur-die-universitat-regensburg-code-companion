@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
     private WebRTC webRTC;
+    private BadgeDrawable connectionState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +64,17 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(bottomNavigation, navController);
 
-        BadgeDrawable badge = bottomNavigation.getOrCreateBadge(R.id.navigation_compiler);
-        //badge.setBackgroundColor(Color.parseColor("#30d158"));
-        badge.isVisible();
+        connectionState = bottomNavigation.getOrCreateBadge(R.id.navigation_compiler);
+        setBadgeForConnectionState("NOT_CONNECTED");
+
+    }
+
+    public void setBadgeForConnectionState(String state) {
+        if(state == "CONNECTED") {
+            connectionState.setBackgroundColor(Color.parseColor("#30d158"));
+        }else {
+            connectionState.setBackgroundColor(Color.parseColor("#ff443a"));
+        }
+        connectionState.isVisible();
     }
 }
