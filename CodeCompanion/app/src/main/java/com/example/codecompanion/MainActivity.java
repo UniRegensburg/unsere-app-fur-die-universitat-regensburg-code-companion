@@ -2,10 +2,17 @@ package com.example.codecompanion;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 
+import com.example.codecompanion.ui.compiler.CompilerFragment;
+import com.example.codecompanion.ui.home.HomeFragment;
+import com.example.codecompanion.ui.profile.ProfileFragment;
+import com.example.codecompanion.ui.tasks.TasksFragment;
+import com.example.codecompanion.util.MessageCreator;
+import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.WebRTC;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -13,6 +20,10 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,20 +32,39 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import org.webrtc.PeerConnection;
+
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG =  "Main Activity";
     private BottomNavigationView bottomNavigation;
     private WebRTC webRTC;
     private BadgeDrawable connectionState;
+    private MessageManager messageManager;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        messageManager = MessageManager.getInstance();
         createNavigation();
-
         webRTC = new WebRTC();
+        webRTC.setWebRTCListener(new WebRTC.WebRTCListener() {
+            @Override
+            public void onConnectionStateChanged(PeerConnection.PeerConnectionState state) {
+                setBadgeForConnectionState(state.toString());
+                Log.d(TAG,state.toString());
+            }
+
+            @Override
+            public void onMessageRecieved(String message) {
+                //TODO: TYPE: type 0 = warning, type 1 = error, ....
+                //TODO: Method to handle message input
+                messageManager.addMessage(message,0);
+            }
+        });
     }
 
     @Override
@@ -66,10 +96,9 @@ public class MainActivity extends AppCompatActivity {
 
         connectionState = bottomNavigation.getOrCreateBadge(R.id.navigation_compiler);
         setBadgeForConnectionState("NOT_CONNECTED");
-
     }
 
-    public void setBadgeForConnectionState(String state) {
+    private void setBadgeForConnectionState(String state) {
         if(state == "CONNECTED") {
             connectionState.setBackgroundColor(Color.parseColor("#30d158"));
         }else {
@@ -77,4 +106,5 @@ public class MainActivity extends AppCompatActivity {
         }
         connectionState.isVisible();
     }
+
 }

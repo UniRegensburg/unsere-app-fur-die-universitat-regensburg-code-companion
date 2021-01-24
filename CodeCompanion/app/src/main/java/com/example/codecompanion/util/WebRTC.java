@@ -39,6 +39,7 @@ public class WebRTC {
     private DataChannel dc1;
     private MediaConstraints constraints;
     private String id;
+    private WebRTCListener listener;
 
     public void init(Context context, String id){
         this.id = id;
@@ -79,6 +80,7 @@ public class WebRTC {
             public void onIceConnectionChange(PeerConnection.IceConnectionState iceConnectionState) {
                 super.onIceConnectionChange(iceConnectionState);
                 Log.d(TAG,"Connection State Changed: " + peerConnection.connectionState().toString());
+                listener.onConnectionStateChanged(peerConnection.connectionState());
             }
         });
 
@@ -158,6 +160,7 @@ public class WebRTC {
                         final byte[] bytes = new byte[data.capacity()];
                         data.get(bytes);
                         String strData = new String(bytes);
+                        listener.onMessageRecieved(strData);
                         Log.d(TAG, "Got msg: " + strData + " over " + dc1);
                     }
                 });
@@ -184,4 +187,12 @@ public class WebRTC {
         }
     }
 
+    public void setWebRTCListener(WebRTCListener listener) {
+        this.listener = listener;
+    }
+
+    public interface WebRTCListener{
+        public void onConnectionStateChanged(PeerConnection.PeerConnectionState state);
+        public void onMessageRecieved(String message);
+    }
 }

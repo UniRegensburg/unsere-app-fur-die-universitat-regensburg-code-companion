@@ -1,33 +1,44 @@
 package com.example.codecompanion.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.codecompanion.R;
+
+import static com.example.codecompanion.R.id.message_warning_template;
 
 public class MessageCreator {
 
-    private String text;
     private Context context;
+    private LinearLayout linearLayout;
+    private View rootView;
 
-    public MessageCreator(String text, Context context) {
-        this.text = text;
+    public MessageCreator(Context context, LinearLayout linearLayout,View rootView) {
         this.context = context;
+        this.linearLayout = linearLayout;
+        this.rootView = rootView;
     }
 
     // TODO: test if return-type textview is better
-    public void createErrorMessage() {
-        TextView error = createMessageTemplate();
-        error.setBackground(Drawable.createFromPath("@drawable/message_error_template"));
+    public void createErrorMessage(String text) {
+        TextView error = createMessageTemplate(text);
+        error.setBackgroundResource(R.drawable.message_error_template);
+        linearLayout.addView(error);
     }
 
     // TODO: test if return-type textview is better
-    public void createWarningMessage() {
-        TextView warning = createMessageTemplate();
-        warning.setBackground(Drawable.createFromPath("@drawable/message_warning_template"));
+    public void createWarningMessage(String text) {
+        TextView warning = createMessageTemplate(text);
+        warning.setBackgroundResource(R.drawable.message_warning_template);
+        linearLayout.addView(warning);
     }
 
     // TODO: implement rest of ui-styling
-    private TextView createMessageTemplate() {
+    private TextView createMessageTemplate(String text) {
         TextView view = new TextView(context);
         view.setText(text);
         view.setPadding(8, 8, 8, 8);
