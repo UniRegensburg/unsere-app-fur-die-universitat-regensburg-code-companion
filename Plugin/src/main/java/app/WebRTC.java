@@ -24,7 +24,6 @@ public class WebRTC {
     private RTCPeerConnection peerConnection;
     private ExecutorService executor;
     private RTCDataChannel dc;
-    private RTCDataChannelObserver dcO;
     private String id;
 
     private String stunServer = "stun:stun.l.google.com:19302";
@@ -74,7 +73,7 @@ public class WebRTC {
                 public void onDataChannel(RTCDataChannel dataChannel) {
                     dc = dataChannel;
                     System.out.println("New Data channel " + dc.getLabel());
-                    dc.registerObserver(dcO = new RTCDataChannelObserver() {
+                    dc.registerObserver(new RTCDataChannelObserver() {
                         @Override
                         public void onBufferedAmountChange(long previousAmount) {
                             System.out.println("Data channel buffered amount changed: " + dc.getLabel() + ": " + dc.getState());
@@ -100,7 +99,7 @@ public class WebRTC {
 
                 @Override
                 public void onIceConnectionChange(RTCIceConnectionState iceConnectionState) {
-                    System.out.println("Connection State Changed: " + RTCPeerConnectionState.values().toString());
+                    System.out.println("Connection State Changed: " + peerConnection.getConnectionState().toString());
                 }
             });
         });

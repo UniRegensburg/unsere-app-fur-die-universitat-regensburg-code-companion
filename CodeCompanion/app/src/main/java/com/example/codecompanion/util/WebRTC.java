@@ -36,9 +36,8 @@ public class WebRTC {
 
     private PeerConnection peerConnection;
     private PeerConnectionFactory factory;
-    private DataChannel dc;
+    private DataChannel dc1;
     private MediaConstraints constraints;
-    private DataChannel.Observer dcO;
     private String id;
 
     public void init(Context context, String id){
@@ -77,40 +76,12 @@ public class WebRTC {
             }
 
             @Override
-            public void onDataChannel(DataChannel dataChannel) {
-                super.onDataChannel(dataChannel);
-                dc = dataChannel;
-                Log.d(TAG, "New Data channel " + dc.label());
-                dc.registerObserver(dcO = new DataChannel.Observer() {
-                    public void onBufferedAmountChange(long previousAmount) {
-                        Log.d(TAG, "Data channel buffered amount changed: " + dc.label() + ": " + dc.state());
-                    }
-                    @Override
-                    public void onStateChange() {
-                        Log.d(TAG, "Data channel state changed: " + dc.label() + ": " + dc.state());
-                    }
-                    @Override
-                    public void onMessage(final DataChannel.Buffer buffer) {
-                        if (buffer.binary) {
-                            Log.d(TAG, "Received binary msg over " + dc);
-                            return;
-                        }
-                        ByteBuffer data = buffer.data;
-                        final byte[] bytes = new byte[data.capacity()];
-                        data.get(bytes);
-                        String strData = new String(bytes);
-                        Log.d(TAG, "Got msg: " + strData + " over " + dc);
-                    }
-                });
-            }
-
-            @Override
             public void onIceConnectionChange(PeerConnection.IceConnectionState iceConnectionState) {
                 super.onIceConnectionChange(iceConnectionState);
                 Log.d(TAG,"Connection State Changed: " + peerConnection.connectionState().toString());
-
             }
         });
+
         start();
     }
 
@@ -166,28 +137,28 @@ public class WebRTC {
                 Log.d(TAG, "connectToSignallingServer: disconnect");
             }).on("ready", args -> {
                 Log.d(TAG,"READY");
+
                 DataChannel.Init dcInit = new DataChannel.Init();
-                dcInit.id = 1;
-                dc = peerConnection.createDataChannel("TestChannel",dcInit);
-                dc.registerObserver(dcO = new DataChannel.Observer() {
+                dc1 = peerConnection.createDataChannel("TestChannel",dcInit);
+                dc1.registerObserver(new DataChannel.Observer() {
                     public void onBufferedAmountChange(long previousAmount) {
-                        Log.d(TAG, "Data channel buffered amount changed: " + dc.label() + ": " + dc.state());
+                        Log.d(TAG, "Data channel buffered amount changed: " + dc1.label() + ": " + dc1.state());
                     }
                     @Override
                     public void onStateChange() {
-                        Log.d(TAG, "Data channel state changed: " + dc.label() + ": " + dc.state());
+                        Log.d(TAG, "Data channel state changed: " + dc1.label() + ": " + dc1.state());
                     }
                     @Override
                     public void onMessage(final DataChannel.Buffer buffer) {
                         if (buffer.binary) {
-                            Log.d(TAG, "Received binary msg over " + dc);
+                            Log.d(TAG, "Received binary msg over " + dc1);
                             return;
                         }
                         ByteBuffer data = buffer.data;
                         final byte[] bytes = new byte[data.capacity()];
                         data.get(bytes);
                         String strData = new String(bytes);
-                        Log.d(TAG, "Got msg: " + strData + " over " + dc);
+                        Log.d(TAG, "Got msg: " + strData + " over " + dc1);
                     }
                 });
 
