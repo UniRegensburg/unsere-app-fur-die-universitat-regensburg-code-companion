@@ -100,7 +100,7 @@ public class WebRTC {
 
                 @Override
                 public void onIceConnectionChange(RTCIceConnectionState iceConnectionState) {
-                    System.out.println(RTCPeerConnectionState.values());
+                    System.out.println("Connection State Changed: " + RTCPeerConnectionState.values().toString());
                 }
             });
         });

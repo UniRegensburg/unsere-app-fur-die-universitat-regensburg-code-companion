@@ -107,7 +107,7 @@ public class WebRTC {
             @Override
             public void onIceConnectionChange(PeerConnection.IceConnectionState iceConnectionState) {
                 super.onIceConnectionChange(iceConnectionState);
-                Log.d(TAG,peerConnection.connectionState().toString());
+                Log.d(TAG,"Connection State Changed: " + peerConnection.connectionState().toString());
 
             }
         });
