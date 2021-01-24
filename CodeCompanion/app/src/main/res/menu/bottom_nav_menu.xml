@@ -16,4 +16,9 @@
         android:icon="@drawable/ic_baseline_list_white"
         android:title="@string/menu_tasks" />
 
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_baseline_person_white"
+        android:title="@string/menu_profile"/>
+
 </menu>
