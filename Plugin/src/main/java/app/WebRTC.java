@@ -81,13 +81,6 @@ public class WebRTC {
                         @Override
                         public void onStateChange() {
                             System.out.println("Data channel state changed: " + dc.getLabel() + ": " + dc.getState());
-                            if(dc.getState() == RTCDataChannelState.OPEN){
-                                try {
-                                    sendData("HALLO HALLO WER DA ?");
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
                         }
                         @Override
                         public void onMessage(RTCDataChannelBuffer buffer) {

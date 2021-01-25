@@ -10,31 +10,31 @@ import android.widget.TextView;
 import com.example.codecompanion.R;
 
 import static com.example.codecompanion.R.id.message_warning_template;
+import static com.example.codecompanion.R.id.rectangles;
 
 public class MessageCreator {
 
     private Context context;
-    private LinearLayout linearLayout;
     private View rootView;
 
-    public MessageCreator(Context context, LinearLayout linearLayout,View rootView) {
+    public MessageCreator(Context context,View rootView) {
         this.context = context;
-        this.linearLayout = linearLayout;
         this.rootView = rootView;
     }
 
     // TODO: test if return-type textview is better
-    public void createErrorMessage(String text) {
+    public View createErrorMessage(String text) {
         TextView error = createMessageTemplate(text);
         error.setBackgroundResource(R.drawable.message_error_template);
-        linearLayout.addView(error);
+
+        return error;
     }
 
     // TODO: test if return-type textview is better
-    public void createWarningMessage(String text) {
+    public View createWarningMessage(String text) {
         TextView warning = createMessageTemplate(text);
         warning.setBackgroundResource(R.drawable.message_warning_template);
-        linearLayout.addView(warning);
+        return warning;
     }
 
     // TODO: implement rest of ui-styling
@@ -47,5 +47,6 @@ public class MessageCreator {
 
         return view;
     }
+
 
 }

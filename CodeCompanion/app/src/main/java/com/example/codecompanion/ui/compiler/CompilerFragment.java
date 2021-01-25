@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,35 +21,36 @@ public class CompilerFragment extends Fragment {
 
     private MessageManager messageManager;
     private MessageCreator messageCreator;
+    private LinearLayout linearLayout;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_compiler, container, false);
-        messageCreator = new MessageCreator(getContext(), root.findViewById(R.id.message_list),root);
+        messageCreator = new MessageCreator(getContext(),root);
         messageManager = MessageManager.getInstance();
+        linearLayout = root.findViewById(R.id.message_list);
         return root;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        System.out.println(messageManager.getWarnings());
         messageManager.setListener(new MessageManager.MessageManagerListener() {
             @Override
             public void onDataChanged() {
                 for (String error:messageManager.getErrors()) {
-                    messageCreator.createErrorMessage(error);
+                    doUiChanges(messageCreator.createErrorMessage(error));
                 }
                 for (String warning:messageManager.getWarnings()) {
-                    messageCreator.createWarningMessage(warning);
+                    doUiChanges(messageCreator.createWarningMessage(warning));
                 }
             }
         });
         for (String error:messageManager.getErrors()) {
-            messageCreator.createErrorMessage(error);
+            doUiChanges(messageCreator.createErrorMessage(error));
         }
         for (String warning:messageManager.getWarnings()) {
-            messageCreator.createWarningMessage(warning);
+            doUiChanges(messageCreator.createWarningMessage(warning));
         }
     }
 
@@ -56,5 +58,9 @@ public class CompilerFragment extends Fragment {
     public void onPause() {
         super.onPause();
         messageManager.removeListener();
+    }
+
+    private void doUiChanges(View view){
+        linearLayout.addView(view);
     }
 }

@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onMessageRecieved(String message) {
-                //TODO: TYPE: type 0 = warning, type 1 = error, ....
                 try {
                     messageManager.handleMessage(message);
                 } catch (JSONException e) {

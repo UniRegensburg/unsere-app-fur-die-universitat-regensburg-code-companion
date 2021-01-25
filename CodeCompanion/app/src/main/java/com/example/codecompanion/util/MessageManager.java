@@ -2,11 +2,14 @@ package com.example.codecompanion.util;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MessageManager {
@@ -33,7 +36,22 @@ public class MessageManager {
     }
 
     public void handleMessage(String message) throws JSONException {
-        unpackString(message);
+        HashMap<String, String> messageMap = unpackString(message);
+        String tag = messageMap.get("tag");
+        String desc = messageMap.get("description");
+        String line = messageMap.get("line");
+        String type = messageMap.get("type");
+        String oc = messageMap.get("ocurence");
+        int messageType;
+
+        if(tag.equals("WARNING")){
+            messageType = 0;
+        }else{
+            messageType = 1;
+        }
+
+        String messageText = oc + ": " + line + "\n" + type + "\n" + desc;
+        addMessage(messageText, messageType);
     }
 
     public void addMessage(String message, int type){
@@ -89,9 +107,11 @@ public class MessageManager {
     }
 
 
-    private void unpackString(String message) throws JSONException {
+    private HashMap<String,String> unpackString(String message) throws JSONException {
         JSONObject jsonObject = new JSONObject(message);
-        Log.d("Test", jsonObject.toString());
+        HashMap<String, String> messageMap = new Gson().fromJson(jsonObject.toString(), HashMap.class);
+        Log.d("Test",messageMap.toString());
+        return messageMap;
     }
     
 

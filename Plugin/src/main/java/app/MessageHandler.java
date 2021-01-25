@@ -9,7 +9,9 @@ import dev.onvoid.webrtc.RTCDataChannelState;
 import dev.onvoid.webrtc.RTCPeerConnectionState;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MessageHandler {
 
@@ -26,7 +28,7 @@ public class MessageHandler {
 
     private void makeString(List<HighlightInfo> highlightInfoList, Document document) throws Exception {
         for(int i = 0; i < highlightInfoList.size();i++){
-            List<String> message = new ArrayList<String>();
+            Map<String,String> message = new HashMap();
 
             String type = highlightInfoList.get(i).type.getAttributesKey().toString();
             String line = Integer.toString(1 + document.getLineNumber(highlightInfoList.get(i).startOffset));
@@ -34,15 +36,16 @@ public class MessageHandler {
             String occurence = highlightInfoList.get(i).getText();
             String tag = highlightInfoList.get(i).getSeverity().toString();
 
-            message.add(tag);
-            message.add(type);
-            message.add(occurence);
-            message.add(line);
-            message.add(description);
+            message.put("tag",tag);
+            message.put("type",type);
+            message.put("ocurence", occurence);
+            message.put("line", line);
+            message.put("description", description);
 
             String json = new Gson().toJson(message);
             System.out.println(json);
             send(json);
+
         }
 
     }
