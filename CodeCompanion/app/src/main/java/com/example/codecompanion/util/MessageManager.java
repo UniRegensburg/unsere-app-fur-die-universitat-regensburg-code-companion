@@ -1,5 +1,11 @@
 package com.example.codecompanion.util;
 
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +30,10 @@ public class MessageManager {
             MessageManager.instance = new MessageManager();
         }
         return MessageManager.instance;
+    }
+
+    public void handleMessage(String message) throws JSONException {
+        unpackString(message);
     }
 
     public void addMessage(String message, int type){
@@ -77,4 +87,12 @@ public class MessageManager {
     public void removeListener(){
         this.listener = null;
     }
+
+
+    private void unpackString(String message) throws JSONException {
+        JSONObject jsonObject = new JSONObject(message);
+        Log.d("Test", jsonObject.toString());
+    }
+    
+
 }

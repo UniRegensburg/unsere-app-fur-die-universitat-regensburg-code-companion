@@ -32,6 +32,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import org.json.JSONException;
 import org.webrtc.PeerConnection;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,8 +62,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMessageRecieved(String message) {
                 //TODO: TYPE: type 0 = warning, type 1 = error, ....
-                //TODO: Method to handle message input
-                messageManager.addMessage(message,0);
+                try {
+                    messageManager.handleMessage(message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
