@@ -182,4 +182,19 @@ public class WebRTC {
     }
 
 
+    public RTCPeerConnectionState getConnectionState() {
+        if(peerConnection != null){
+             return peerConnection.getConnectionState();
+        }else{
+            return null;
+        }
+    }
+
+    public RTCDataChannelState getDataChannelState(){
+        if(dc.getState() != null){
+            return dc.getState();
+        }else{
+            return null;
+        }
+    }
 }

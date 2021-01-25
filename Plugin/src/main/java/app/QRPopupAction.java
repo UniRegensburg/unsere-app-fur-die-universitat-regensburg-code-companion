@@ -26,6 +26,7 @@ public class QRPopupAction extends AnAction {
     private QRCodeGenerator qrGenerator;
     private int qrDimensions = 500;
     private WebRTC webRTC;
+    private MessageHandler messageHandler;
 
     /**
      * Default method of intellij plugins
@@ -47,11 +48,14 @@ public class QRPopupAction extends AnAction {
         menuBar = WindowManager.getInstance().getFrame(currentProject).getJMenuBar();
         double id = Math.random();
         webRTC = new WebRTC();
+        messageHandler = new MessageHandler();
         String stringId = Double.toString(id);
         webRTC.init(stringId);
 
         // start listening for IDE events
         ApplicationService.getInstance().startSession();
+        ApplicationService.getInstance().setMessageHandler(messageHandler);
+        ApplicationService.getInstance().setWebRTC(webRTC);
 
 
         try {
