@@ -1,4 +1,4 @@
-name: Build Android App
+name: Build Plugin
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   apk:
-    name: Generate APK
+    name: Generate ZIP
     runs-on: ubuntu-18.04
 
     steps:
@@ -16,10 +16,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Build debug APK
-        run: bash ./Android/gradlew assemble --stacktrace
-      - name: Upload APK
+      - name: Build debug PluginZIP
+        run: bash ./Android/gradlew buildPlugin --stacktrace
+      - name: Upload ZIP
         uses: actions/upload-artifact@v1
         with:
           name: app
-          path: build/Android-CC.apk
+          path: build/intelliJ-CC.zip
