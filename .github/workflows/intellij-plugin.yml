@@ -17,7 +17,8 @@ jobs:
         with:
           java-version: 1.8
       - name: Build debug PluginZIP
-        run: bash ./Android/gradlew buildPlugin --stacktrace
+        working-directory: ./Plugin
+        run: bash ./gradlew buildPlugin --stacktrace
       - name: Upload ZIP
         uses: actions/upload-artifact@v1
         with:
