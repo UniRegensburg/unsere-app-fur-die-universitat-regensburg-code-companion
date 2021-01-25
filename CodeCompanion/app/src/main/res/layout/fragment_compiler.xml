@@ -9,11 +9,9 @@
     android:id = "@+id/compiler_fragment"
     tools:context=".ui.compiler.CompilerFragment">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/message_list"
-        android:orientation="vertical"/>
-
+        android:orientation="vertical"
+        android:id="@+id/message_list"></LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

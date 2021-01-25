@@ -27,6 +27,7 @@ public class MessageHandler {
     }
 
     private void makeString(List<HighlightInfo> highlightInfoList, Document document) throws Exception {
+        send("ERROR LOG STARTED");
         for(int i = 0; i < highlightInfoList.size();i++){
             Map<String,String> message = new HashMap();
 
@@ -47,7 +48,6 @@ public class MessageHandler {
             send(json);
 
         }
-
     }
 
     private void send(String data) throws Exception {

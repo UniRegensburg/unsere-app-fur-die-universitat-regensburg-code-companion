@@ -36,22 +36,26 @@ public class MessageManager {
     }
 
     public void handleMessage(String message) throws JSONException {
-        HashMap<String, String> messageMap = unpackString(message);
-        String tag = messageMap.get("tag");
-        String desc = messageMap.get("description");
-        String line = messageMap.get("line");
-        String type = messageMap.get("type");
-        String oc = messageMap.get("ocurence");
-        int messageType;
-
-        if(tag.equals("WARNING")){
-            messageType = 0;
+        if(message.equals("ERROR LOG STARTED")){
+            removeAll();
         }else{
-            messageType = 1;
-        }
+            HashMap<String, String> messageMap = unpackString(message);
+            String tag = messageMap.get("tag");
+            String desc = messageMap.get("description");
+            String line = messageMap.get("line");
+            String type = messageMap.get("type");
+            String oc = messageMap.get("ocurence");
+            int messageType;
 
-        String messageText = oc + ": " + line + "\n" + type + "\n" + desc;
-        addMessage(messageText, messageType);
+            if(tag.equals("WARNING")){
+                messageType = 0;
+            }else{
+                messageType = 1;
+            }
+
+            String messageText = oc + ": " + line + "\n" + type + "\n" + desc;
+            addMessage(messageText, messageType);
+        }
     }
 
     public void addMessage(String message, int type){
@@ -61,20 +65,6 @@ public class MessageManager {
                 break;
             case 1:
                 errors.add(message);
-                break;
-        }
-        if(listener != null) {
-            listener.onDataChanged();
-        }
-    }
-
-    public void removeMessage(String message, int type){
-        switch(type){
-            case 0:
-                warnings.remove(message);
-                break;
-            case 1:
-                errors.remove(message);
                 break;
         }
         if(listener != null) {

@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,10 +14,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.codecompanion.MainActivity;
 import com.example.codecompanion.R;
 import com.example.codecompanion.util.MessageCreator;
 import com.example.codecompanion.util.MessageManager;
+
+import java.util.ArrayList;
 
 public class CompilerFragment extends Fragment {
 
@@ -38,6 +44,12 @@ public class CompilerFragment extends Fragment {
         messageManager.setListener(new MessageManager.MessageManagerListener() {
             @Override
             public void onDataChanged() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        linearLayout.removeAllViewsInLayout();
+                    }
+                });
                 for (String error:messageManager.getErrors()) {
                     doUiChanges(messageCreator.createErrorMessage(error));
                 }
@@ -61,6 +73,12 @@ public class CompilerFragment extends Fragment {
     }
 
     private void doUiChanges(View view){
-        linearLayout.addView(view);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                linearLayout.addView(view);
+            }
+        });
+
     }
 }
