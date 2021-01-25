@@ -3,7 +3,7 @@ name: Build Android App
 on:
   push:
     branches:
-      - 'dev'
+      - 'github_actions'
 
 jobs:
   apk:

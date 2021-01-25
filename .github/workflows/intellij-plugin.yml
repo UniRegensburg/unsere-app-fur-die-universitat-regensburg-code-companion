@@ -3,7 +3,7 @@ name: Build Plugin
 on:
   push:
     branches:
-      - 'dev'
+      - 'github_actions'
 
 jobs:
   apk:
