@@ -1,5 +1,7 @@
 package app.services.application;
 
+import app.MessageHandler;
+import app.WebRTC;
 import app.listeners.ListenerHelper;
 import app.listeners.base.Event;
 import app.services.log.LogService;
@@ -11,6 +13,8 @@ public class ApplicationService {
 
     private boolean logIsReady = false;
     private boolean listenersAreReady = false;
+    private MessageHandler messageHandler;
+    private WebRTC webRTC;
     private ApplicationState state = ApplicationState.IDLE;
     private LogService logService;
     private final ArrayList<AutoLogger> autoLoggers = new ArrayList<>();
@@ -73,6 +77,22 @@ public class ApplicationService {
 
     public void registerAutoLogger(AutoLogger logger) {
         autoLoggers.add(logger);
+    }
+
+    public void setMessageHandler(MessageHandler messageHandler){
+        this.messageHandler = messageHandler;
+    }
+
+    public MessageHandler getMessageHandler(){
+        return this.messageHandler;
+    }
+
+    public void setWebRTC(WebRTC webRTC){
+        this.webRTC = webRTC;
+    }
+
+    public WebRTC getWebRTC(){
+        return this.webRTC;
     }
 
 }

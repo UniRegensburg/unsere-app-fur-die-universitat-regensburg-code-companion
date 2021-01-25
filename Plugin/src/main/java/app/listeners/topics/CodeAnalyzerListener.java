@@ -38,7 +38,11 @@ public class CodeAnalyzerListener extends BaseListener implements DaemonCodeAnal
 
     @Override
     public void daemonFinished(@NotNull Collection<? extends FileEditor> fileEditors) {
-        analyzeCurrentErrors();
+        try {
+            analyzeCurrentErrors();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -46,14 +50,17 @@ public class CodeAnalyzerListener extends BaseListener implements DaemonCodeAnal
 
     }
 
-    private void analyzeCurrentErrors() {
+    private void analyzeCurrentErrors() throws Exception {
         Document document = FileEditorManager.getInstance(currentProject).getSelectedTextEditor().getDocument();
         List<HighlightInfo> highlightInfoList = DaemonCodeAnalyzerImpl.getHighlights(document, HighlightSeverity.INFORMATION, currentProject);
+        handleErrors(highlightInfoList, document);
+        /*
         HighlightInfoInspector.HighlightInfoInspectorResults results = HighlightInfoInspector.inspectHighlightList(highlightInfoList);
         if(results.equals(lastResults)) {
             return;
         }
         log(results.toString());
         lastResults = results;
+        */
     }
 }
