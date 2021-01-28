@@ -1,0 +1,27 @@
+name: Build Plugin
+
+on:
+  push:
+    branches:
+      - 'dev'
+
+jobs:
+  apk:
+    name: Generate ZIP
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+          java-package: jdk
+      - name: Build debug PluginZIP
+        working-directory: ./Plugin
+        run: bash ./gradlew buildPlugin --stacktrace
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v2
+        with:
+          name: IntelliJ-Plugin
+          path: Plugin/build/distributions/CodeCompanion-1.0-SNAPSHOT.zip

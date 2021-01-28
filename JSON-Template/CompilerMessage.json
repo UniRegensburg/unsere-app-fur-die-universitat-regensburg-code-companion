@@ -1,0 +1,12 @@
+[
+	{
+		"errorClass": "error",
+		"errorType": "syntax",
+		"line": 5
+	},
+	{
+		"errorClass": "warning",
+		"errorType": "unused_var",
+		"line": 8
+	}
+]

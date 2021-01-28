@@ -6,16 +6,31 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
 
     <!--iOS Darkmode Colorcodes -->
-    <color name="orange">#ff9f0a</color>
-    <color name="green">#30d158</color>
-    <color name="yellow">#ffd60a</color>
-    <color name="light_blue">#64d2ff</color>
+    <color name="ios_orange">#ff9f0a</color>
+    <color name="ios_green">#30d158</color>
+    <color name="ios_yellow">#ffd60a</color>
+    <color name="ios_light_blue">#64d2ff</color>
+    <color name="ios_red">#ff443a</color>
+    <color name="ios_pink">#ff373b</color>
+
+    <color name="magenta">#9C004B</color>
+    <color name="pink">#e52e71</color>
+    <color name="bright_orange">#ff8a00</color>
+
+    <!-- Darkmode Background colors -->
+    <color name="ios_dark_grey">#222222</color>
+    <color name="ios_grey">#3a3a3c</color>
+    <color name="ios_light_grey">#3b3b3b</color>
+
     <color name="dark_grey">#364161</color>
     <color name="grey">#3a3a3c</color>
     <color name="light_grey">#465277</color>
 
-    <color name="magenta">#9C004B</color>
+    <!-- Lightmode Background colors -->
+    <color name="white">#ffffff</color>
+    <color name="light_white">#f2f2f7</color>
+
+
 </resources>

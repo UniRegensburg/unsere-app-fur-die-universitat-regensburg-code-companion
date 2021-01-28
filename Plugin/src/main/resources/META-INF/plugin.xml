@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>org.example.CodeCompanionPlugin</id>
+    <id>org.example.CodeCompanion</id>
     <name>CodeCompanion</name>
     <vendor email="fabian.schiller@stud.uni-regensburg.de" url="uni-regensburg.de">Uni Regensburg</vendor>
 
@@ -7,18 +7,22 @@
         Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
     </description>
 
+
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="app.App" />
+        <applicationService serviceImplementation="app.services.application.ApplicationService"/>
+        <applicationService serviceImplementation="app.services.log.LogService"/>
         <!-- Add your extensions here -->
     </extensions>
 
     <actions>
-        <action id="QRPopupAction"
+        <action id="app.QRPopupAction"
                 icon="/icons/devices_icon_16x16.png"
-                class="QRPopupAction"
+                class="app.QRPopupAction"
                 text="Pop Up Dialog Action">
             <add-to-group group-id="NavBarToolBar" anchor="last"/>
         </action>

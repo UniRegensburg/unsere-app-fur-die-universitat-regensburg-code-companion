@@ -1,13 +1,29 @@
 package com.example.codecompanion;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.codecompanion.ui.compiler.CompilerFragment;
+import com.example.codecompanion.ui.home.HomeFragment;
+import com.example.codecompanion.ui.profile.ProfileFragment;
+import com.example.codecompanion.ui.tasks.TasksFragment;
+import com.example.codecompanion.util.MessageCreator;
+import com.example.codecompanion.util.MessageManager;
+import com.example.codecompanion.util.WebRTC;
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -16,33 +32,82 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import org.json.JSONException;
+import org.webrtc.PeerConnection;
+
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration mAppBarConfiguration;
+    private static final String TAG =  "Main Activity";
+    private BottomNavigationView bottomNavigation;
+    private WebRTC webRTC;
+    private BadgeDrawable connectionState;
+    private MessageManager messageManager;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_compiler, R.id.nav_tasks)
-                .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+
+        messageManager = MessageManager.getInstance();
+        createNavigation();
+        webRTC = new WebRTC();
+        webRTC.setWebRTCListener(new WebRTC.WebRTCListener() {
+            @Override
+            public void onConnectionStateChanged(PeerConnection.PeerConnectionState state) {
+                setBadgeForConnectionState(state.toString());
+                Log.d(TAG,state.toString());
+            }
+
+            @Override
+            public void onMessageRecieved(String message) {
+                try {
+                    messageManager.handleMessage(message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Log.d("Scan", "Cancelled scan");
+            } else {
+                Log.d("Scan", "Scanned: " + result.getContents());
+                String id = result.getContents();
+                webRTC.init(this,id);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
+
+
+    private void createNavigation() {
+        bottomNavigation = findViewById(R.id.nav_view);
+
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_home, R.id.navigation_compiler, R.id.navigation_tasks, R.id.navigation_profile)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupWithNavController(bottomNavigation, navController);
+
+        connectionState = bottomNavigation.getOrCreateBadge(R.id.navigation_compiler);
+        setBadgeForConnectionState("NOT_CONNECTED");
+    }
+
+    private void setBadgeForConnectionState(String state) {
+        if(state == "CONNECTED") {
+            connectionState.setBackgroundColor(Color.parseColor("#30d158"));
+        }else {
+            connectionState.setBackgroundColor(Color.parseColor("#ff443a"));
+        }
+        connectionState.isVisible();
+    }
+
 }
