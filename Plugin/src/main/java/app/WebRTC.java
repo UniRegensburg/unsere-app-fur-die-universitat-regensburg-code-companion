@@ -18,7 +18,6 @@ import static io.socket.client.Socket.EVENT_DISCONNECT;
 
 public class WebRTC {
 
-
     public Socket socket;
     private PeerConnectionFactory factory;
     private RTCPeerConnection peerConnection;
@@ -26,6 +25,7 @@ public class WebRTC {
     private RTCDataChannel dc;
     private String id;
     private boolean isConnecting;
+    private WebRTCListener listener;
 
     private String stunServer = "stun:stun.l.google.com:19302";
     private String turnServer = "turn:nrg-esport.de:3478";
@@ -101,7 +101,13 @@ public class WebRTC {
 
                 @Override
                 public void onIceConnectionChange(RTCIceConnectionState iceConnectionState) {
+                    System.out.println("Ice Connection State Changed: " + peerConnection.getIceConnectionState().toString());
+                }
+
+                @Override
+                public void onConnectionChange(RTCPeerConnectionState state){
                     System.out.println("Connection State Changed: " + peerConnection.getConnectionState().toString());
+                    listener.onConnectionStateChanged(state);
                 }
             });
         });
@@ -130,20 +136,24 @@ public class WebRTC {
                         peerConnection.setRemoteDescription(new RTCSessionDescription(RTCSdpType.OFFER, message.getString("sdp")),new SimpleSdpObserverSet(){
                             @Override
                             public void onSuccess() {
-                                peerConnection.createAnswer(new RTCAnswerOptions(), new SimpleSdpObserverCreate() {
-                                    @Override
-                                    public void onSuccess(RTCSessionDescription sessionDescription) {
-                                        peerConnection.setLocalDescription(sessionDescription, new SimpleSdpObserverSet());
-                                        JSONObject message = new JSONObject();
-                                        try {
-                                            message.put("type", "answer");
-                                            message.put("sdp", sessionDescription.sdp);
-                                            socket.emit("message", message);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                try{
+                                    peerConnection.createAnswer(new RTCAnswerOptions(), new SimpleSdpObserverCreate() {
+                                        @Override
+                                        public void onSuccess(RTCSessionDescription sessionDescription) {
+                                            peerConnection.setLocalDescription(sessionDescription, new SimpleSdpObserverSet());
+                                            JSONObject message = new JSONObject();
+                                            try {
+                                                message.put("type", "answer");
+                                                message.put("sdp", sessionDescription.sdp);
+                                                socket.emit("message", message);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         });
                     }
@@ -162,6 +172,7 @@ public class WebRTC {
             }).on("ready", args -> {
                 System.out.println("Room ready");
                 isConnecting = true;
+
             });
             socket.connect();
         } catch (URISyntaxException e) {
@@ -218,5 +229,13 @@ public class WebRTC {
                 peerConnection.close();
             }
         }
+    }
+
+    public void setWebRTCListener(WebRTCListener listener) {
+        this.listener = listener;
+    }
+
+    public interface WebRTCListener{
+        public void onConnectionStateChanged(RTCPeerConnectionState state);
     }
 }

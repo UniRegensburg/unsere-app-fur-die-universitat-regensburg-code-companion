@@ -10,7 +10,9 @@ import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.util.ui.JBDimension;
+import dev.onvoid.webrtc.RTCPeerConnectionState;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -29,6 +31,7 @@ public class QRPopupAction extends AnAction {
     private int qrDimensions = 500;
     private WebRTC webRTC;
     private MessageHandler messageHandler;
+    private JFrame frame;
 
     /**
      * Default method of intellij plugins
@@ -45,6 +48,7 @@ public class QRPopupAction extends AnAction {
      */
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
+        frame = new JFrame("QR Code");
         currentProject = event.getProject();
         qrGenerator = new QRCodeGenerator();
         menuBar = WindowManager.getInstance().getFrame(currentProject).getJMenuBar();
@@ -53,6 +57,17 @@ public class QRPopupAction extends AnAction {
         messageHandler = new MessageHandler();
         String stringId = Double.toString(id);
         webRTC.init(stringId);
+
+        webRTC.setWebRTCListener(new WebRTC.WebRTCListener() {
+            @Override
+            public void onConnectionStateChanged(RTCPeerConnectionState state) {
+                System.out.println("CURRENT STATE:" + state);
+                if(state == RTCPeerConnectionState.CONNECTING || state == RTCPeerConnectionState.CONNECTED){
+                    frame.setVisible(false);
+                    frame.dispose();
+                }
+            }
+        });
 
         // start listening for IDE events
         ApplicationService.getInstance().startSession();
@@ -85,10 +100,10 @@ public class QRPopupAction extends AnAction {
         int height = screenSize.height;
         int width = screenSize.width;
         int size = 300;
-        JFrame frame = new JFrame("QR Code");
 
         frame.pack();
         frame.getContentPane().add(new JLabel(new ImageIcon(qrCodeImage)),BorderLayout.CENTER);
+        frame.getContentPane().setBackground(Color.WHITE);
         //frame.add(new JLabel(connectId));
         frame.setSize(size,size);
         frame.setLocation(width/2-size/2, height/2-size/2);
