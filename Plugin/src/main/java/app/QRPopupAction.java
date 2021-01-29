@@ -15,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -79,19 +81,26 @@ public class QRPopupAction extends AnAction {
      * @param connectId > ConnectId in PlainText
      */
     public void createPopup(BufferedImage qrCodeImage, String connectId) {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(new JLabel(new ImageIcon(qrCodeImage)));
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int height = screenSize.height;
+        int width = screenSize.width;
+        int size = 300;
+        JFrame frame = new JFrame("QR Code");
 
-        ComponentPopupBuilder popupFactory = JBPopupFactory
-                .getInstance()
-                .createComponentPopupBuilder(panel, panel)
-                .setCancelOnClickOutside(true)
-                .setResizable(true);
+        frame.pack();
+        frame.getContentPane().add(new JLabel(new ImageIcon(qrCodeImage)),BorderLayout.CENTER);
+        //frame.add(new JLabel(connectId));
+        frame.setSize(size,size);
+        frame.setLocation(width/2-size/2, height/2-size/2);
+        frame.setVisible(true);
 
-        if(currentProject != null) {
-            JBPopup popup = popupFactory.createPopup();
-            popup.showUnderneathOf(menuBar);
-            popup.setMinimumSize(new JBDimension(qrDimensions, qrDimensions));
-        }
+        frame.addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                webRTC.safeCloseRoom();
+            }
+        });
     }
 }

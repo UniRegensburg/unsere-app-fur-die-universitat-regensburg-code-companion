@@ -25,6 +25,7 @@ public class WebRTC {
     private ExecutorService executor;
     private RTCDataChannel dc;
     private String id;
+    private boolean isConnecting;
 
     private String stunServer = "stun:stun.l.google.com:19302";
     private String turnServer = "turn:nrg-esport.de:3478";
@@ -32,6 +33,7 @@ public class WebRTC {
 
     public void init(String id){
         this.id = id;
+        isConnecting = false;
         executor = Executors.newFixedThreadPool(1);
         RTCIceServer iceServer1 = new RTCIceServer();
         iceServer1.urls.add(stunServer);
@@ -159,6 +161,7 @@ public class WebRTC {
             }).on(EVENT_DISCONNECT, args -> {
             }).on("ready", args -> {
                 System.out.println("Room ready");
+                isConnecting = true;
             });
             socket.connect();
         } catch (URISyntaxException e) {
@@ -195,6 +198,25 @@ public class WebRTC {
             return dc.getState();
         }else{
             return null;
+        }
+    }
+
+    public void closeConnection(){
+        if(peerConnection != null){
+            socket.disconnect();
+            socket.close();
+            peerConnection.close();
+        }
+    }
+
+    public void safeCloseRoom(){
+        if(peerConnection != null){
+            if(!isConnecting){
+                System.out.println("Safe closing connection");
+                socket.disconnect();
+                socket.close();
+                peerConnection.close();
+            }
         }
     }
 }
