@@ -11,6 +11,7 @@ import com.example.codecompanion.ui.compiler.CompilerFragment;
 import com.example.codecompanion.ui.home.HomeFragment;
 import com.example.codecompanion.ui.profile.ProfileFragment;
 import com.example.codecompanion.ui.tasks.TasksFragment;
+import com.example.codecompanion.util.ConnectionState;
 import com.example.codecompanion.util.MessageCreator;
 import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.WebRTC;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private WebRTC webRTC;
     private BadgeDrawable connectionState;
     private MessageManager messageManager;
+    private ConnectionState conStateManager;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -50,11 +52,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         messageManager = MessageManager.getInstance();
+        conStateManager = ConnectionState.getInstance();
         createNavigation();
         webRTC = new WebRTC();
         webRTC.setWebRTCListener(new WebRTC.WebRTCListener() {
             @Override
             public void onConnectionStateChanged(PeerConnection.PeerConnectionState state) {
+                conStateManager.getInstance().stateChanged(state);
                 setBadgeForConnectionState(state.toString());
                 Log.d(TAG,state.toString());
             }
