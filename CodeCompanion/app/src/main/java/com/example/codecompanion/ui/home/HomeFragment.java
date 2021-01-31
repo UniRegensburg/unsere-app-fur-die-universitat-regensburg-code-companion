@@ -6,13 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.codecompanion.util.ConnectionState;
+import com.example.codecompanion.util.ConnectionStateManager;
 import com.example.codecompanion.util.QrScanner;
 import com.example.codecompanion.R;
 
@@ -22,7 +21,7 @@ public class HomeFragment extends Fragment {
     private Button connect;
     private View connectionStateView;
     private TextView connectionStateValue;
-    private ConnectionState connectionState;
+    private ConnectionStateManager connectionStateManager;
     private TextView connectionStateId;
     private Drawable connectedIcon;
     private Drawable disconnectedIcon;
@@ -34,7 +33,7 @@ public class HomeFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         qrScanner = new QrScanner();
 
-        connectionState = ConnectionState.getInstance();
+        connectionStateManager = ConnectionStateManager.getInstance();
         connectionStateValue = root.findViewById(R.id.connection_state_value);
         connectionStateView = root.findViewById(R.id.connection_state_view);
         connectionStateId = root.findViewById(R.id.connection_state_id);
@@ -53,7 +52,7 @@ public class HomeFragment extends Fragment {
 
     public void onResume() {
         super.onResume();
-        connectionState.setListener(new ConnectionState.ConnectionStateListener() {
+        connectionStateManager.setListener(new ConnectionStateManager.ConnectionStateListener() {
             @Override
             public void onConnect() {
                 setConnected();
@@ -64,8 +63,8 @@ public class HomeFragment extends Fragment {
                 setDisconnected();
             }
         });
-        if(connectionState.getConnectionState() == PeerConnection.PeerConnectionState.CONNECTED ||
-        connectionState.getConnectionState() == PeerConnection.PeerConnectionState.CONNECTING) {
+        if(connectionStateManager.getConnectionState() == PeerConnection.PeerConnectionState.CONNECTED ||
+        connectionStateManager.getConnectionState() == PeerConnection.PeerConnectionState.CONNECTING) {
             setConnected();
         }else {
             setDisconnected();
@@ -81,7 +80,7 @@ public class HomeFragment extends Fragment {
                 connect.setAlpha(.5f);
                 connectionStateView.setBackgroundResource(R.drawable.button_green);
                 connectionStateValue.setText("CONNECTED");
-                connectionStateId.setText("to " + connectionState.getConnectedToId());
+                connectionStateId.setText("to " + connectionStateManager.getConnectedToId());
                 connectionStateValue.setCompoundDrawablesRelativeWithIntrinsicBounds(connectedIcon, null, null, null);
             }
         });
@@ -104,6 +103,6 @@ public class HomeFragment extends Fragment {
 
     public void onPause() {
         super.onPause();
-        connectionState.removeListener();
+        connectionStateManager.removeListener();
     }
 }
