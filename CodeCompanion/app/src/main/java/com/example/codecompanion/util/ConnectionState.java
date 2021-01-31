@@ -4,15 +4,14 @@ import org.webrtc.PeerConnection;
 
 public class ConnectionState {
     private ConnectionStateListener listener;
+    private static ConnectionState instance;
+    private PeerConnection.PeerConnectionState status;
+    private String id;
 
     public interface ConnectionStateListener{
         public void onConnect();
         public void onDisconnect();
     }
-
-    private static ConnectionState instance;
-    private PeerConnection.PeerConnectionState status;
-
     private ConnectionState() {}
 
     public static ConnectionState getInstance() {
@@ -48,5 +47,14 @@ public class ConnectionState {
             }
         }
 
+    }
+
+    public String getConnectedToId() {
+        return this.id;
+    }
+
+
+    public void setConnectedToId(String id) {
+        this.id = id;
     }
 }

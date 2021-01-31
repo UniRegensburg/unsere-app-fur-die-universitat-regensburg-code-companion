@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private BadgeDrawable connectionState;
     private MessageManager messageManager;
     private ConnectionState conStateManager;
+    private String id;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onConnectionStateChanged(PeerConnection.PeerConnectionState state) {
                 conStateManager.getInstance().stateChanged(state);
+                conStateManager.setConnectedToId(id);
                 setBadgeForConnectionState(state.toString());
                 Log.d(TAG,state.toString());
             }
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Scan", "Cancelled scan");
             } else {
                 Log.d("Scan", "Scanned: " + result.getContents());
-                String id = result.getContents();
+                id = result.getContents();
                 webRTC.init(this,id);
             }
         } else {
