@@ -1,6 +1,7 @@
 package app.services.application;
 
 import app.MessageHandler;
+import app.TaskHandler;
 import app.WebRTC;
 import app.listeners.ListenerHelper;
 import app.listeners.base.Event;
@@ -15,9 +16,11 @@ public class ApplicationService {
     private boolean listenersAreReady = false;
     private MessageHandler messageHandler;
     private WebRTC webRTC;
+    private TaskHandler taskHandler = new TaskHandler();
     private ApplicationState state = ApplicationState.IDLE;
     private LogService logService;
     private final ArrayList<AutoLogger> autoLoggers = new ArrayList<>();
+
 
     public static ApplicationService getInstance() {
         return ServiceManager.getService(ApplicationService.class);
@@ -28,10 +31,13 @@ public class ApplicationService {
     }
 
     public void startSession() {
+
         if (state == ApplicationState.RECORDING) {
             return;
         }
         if(!logIsReady) {
+           //Hier?
+           taskHandler.init();
            logService = ServiceManager.getService(LogService.class);
            logService.init();
            logIsReady = true;
@@ -94,5 +100,7 @@ public class ApplicationService {
     public WebRTC getWebRTC(){
         return this.webRTC;
     }
+
+    public TaskHandler getTaskHandler(){return this.taskHandler; }
 
 }
