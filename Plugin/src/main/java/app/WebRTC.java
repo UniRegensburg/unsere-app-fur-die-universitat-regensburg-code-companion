@@ -5,6 +5,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.scijava.nativelib.NativeLoader;
 
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -137,7 +138,7 @@ public class WebRTC {
                             @Override
                             public void onSuccess() {
                                 try{
-                                    peerConnection.createAnswer(new RTCAnswerOptions(), new SimpleSdpObserverCreate() {
+                                    peerConnection.createAnswer(new RTCAnswerOptions(), new CreateSessionDescriptionObserver(){
                                         @Override
                                         public void onSuccess(RTCSessionDescription sessionDescription) {
                                             peerConnection.setLocalDescription(sessionDescription, new SimpleSdpObserverSet());
@@ -149,6 +150,11 @@ public class WebRTC {
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
+                                        }
+
+                                        @Override
+                                        public void onFailure(String error) {
+                                            System.out.println(error);
                                         }
                                     });
                                 } catch (Exception e) {
