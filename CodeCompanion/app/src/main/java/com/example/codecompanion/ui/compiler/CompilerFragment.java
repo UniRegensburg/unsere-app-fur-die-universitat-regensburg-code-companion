@@ -25,13 +25,14 @@ import com.example.codecompanion.util.MessageViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CompilerFragment extends Fragment {
 
     private MessageManager messageManager;
     private MessageCreator messageCreator;
     private MessageViewAdapter adapter;
-    private List<String> data;
+    private List<Map> data;
 
     private RecyclerView messages;
 
@@ -60,43 +61,22 @@ public class CompilerFragment extends Fragment {
                     @Override
                     public void run() {
                         data.clear();
+                        for (Map error: messageManager.getErrors()) {
+                            data.add(error);
+                        }
+                        for (Map warning:messageManager.getWarnings()) {
+                            data.add(warning);
+                        }
                         adapter.notifyDataSetChanged();
                     }
                 });
-                for (String error:messageManager.getErrors()) {
-                    data.add(error);
-                    doUiChanges();
-                }
-                for (String warning:messageManager.getWarnings()) {
-                    data.add(warning);
-                    doUiChanges();
-                }
-
             }
         });
-        for (String error:messageManager.getErrors()) {
-            data.add(error);
-            doUiChanges();
-        }
-        for (String warning:messageManager.getWarnings()) {
-            data.add(warning);
-            doUiChanges();
-        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         messageManager.removeListener();
-    }
-
-    private void doUiChanges(){
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyItemInserted(data.size());
-            }
-        });
-
     }
 }
