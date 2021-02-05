@@ -41,20 +41,12 @@ public class MessageManager {
             removeAll();
         }else{
             HashMap<String, String> messageMap = unpackString(message);
-            String tag = messageMap.get("tag");
             String desc = messageMap.get("description");
             String line = messageMap.get("line");
             String type = messageMap.get("type");
             String oc = messageMap.get("ocurence");
-            int messageType;
-
-            if(tag.equals("WARNING")){
-                messageType = 0;
-            }else{
-                messageType = 1;
-            }
-
             String messageText = oc + ": " + line + "\n" + type + "\n" + desc;
+
             Map convertedMessage = new HashMap();
             convertedMessage.put("tag", messageMap.get("tag"));
             convertedMessage.put("text", messageText);

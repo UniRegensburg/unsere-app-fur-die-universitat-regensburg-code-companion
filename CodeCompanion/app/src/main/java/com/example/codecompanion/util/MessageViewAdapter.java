@@ -5,15 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.codecompanion.R;
-
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * @author PLACEBOBRO
+ */
 public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Map> localDataSet;
@@ -22,6 +23,10 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static int TYPE_ERROR = 1;
     private static int TYPE_WARNING = 0;
 
+
+    /**
+     * ErrorViewHolder with error layout
+     */
     class ErrorViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
 
@@ -31,6 +36,9 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
+    /**
+     * WarningViewHolder with warning layout
+     */
     class WarningViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
 
@@ -45,6 +53,11 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         localDataSet = dataSet;
     }
 
+    /**
+     * Checks the type of given map and returns it
+     * @param position
+     * @return type of given map
+     */
     @Override
     public int getItemViewType(int position) {
         if(localDataSet.get(position).get("tag").equals("WARNING")) {
@@ -55,10 +68,15 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     }
 
+    /**
+     * Decides which layout to inflate based on type
+     * @param parent
+     * @param viewType
+     * @return the used viewHolder
+     */
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Create a new view, which defines the UI of the list item
         View view;
         if(viewType == TYPE_ERROR) {
             view = mInflater.inflate(R.layout.rv_message_error, parent, false);
@@ -71,6 +89,11 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     }
 
+    /**
+     * Sets text of selected view template
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         String message = (String) localDataSet.get(position).get("text");
