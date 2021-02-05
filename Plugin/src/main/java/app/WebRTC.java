@@ -35,7 +35,7 @@ public class WebRTC {
     public void init(String id){
         this.id = id;
         isConnecting = false;
-        executor = Executors.newFixedThreadPool(1);
+        executor = Executors.newFixedThreadPool(3);
         RTCIceServer iceServer1 = new RTCIceServer();
         iceServer1.urls.add(stunServer);
 
@@ -50,6 +50,7 @@ public class WebRTC {
 
         RTCConfiguration rtcConfiguration = new RTCConfiguration();
         rtcConfiguration.iceServers = iceServers;
+
 
         executeAndWait(() ->{
             factory = new PeerConnectionFactory();
@@ -172,6 +173,7 @@ public class WebRTC {
                         peerConnection.addIceCandidate(candidate);
                     }
                 } catch (JSONException e) {
+                    System.out.println("Crashed");
                     e.printStackTrace();
                 }
             }).on(EVENT_DISCONNECT, args -> {
