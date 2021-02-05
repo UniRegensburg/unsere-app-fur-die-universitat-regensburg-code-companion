@@ -14,27 +14,39 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.codecompanion.MainActivity;
 import com.example.codecompanion.R;
 import com.example.codecompanion.util.MessageCreator;
 import com.example.codecompanion.util.MessageManager;
+import com.example.codecompanion.util.MessageViewAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CompilerFragment extends Fragment {
 
     private MessageManager messageManager;
     private MessageCreator messageCreator;
-    private LinearLayout linearLayout;
+    private MessageViewAdapter adapter;
+    private List<String> data;
+
+    private RecyclerView messages;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_compiler, container, false);
         messageCreator = new MessageCreator(getContext(),root);
         messageManager = MessageManager.getInstance();
-        linearLayout = root.findViewById(R.id.message_list);
+        messages = root.findViewById(R.id.message_list);
+        messages.setLayoutManager(new LinearLayoutManager(root.getContext()));
+        data = new ArrayList<>();
+        data.addAll(messageManager.getErrors());
+        data.addAll(messageManager.getWarnings());
+        adapter = new MessageViewAdapter(root.getContext(), data);
+        messages.setAdapter(adapter);
         return root;
     }
 
@@ -47,22 +59,28 @@ public class CompilerFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        linearLayout.removeAllViewsInLayout();
+                        data.clear();
+                        adapter.notifyDataSetChanged();
                     }
                 });
                 for (String error:messageManager.getErrors()) {
-                    doUiChanges(messageCreator.createErrorMessage(error));
+                    data.add(error);
+                    doUiChanges();
                 }
                 for (String warning:messageManager.getWarnings()) {
-                    doUiChanges(messageCreator.createWarningMessage(warning));
+                    data.add(warning);
+                    doUiChanges();
                 }
+
             }
         });
         for (String error:messageManager.getErrors()) {
-            doUiChanges(messageCreator.createErrorMessage(error));
+            data.add(error);
+            doUiChanges();
         }
         for (String warning:messageManager.getWarnings()) {
-            doUiChanges(messageCreator.createWarningMessage(warning));
+            data.add(warning);
+            doUiChanges();
         }
     }
 
@@ -72,11 +90,11 @@ public class CompilerFragment extends Fragment {
         messageManager.removeListener();
     }
 
-    private void doUiChanges(View view){
+    private void doUiChanges(){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                linearLayout.addView(view);
+                adapter.notifyItemInserted(data.size());
             }
         });
 
