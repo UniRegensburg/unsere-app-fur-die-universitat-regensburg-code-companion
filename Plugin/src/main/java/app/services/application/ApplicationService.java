@@ -36,8 +36,6 @@ public class ApplicationService {
             return;
         }
         if(!logIsReady) {
-           //Hier den task handler starten?
-           taskHandler.init();
            logService = ServiceManager.getService(LogService.class);
            logService.init();
            logIsReady = true;
