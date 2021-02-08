@@ -124,7 +124,7 @@ public class WebRTC {
                 Log.d(TAG,"READY");
 
                 DataChannel.Init dcInit = new DataChannel.Init();
-                dc1 = peerConnection.createDataChannel("TestChannel",dcInit);
+                dc1 = peerConnection.createDataChannel(id,dcInit);
                 dc1.registerObserver(new DataChannel.Observer() {
                     public void onBufferedAmountChange(long previousAmount) {
                         Log.d(TAG, "Data channel buffered amount changed: " + dc1.label() + ": " + dc1.state());
