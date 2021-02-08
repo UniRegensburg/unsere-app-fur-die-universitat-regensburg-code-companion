@@ -90,8 +90,6 @@ public class QRPopupAction extends AnAction implements PluginIcons {
         } catch (WriterException | IOException e) {
             e.printStackTrace();
         }
-
-        webRTC.connectSignaling();
     }
 
     /**
