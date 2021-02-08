@@ -1,13 +1,12 @@
 package app;
 
-import com.google.common.util.concurrent.ListenableFuture;
 import dev.onvoid.webrtc.*;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.xml.transform.Result;
+
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -52,6 +51,69 @@ public class WebRTC {
         RTCConfiguration rtcConfiguration = new RTCConfiguration();
         rtcConfiguration.iceServers = iceServers;
 
+        factory = new PeerConnectionFactory();
+        peerConnection = factory.createPeerConnection(rtcConfiguration, new PeerConnectionObserver() {
+
+            @Override
+            public void onIceCandidate(RTCIceCandidate iceCandidate) {
+                JSONObject message = new JSONObject();
+
+                try {
+                    message.put("type", "candidate");
+                    message.put("label", iceCandidate.sdpMLineIndex);
+                    message.put("id", iceCandidate.sdpMid);
+                    message.put("candidate", iceCandidate.sdp);
+
+                    System.out.println("onIceCandidate: sending candidate " + message);
+                    socket.emit("message", message, id);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onDataChannel(RTCDataChannel dataChannel) {
+                dc = dataChannel;
+                System.out.println("New Data channel " + dc.getLabel());
+                dc.registerObserver(new RTCDataChannelObserver() {
+                    @Override
+                    public void onBufferedAmountChange(long previousAmount) {
+                        System.out.println("Data channel buffered amount changed: " + dc.getLabel() + ": " + dc.getState());
+                    }
+
+                    @Override
+                    public void onStateChange() {
+                        System.out.println("Data channel state changed: " + dc.getLabel() + ": " + dc.getState());
+                    }
+
+                    @Override
+                    public void onMessage(RTCDataChannelBuffer buffer) {
+                        if (buffer.binary) {
+                            System.out.println("Received binary msg over " + dc);
+                            return;
+                        }
+                        ByteBuffer data = buffer.data;
+                        final byte[] bytes = new byte[data.capacity()];
+                        data.get(bytes);
+                        String strData = new String(bytes);
+                        System.out.println("Got msg: " + strData + " over " + dc);
+                    }
+                });
+            }
+
+            @Override
+            public void onIceConnectionChange(RTCIceConnectionState iceConnectionState) {
+                System.out.println("Ice Connection State Changed: " + peerConnection.getIceConnectionState().toString());
+            }
+
+            @Override
+            public void onConnectionChange(RTCPeerConnectionState state) {
+                System.out.println("Connection State Changed: " + peerConnection.getConnectionState().toString());
+                listener.onConnectionStateChanged(state);
+            }
+        });
+        connectSignaling();
+        /*
         executeAndWait(new Runnable() {
             @Override
             public void run() {
@@ -119,6 +181,8 @@ public class WebRTC {
                 connectSignaling();
             }
         });
+        */
+
     }
 
     public void connectSignaling(){
