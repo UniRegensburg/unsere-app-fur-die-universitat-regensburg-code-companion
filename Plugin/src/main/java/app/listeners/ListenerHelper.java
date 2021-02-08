@@ -30,6 +30,7 @@ public class ListenerHelper {
         FileEditor currentEditor = FileEditorManager.getInstance(currentProject).getSelectedEditor();
         initMenuListener(currentEditor);
         initMessageBusListener(currentProject.getMessageBus(), currentProject);
+
     }
 
     public static void initMenuListener(FileEditor currentEditor) {

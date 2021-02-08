@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MessageManager {
 
@@ -18,14 +19,14 @@ public class MessageManager {
         public void onDataChanged();
     }
 
-    private List<String> errors;
-    private List<String> warnings;
+    private List<Map> errors;
+    private List<Map> warnings;
     private MessageManagerListener listener;
     private static MessageManager instance;
 
     private MessageManager() {
-        errors = new ArrayList<String>();
-        warnings = new ArrayList<String>();
+        errors = new ArrayList<>();
+        warnings = new ArrayList<>();
     }
 
     public static MessageManager getInstance(){
@@ -40,32 +41,26 @@ public class MessageManager {
             removeAll();
         }else{
             HashMap<String, String> messageMap = unpackString(message);
-            String tag = messageMap.get("tag");
             String desc = messageMap.get("description");
             String line = messageMap.get("line");
             String type = messageMap.get("type");
             String oc = messageMap.get("ocurence");
-            int messageType;
-
-            if(tag.equals("WARNING")){
-                messageType = 0;
-            }else{
-                messageType = 1;
-            }
-
             String messageText = oc + ": " + line + "\n" + type + "\n" + desc;
-            addMessage(messageText, messageType);
+
+            Map convertedMessage = new HashMap();
+            convertedMessage.put("tag", messageMap.get("tag"));
+            convertedMessage.put("text", messageText);
+
+            addMessage(convertedMessage);
         }
     }
 
-    public void addMessage(String message, int type){
-        switch(type){
-            case 0:
-                warnings.add(message);
-                break;
-            case 1:
-                errors.add(message);
-                break;
+    public void addMessage(Map message){
+        Object tag = message.get("tag");
+        if ("WARNING".equals(tag)) {
+            warnings.add(message);
+        } else if ("ERROR".equals(tag)) {
+            errors.add(message);
         }
         if(listener != null) {
             listener.onDataChanged();
@@ -80,11 +75,11 @@ public class MessageManager {
         }
     }
 
-    public List<String> getErrors() {
+    public List<Map> getErrors() {
         return errors;
     }
 
-    public List<String> getWarnings() {
+    public List<Map> getWarnings() {
         return warnings;
     }
 
