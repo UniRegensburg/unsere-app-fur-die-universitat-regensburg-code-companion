@@ -164,9 +164,6 @@ public class WebRTC {
                             }
                         });
                     }
-                    if (message.getString("type").equals("answer")) {
-                        peerConnection.setRemoteDescription(new RTCSessionDescription(RTCSdpType.ANSWER, message.getString("sdp")),new SimpleSdpObserverSet());
-                    }
                     if (message.getString("type").equals("candidate")) {
                         System.out.println("connectToSignallingServer: receiving candidates");
                         RTCIceCandidate candidate = new RTCIceCandidate(message.getString("id"), message.getInt("label"), message.getString("candidate"));
