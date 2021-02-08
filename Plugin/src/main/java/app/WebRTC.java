@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -14,8 +15,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static io.socket.client.Socket.EVENT_CONNECT;
-import static io.socket.client.Socket.EVENT_DISCONNECT;
+import static io.socket.client.Socket.*;
 
 public class WebRTC {
 
@@ -27,14 +27,16 @@ public class WebRTC {
     private String id;
     private boolean isConnecting;
     private WebRTCListener listener;
+    private boolean hasSendAnswer;
 
     private String stunServer = "stun:stun.l.google.com:19302";
     private String turnServer = "turn:nrg-esport.de:3478";
-    private String socketUri = "http://nrg-esport.de:3000/";
+    private String socketUri = "http://62.75.151.5:3000/";
 
     public void init(String id){
         this.id = id;
         isConnecting = false;
+        hasSendAnswer = false;
         executor = Executors.newFixedThreadPool(1);
         RTCIceServer iceServer1 = new RTCIceServer();
         iceServer1.urls.add(stunServer);
@@ -115,83 +117,78 @@ public class WebRTC {
                         listener.onConnectionStateChanged(state);
                     }
                 });
-                connectSignaling();
             }
         });
 
 
     }
 
-    public void connectSignaling(){
-        try {
-            socket = IO.socket(socketUri);
-            socket.connect();
-            socket.on(EVENT_CONNECT, args -> {
-                System.out.println("Connected to Signalling");
-                socket.emit("create or join", id);
-            }).on("created", args -> {
-                System.out.println("Room created");
-            }).on("full", args -> {
-                System.out.println("Room full");
-            }).on("join", args -> {
-                System.out.println("Join Room");
-            }).on("joined", args -> {
-                System.out.println("Joined Room");
-            }).on("message", args -> {
-                try {
-                    System.out.println("connectToSignallingServer: got a message");
-                    System.out.println(args[0].toString());
-                    JSONObject message = (JSONObject) args[0];
-                    if (message.getString("type").equals("offer")) {
-                        peerConnection.setRemoteDescription(new RTCSessionDescription(RTCSdpType.OFFER, message.getString("sdp")),new SimpleSdpObserverSet(){
+    public void startSignaling() {
+        URI uri = URI.create(socketUri);
+        socket = IO.socket(uri);
+        socket.on(EVENT_CONNECT, args -> {
+            System.out.println("Connected to Signalling");
+            socket.emit("create or join", id);
+        }).on("created", args -> {
+            System.out.println("Room created");
+        }).on("full", args -> {
+            System.out.println("Room full");
+        }).on("join", args -> {
+            System.out.println("Join Room");
+        }).on("joined", args -> {
+            System.out.println("Joined Room");
+        }).on("message", args -> {
+            try {
+                System.out.println("connectToSignallingServer: got a message");
+                System.out.println(args[0].toString());
+                JSONObject message = (JSONObject) args[0];
+                if (message.getString("type").equals("offer")) {
+                    peerConnection.setRemoteDescription(new RTCSessionDescription(RTCSdpType.OFFER, message.getString("sdp")),new SimpleSdpObserverSet());
+                }
+                if (message.getString("type").equals("candidate")) {
+                    System.out.println("connectToSignallingServer: receiving candidates");
+                    RTCIceCandidate candidate = new RTCIceCandidate(message.getString("id"), message.getInt("label"), message.getString("candidate"));
+                    peerConnection.addIceCandidate(candidate);
+                    if(!hasSendAnswer){
+                        hasSendAnswer = true;
+                        peerConnection.createAnswer(new RTCAnswerOptions(), new CreateSessionDescriptionObserver(){
                             @Override
-                            public void onSuccess() {
-                                try{
-                                    System.out.println(peerConnection.getPendingRemoteDescription());
-                                    peerConnection.createAnswer(new RTCAnswerOptions(), new CreateSessionDescriptionObserver(){
-                                        @Override
-                                        public void onSuccess(RTCSessionDescription sessionDescription) {
-                                            peerConnection.setLocalDescription(sessionDescription, new SimpleSdpObserverSet());
-                                            JSONObject message = new JSONObject();
-                                            try {
-                                                message.put("type", "answer");
-                                                message.put("sdp", sessionDescription.sdp);
-                                                socket.emit("message", message,id);
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(String error) {
-                                            System.out.println(error);
-                                        }
-                                    });
-                                } catch (Exception e) {
+                            public void onSuccess(RTCSessionDescription sessionDescription) {
+                                peerConnection.setLocalDescription(sessionDescription, new SimpleSdpObserverSet());
+                                JSONObject message = new JSONObject();
+                                try {
+                                    message.put("type", "answer");
+                                    message.put("sdp", sessionDescription.sdp);
+                                    socket.emit("message", message,id);
+                                } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+
+                            }
+
+                            @Override
+                            public void onFailure(String error) {
+                                System.out.println(error);
                             }
                         });
                     }
-                    if (message.getString("type").equals("candidate")) {
-                        System.out.println("connectToSignallingServer: receiving candidates");
-                        RTCIceCandidate candidate = new RTCIceCandidate(message.getString("id"), message.getInt("label"), message.getString("candidate"));
-                        peerConnection.addIceCandidate(candidate);
-                    }
-                } catch (JSONException e) {
-                    System.out.println("Crashed");
-                    e.printStackTrace();
                 }
-            }).on(EVENT_DISCONNECT, args -> {
-            }).on("ready", args -> {
-                System.out.println("Room ready");
-                isConnecting = true;
+            } catch (JSONException e) {
+                System.out.println("Crashed");
+                e.printStackTrace();
+            }
+        }).on(EVENT_CONNECT_ERROR, args -> {
+            System.out.println(args[0]);
+        }).on(EVENT_DISCONNECT, args -> {
+            System.out.println("Disconnected");
+        }).on("ready", args -> {
+            System.out.println("Room ready");
+            isConnecting = true;
+        });
+    }
 
-            });
-            socket.connect();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+    public void connect (){
+        socket.connect();
     }
 
     private void executeAndWait(Runnable runnable) {
@@ -205,7 +202,6 @@ public class WebRTC {
 
     public void sendData(final String data) throws Exception {
         ByteBuffer buffer = ByteBuffer.wrap(data.getBytes());
-        RTCDataChannelBuffer rtcDataChannelBuffer = new RTCDataChannelBuffer(buffer,false);
         dc.send(new RTCDataChannelBuffer(buffer, false));
     }
 
@@ -243,6 +239,10 @@ public class WebRTC {
                 peerConnection.close();
             }
         }
+    }
+
+    public String getId(){
+        return id;
     }
 
     public void setWebRTCListener(WebRTCListener listener) {

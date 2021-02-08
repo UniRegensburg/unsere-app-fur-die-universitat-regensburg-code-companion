@@ -62,7 +62,6 @@ public class WebRTC {
             public void onIceCandidate(IceCandidate iceCandidate) {
                 super.onIceCandidate(iceCandidate);
                 JSONObject message = new JSONObject();
-
                 try {
                     message.put("type", "candidate");
                     message.put("label", iceCandidate.sdpMLineIndex);
@@ -79,7 +78,12 @@ public class WebRTC {
             @Override
             public void onIceConnectionChange(PeerConnection.IceConnectionState iceConnectionState) {
                 super.onIceConnectionChange(iceConnectionState);
-                Log.d(TAG,"Connection State Changed: " + peerConnection.connectionState().toString());
+                Log.d(TAG,"Ice Connection State Changed: " + peerConnection.iceConnectionState().toString());
+            }
+
+            @Override
+            public void onConnectionChange(PeerConnection.PeerConnectionState state) {
+                System.out.println("Connection State Changed: " + peerConnection.connectionState().toString());
                 listener.onConnectionStateChanged(peerConnection.connectionState());
             }
         });

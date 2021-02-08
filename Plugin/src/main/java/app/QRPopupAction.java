@@ -25,6 +25,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.UUID;
 
 public class QRPopupAction extends AnAction implements PluginIcons {
@@ -56,14 +57,10 @@ public class QRPopupAction extends AnAction implements PluginIcons {
         currentProject = event.getProject();
         qrGenerator = new QRCodeGenerator();
         menuBar = WindowManager.getInstance().getFrame(currentProject).getJMenuBar();
-        double id = Math.random();
-        ApplicationService.getInstance().startSession();
         webRTC = ApplicationService.getInstance().getWebRTC();
         messageHandler = ApplicationService.getInstance().getMessageHandler();
-        UUID uuid = UUID.randomUUID();
-        String stringId = uuid.toString();
-        webRTC.init(stringId);
 
+        webRTC.connect();
         webRTC.setWebRTCListener(new WebRTC.WebRTCListener() {
             @Override
             public void onConnectionStateChanged(RTCPeerConnectionState state) {
@@ -77,7 +74,7 @@ public class QRPopupAction extends AnAction implements PluginIcons {
 
 
         try {
-            byte[] imageData = qrGenerator.getQRCodeImage(stringId, 150, 150);
+            byte[] imageData = qrGenerator.getQRCodeImage(webRTC.getId(), 150, 150);
             ByteArrayInputStream bis = new ByteArrayInputStream(imageData);
             BufferedImage qrCodeImage = ImageIO.read(bis);
 

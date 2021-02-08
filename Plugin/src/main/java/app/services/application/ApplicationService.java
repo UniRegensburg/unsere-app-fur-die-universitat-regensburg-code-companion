@@ -7,7 +7,9 @@ import app.listeners.base.Event;
 import app.services.log.LogService;
 import com.intellij.openapi.components.ServiceManager;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class ApplicationService {
 
@@ -27,7 +29,7 @@ public class ApplicationService {
         return state;
     }
 
-    public void startSession() {
+    public void startSession() throws URISyntaxException {
         if (state == ApplicationState.RECORDING) {
             return;
         }
@@ -46,6 +48,10 @@ public class ApplicationService {
         state = ApplicationState.RECORDING;
         webRTC = new WebRTC();
         messageHandler = new MessageHandler();
+        UUID uuid = UUID.randomUUID();
+        String stringId = uuid.toString();
+        webRTC.init(stringId);
+        webRTC.startSignaling();
     }
 
     public void saveSession() {
