@@ -57,8 +57,9 @@ public class QRPopupAction extends AnAction implements PluginIcons {
         qrGenerator = new QRCodeGenerator();
         menuBar = WindowManager.getInstance().getFrame(currentProject).getJMenuBar();
         double id = Math.random();
-        webRTC = new WebRTC();
-        messageHandler = new MessageHandler();
+        ApplicationService.getInstance().startSession();
+        webRTC = ApplicationService.getInstance().getWebRTC();
+        messageHandler = ApplicationService.getInstance().getMessageHandler();
         UUID uuid = UUID.randomUUID();
         String stringId = uuid.toString();
         webRTC.init(stringId);
@@ -73,11 +74,6 @@ public class QRPopupAction extends AnAction implements PluginIcons {
                 }
             }
         });
-
-        // start listening for IDE events
-        ApplicationService.getInstance().startSession();
-        ApplicationService.getInstance().setMessageHandler(messageHandler);
-        ApplicationService.getInstance().setWebRTC(webRTC);
 
 
         try {

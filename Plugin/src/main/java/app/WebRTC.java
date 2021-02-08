@@ -125,6 +125,7 @@ public class WebRTC {
     public void connectSignaling(){
         try {
             socket = IO.socket(socketUri);
+            socket.connect();
             socket.on(EVENT_CONNECT, args -> {
                 System.out.println("Connected to Signalling");
                 socket.emit("create or join", id);
