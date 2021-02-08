@@ -2,24 +2,33 @@ package app;
 
 import app.services.application.ApplicationService;
 import com.google.zxing.WriterException;
+import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.ComponentPopupBuilder;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.util.ui.JBDimension;
+import dev.onvoid.webrtc.RTCPeerConnectionState;
+import icons.PluginIcons;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.UUID;
 
-public class QRPopupAction extends AnAction {
+public class QRPopupAction extends AnAction implements PluginIcons {
 
     private Project currentProject;
     private JMenuBar menuBar;
@@ -27,6 +36,7 @@ public class QRPopupAction extends AnAction {
     private int qrDimensions = 500;
     private WebRTC webRTC;
     private MessageHandler messageHandler;
+    private JFrame frame;
 
     /**
      * Default method of intellij plugins
@@ -43,23 +53,28 @@ public class QRPopupAction extends AnAction {
      */
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
+        frame = new JFrame("QR Code");
         currentProject = event.getProject();
         qrGenerator = new QRCodeGenerator();
         menuBar = WindowManager.getInstance().getFrame(currentProject).getJMenuBar();
-        double id = Math.random();
-        webRTC = new WebRTC();
-        messageHandler = new MessageHandler();
-        String stringId = Double.toString(id);
-        webRTC.init(stringId);
+        webRTC = ApplicationService.getInstance().getWebRTC();
+        messageHandler = ApplicationService.getInstance().getMessageHandler();
 
-        // start listening for IDE events
-        ApplicationService.getInstance().startSession();
-        ApplicationService.getInstance().setMessageHandler(messageHandler);
-        ApplicationService.getInstance().setWebRTC(webRTC);
+        webRTC.connect();
+        webRTC.setWebRTCListener(new WebRTC.WebRTCListener() {
+            @Override
+            public void onConnectionStateChanged(RTCPeerConnectionState state) {
+                System.out.println("CURRENT STATE:" + state);
+                if(state == RTCPeerConnectionState.CONNECTING || state == RTCPeerConnectionState.CONNECTED){
+                    frame.setVisible(false);
+                    frame.dispose();
+                }
+            }
+        });
 
 
         try {
-            byte[] imageData = qrGenerator.getQRCodeImage(stringId, 150, 150);
+            byte[] imageData = qrGenerator.getQRCodeImage(webRTC.getId(), 150, 150);
             ByteArrayInputStream bis = new ByteArrayInputStream(imageData);
             BufferedImage qrCodeImage = ImageIO.read(bis);
 
@@ -68,8 +83,6 @@ public class QRPopupAction extends AnAction {
         } catch (WriterException | IOException e) {
             e.printStackTrace();
         }
-
-        webRTC.connectSignaling();
     }
 
     /**
@@ -79,19 +92,26 @@ public class QRPopupAction extends AnAction {
      * @param connectId > ConnectId in PlainText
      */
     public void createPopup(BufferedImage qrCodeImage, String connectId) {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(new JLabel(new ImageIcon(qrCodeImage)));
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int height = screenSize.height;
+        int width = screenSize.width;
+        int size = 300;
 
-        ComponentPopupBuilder popupFactory = JBPopupFactory
-                .getInstance()
-                .createComponentPopupBuilder(panel, panel)
-                .setCancelOnClickOutside(true)
-                .setResizable(true);
+        frame.pack();
+        frame.getContentPane().add(new JLabel(new ImageIcon(qrCodeImage)),BorderLayout.CENTER);
+        frame.getContentPane().setBackground(Color.WHITE);
+        //frame.add(new JLabel(connectId));
+        frame.setSize(size,size);
+        frame.setLocation(width/2-size/2, height/2-size/2);
+        frame.setVisible(true);
 
-        if(currentProject != null) {
-            JBPopup popup = popupFactory.createPopup();
-            popup.showUnderneathOf(menuBar);
-            popup.setMinimumSize(new JBDimension(qrDimensions, qrDimensions));
-        }
+        frame.addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                webRTC.safeCloseRoom();
+            }
+        });
     }
 }

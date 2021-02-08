@@ -62,7 +62,6 @@ public class WebRTC {
             public void onIceCandidate(IceCandidate iceCandidate) {
                 super.onIceCandidate(iceCandidate);
                 JSONObject message = new JSONObject();
-
                 try {
                     message.put("type", "candidate");
                     message.put("label", iceCandidate.sdpMLineIndex);
@@ -70,7 +69,7 @@ public class WebRTC {
                     message.put("candidate", iceCandidate.sdp);
 
                     Log.d(TAG, "onIceCandidate: sending candidate " + message);
-                    socket.emit("message",message);
+                    socket.emit("message",message,id);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -79,7 +78,12 @@ public class WebRTC {
             @Override
             public void onIceConnectionChange(PeerConnection.IceConnectionState iceConnectionState) {
                 super.onIceConnectionChange(iceConnectionState);
-                Log.d(TAG,"Connection State Changed: " + peerConnection.connectionState().toString());
+                Log.d(TAG,"Ice Connection State Changed: " + peerConnection.iceConnectionState().toString());
+            }
+
+            @Override
+            public void onConnectionChange(PeerConnection.PeerConnectionState state) {
+                System.out.println("Connection State Changed: " + peerConnection.connectionState().toString());
                 listener.onConnectionStateChanged(peerConnection.connectionState());
             }
         });
@@ -107,23 +111,6 @@ public class WebRTC {
                     Log.d(TAG, "connectToSignallingServer: got a message");
                     Log.d(TAG, args[0].toString());
                     JSONObject message = (JSONObject) args[0];
-                    if (message.getString("type").equals("offer")) {
-                        peerConnection.setRemoteDescription(new SimpleSdpObserver(), new SessionDescription(OFFER, message.getString("sdp")));
-                        peerConnection.createAnswer(new SimpleSdpObserver() {
-                            @Override
-                            public void onCreateSuccess(SessionDescription sessionDescription) {
-                                peerConnection.setLocalDescription(new SimpleSdpObserver(), sessionDescription);
-                                JSONObject message = new JSONObject();
-                                try {
-                                    message.put("type", "answer");
-                                    message.put("sdp", sessionDescription.description);
-                                    socket.emit("message", message);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, constraints);
-                    }
                     if (message.getString("type").equals("answer")) {
                         peerConnection.setRemoteDescription(new SimpleSdpObserver(), new SessionDescription(ANSWER, message.getString("sdp")));
                     }
@@ -141,7 +128,7 @@ public class WebRTC {
                 Log.d(TAG,"READY");
 
                 DataChannel.Init dcInit = new DataChannel.Init();
-                dc1 = peerConnection.createDataChannel("TestChannel",dcInit);
+                dc1 = peerConnection.createDataChannel(id,dcInit);
                 dc1.registerObserver(new DataChannel.Observer() {
                     public void onBufferedAmountChange(long previousAmount) {
                         Log.d(TAG, "Data channel buffered amount changed: " + dc1.label() + ": " + dc1.state());
@@ -174,7 +161,7 @@ public class WebRTC {
                             try {
                                 message.put("type", "offer");
                                 message.put("sdp", sessionDescription.description);
-                                socket.emit("message",message);
+                                socket.emit("message",message,id);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

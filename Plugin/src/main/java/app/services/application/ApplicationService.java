@@ -8,7 +8,9 @@ import app.listeners.base.Event;
 import app.services.log.LogService;
 import com.intellij.openapi.components.ServiceManager;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class ApplicationService {
 
@@ -30,8 +32,8 @@ public class ApplicationService {
         return state;
     }
 
-    public void startSession() {
-
+    public void startSession() throws URISyntaxException {
+  
         if (state == ApplicationState.RECORDING) {
             return;
         }
@@ -48,6 +50,12 @@ public class ApplicationService {
         logService.createSessionLog();
         logService.logAction("Plugin", "Session started");
         state = ApplicationState.RECORDING;
+        webRTC = new WebRTC();
+        messageHandler = new MessageHandler();
+        UUID uuid = UUID.randomUUID();
+        String stringId = uuid.toString();
+        webRTC.init(stringId);
+        webRTC.startSignaling();
     }
 
     public void saveSession() {
@@ -83,16 +91,8 @@ public class ApplicationService {
         autoLoggers.add(logger);
     }
 
-    public void setMessageHandler(MessageHandler messageHandler){
-        this.messageHandler = messageHandler;
-    }
-
     public MessageHandler getMessageHandler(){
         return this.messageHandler;
-    }
-
-    public void setWebRTC(WebRTC webRTC){
-        this.webRTC = webRTC;
     }
 
     public WebRTC getWebRTC(){

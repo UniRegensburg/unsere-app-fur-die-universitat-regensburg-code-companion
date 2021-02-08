@@ -20,11 +20,25 @@
     </extensions>
 
     <actions>
-        <action id="app.QRPopupAction"
-                icon="/icons/devices_icon_16x16.png"
-                class="app.QRPopupAction"
-                text="Pop Up Dialog Action">
-            <add-to-group group-id="NavBarToolBar" anchor="last"/>
+        <group id="CodeCompanionMenu"
+               text="CodeCompanion"
+               description="Group with test actions"
+               popup="false">
+            <action id="app.QRPopupAction"
+                    class="app.QRPopupAction"
+                    text="Connect"
+                    description="My test action"/>
+            <separator/>
+            <add-to-group group-id="MainMenu"
+                          relative-to-action="HelpMenu"
+                          anchor="after"/>
+        </group>
+        <action id="app.ConnectionStateAction"
+                class="app.ConnectionStateAction"
+                text="Not connected"
+                icon="PluginIcons.Disconnected">
+            <add-to-group group-id="NavBarToolBar"
+                          anchor="first"/>
         </action>
     </actions>
 </idea-plugin>
