@@ -70,7 +70,7 @@ public class WebRTC {
                     message.put("candidate", iceCandidate.sdp);
 
                     Log.d(TAG, "onIceCandidate: sending candidate " + message);
-                    socket.emit("message",message);
+                    socket.emit("message",message,id);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -107,23 +107,6 @@ public class WebRTC {
                     Log.d(TAG, "connectToSignallingServer: got a message");
                     Log.d(TAG, args[0].toString());
                     JSONObject message = (JSONObject) args[0];
-                    if (message.getString("type").equals("offer")) {
-                        peerConnection.setRemoteDescription(new SimpleSdpObserver(), new SessionDescription(OFFER, message.getString("sdp")));
-                        peerConnection.createAnswer(new SimpleSdpObserver() {
-                            @Override
-                            public void onCreateSuccess(SessionDescription sessionDescription) {
-                                peerConnection.setLocalDescription(new SimpleSdpObserver(), sessionDescription);
-                                JSONObject message = new JSONObject();
-                                try {
-                                    message.put("type", "answer");
-                                    message.put("sdp", sessionDescription.description);
-                                    socket.emit("message", message);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, constraints);
-                    }
                     if (message.getString("type").equals("answer")) {
                         peerConnection.setRemoteDescription(new SimpleSdpObserver(), new SessionDescription(ANSWER, message.getString("sdp")));
                     }
@@ -174,7 +157,7 @@ public class WebRTC {
                             try {
                                 message.put("type", "offer");
                                 message.put("sdp", sessionDescription.description);
-                                socket.emit("message",message);
+                                socket.emit("message",message,id);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

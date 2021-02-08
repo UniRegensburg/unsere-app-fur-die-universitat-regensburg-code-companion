@@ -35,7 +35,7 @@ public class WebRTC {
     public void init(String id){
         this.id = id;
         isConnecting = false;
-        executor = Executors.newFixedThreadPool(3);
+        executor = Executors.newFixedThreadPool(20);
         RTCIceServer iceServer1 = new RTCIceServer();
         iceServer1.urls.add(stunServer);
 
@@ -67,7 +67,7 @@ public class WebRTC {
                         message.put("candidate", iceCandidate.sdp);
 
                         System.out.println("onIceCandidate: sending candidate " + message);
-                        socket.emit("message",message);
+                        socket.emit("message",message,id);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -147,7 +147,7 @@ public class WebRTC {
                                             try {
                                                 message.put("type", "answer");
                                                 message.put("sdp", sessionDescription.sdp);
-                                                socket.emit("message", message);
+                                                socket.emit("message", message,id);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }

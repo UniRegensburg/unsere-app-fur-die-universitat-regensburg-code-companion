@@ -25,6 +25,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 public class QRPopupAction extends AnAction implements PluginIcons {
 
@@ -58,7 +59,8 @@ public class QRPopupAction extends AnAction implements PluginIcons {
         double id = Math.random();
         webRTC = new WebRTC();
         messageHandler = new MessageHandler();
-        String stringId = Double.toString(id);
+        UUID uuid = UUID.randomUUID();
+        String stringId = uuid.toString();
         webRTC.init(stringId);
 
         webRTC.setWebRTCListener(new WebRTC.WebRTCListener() {
