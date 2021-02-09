@@ -89,6 +89,9 @@ public class Log {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
             byte[] address = interfaces.nextElement().getHardwareAddress();
             StringBuilder addressBuilder = new StringBuilder();
+            if (address == null) {
+                return "unknown";
+            }
             for (int i = 0; i < address.length; i++) {
                 addressBuilder.append(String.format("%02X%s", address[i], (i < address.length - 1) ? "-" : ""));
             }
