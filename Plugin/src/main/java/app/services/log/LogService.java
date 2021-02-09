@@ -3,10 +3,11 @@ package app.services.log;
 
 import app.data.StringValues;
 import com.intellij.openapi.components.ServiceManager;
-import de.ur.mi.pluginhelper.User.User;
-import de.ur.mi.pluginhelper.logger.Log;
-import de.ur.mi.pluginhelper.logger.LogDataType;
-import de.ur.mi.pluginhelper.logger.LogManager;
+import pluginhelper.User.User;
+import pluginhelper.logger.Log;
+import pluginhelper.logger.LogDataType;
+import pluginhelper.logger.LogManager;
+
 
 public class LogService implements StringValues {
 
