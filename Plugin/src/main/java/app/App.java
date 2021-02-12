@@ -17,12 +17,7 @@ public class App implements StartupActivity {
     @Override
     public void runActivity(@NotNull Project project) {
         currentProject = project;
-        try {
-            ApplicationService.getInstance().startSession();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            System.out.println("Failed to Start");
-        }
+        ApplicationService.getInstance().startSession();
         System.out.println("Started");
     }
 

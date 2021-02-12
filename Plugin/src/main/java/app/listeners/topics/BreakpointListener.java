@@ -5,6 +5,10 @@ import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointListener;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Listens for adding/removing breakpoints.
+ * Maybe keep for statistics page.
+ */
 public class BreakpointListener extends BaseListener implements XBreakpointListener {
 
     public BreakpointListener() {
@@ -13,16 +17,16 @@ public class BreakpointListener extends BaseListener implements XBreakpointListe
 
     @Override
     public void breakpointAdded(@NotNull XBreakpoint breakpoint) {
-        log("Breakpoint added");
+
     }
 
     @Override
     public void breakpointRemoved(@NotNull XBreakpoint breakpoint) {
-        log("Breakpoint removed");
+
     }
 
     @Override
     public void breakpointChanged(@NotNull XBreakpoint breakpoint) {
-        log("Breakpoint changed");
+
     }
 }

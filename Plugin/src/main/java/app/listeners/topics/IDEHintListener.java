@@ -26,7 +26,7 @@ public class IDEHintListener extends BaseListener implements EditorHintListener,
             return;
         }
         hint.addHintListener(this);
-        log( "Hint shown");
+        System.out.println( "Hint shown");
         lastHintShown = now;
     }
 
@@ -36,7 +36,7 @@ public class IDEHintListener extends BaseListener implements EditorHintListener,
         if (now - lastHintHidden < MIN_EVENT_DELAY_IN_MS) {
             return;
         }
-        log("Hint hidden");
+        System.out.println("Hint hidden");
         lastHintHidden = now;
     }
 }
