@@ -17,7 +17,6 @@ public class ListenerHelper {
     }
 
     private static  void initMessageBusListener(MessageBus bus, Project currentProject) {
-        bus.connect().subscribe(IDEHintListener.TOPIC, new IDEHintListener());
         bus.connect().subscribe(XBreakpointListener.TOPIC, new BreakpointListener());
         bus.connect().subscribe(DaemonCodeAnalyzer.DAEMON_EVENT_TOPIC, new CodeAnalyzerListener(currentProject));
         bus.connect().subscribe(ExecutionManager.EXECUTION_TOPIC, new RunListener());
