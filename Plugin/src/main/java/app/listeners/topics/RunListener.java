@@ -17,18 +17,18 @@ public class RunListener extends BaseListener implements com.intellij.execution.
 
     @Override
     public void processStarting(@NotNull String executorId, @NotNull ExecutionEnvironment env) {
-        log("Configuration [" + executorId + "] starting");
+        System.out.println("Configuration [" + executorId + "] starting");
 
     }
 
     @Override
     public void processNotStarted(@NotNull String executorId, @NotNull ExecutionEnvironment env) {
-        log("Configuration [" + executorId + "] not started");
+        System.out.println("Configuration [" + executorId + "] not started");
     }
 
     @Override
     public void processStarted(@NotNull String executorId, @NotNull ExecutionEnvironment env, @NotNull ProcessHandler handler) {
-        log("Configuration [" + executorId + "] started");
+        System.out.println("Configuration [" + executorId + "] started");
     }
 
     @Override
@@ -38,6 +38,6 @@ public class RunListener extends BaseListener implements com.intellij.execution.
 
     @Override
     public void processTerminated(@NotNull String executorId, @NotNull ExecutionEnvironment env, @NotNull ProcessHandler handler, int exitCode) {
-        log("Configuration [" + executorId + "] terminated with result (" + exitCode + ")");
+        System.out.println("Configuration [" + executorId + "] terminated with result (" + exitCode + ")");
     }
 }
