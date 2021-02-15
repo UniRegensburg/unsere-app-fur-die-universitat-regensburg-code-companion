@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.example.codecompanion.util.ConnectionStateManager;
 import com.example.codecompanion.util.MessageManager;
+import com.example.codecompanion.util.TaskManager;
 import com.example.codecompanion.util.WebRTC;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private WebRTC webRTC;
     private BadgeDrawable connectionState;
     private MessageManager messageManager;
+    private TaskManager taskManager;
     private ConnectionStateManager connectionStateManager;
     private String id;
 
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         messageManager = MessageManager.getInstance();
+        taskManager = TaskManager.getInstance();
         connectionStateManager = ConnectionStateManager.getInstance();
         createNavigation();
         webRTC = new WebRTC();
@@ -56,7 +59,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMessageRecieved(String message) {
                 try {
-                    messageManager.handleMessage(message);
+                    if(message.contains("task")) {
+                        taskManager.handleTaskInfo(message);
+                    } else {
+                        messageManager.handleMessage(message);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

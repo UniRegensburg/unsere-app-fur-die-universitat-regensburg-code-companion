@@ -1,11 +1,23 @@
-[
-  {
-    "name": "Testaufgabe 1.0",
-    "lecture": "EIDI",
-    "date": "2021-01-15",
-    "deadline": "2021-03-15",
-    "task1": "Write HelloWorld Function",
-    "task2": "",
-    "ProjectName": "HelloWorld"
-  }
-]
+
+{
+  "informations": {
+    "name" : "Testaufgabe 1.0",
+    "lecture" : "EIDI",
+    "date" : "2021-01-15",
+    "deadline" : "2021-03-15"
+  },
+  "tasks":[
+    {
+      "headline":"Headline1",
+      "description": "Desc1"
+    },
+    {
+      "headline":"Headline2",
+      "description": "Desc2"
+    },
+    {
+      "headline":"Headline3",
+      "description": "Desc3"
+    }
+  ]
+}
