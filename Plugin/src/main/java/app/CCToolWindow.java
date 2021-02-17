@@ -8,6 +8,7 @@ import dev.onvoid.webrtc.RTCPeerConnectionState;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -19,7 +20,9 @@ public class CCToolWindow implements ApplicationService.ApplicationServiceListen
     private QRCodeGenerator qrGenerator;
 
     public CCToolWindow() {
+
         myToolWindowContent = new JPanel();
+        myToolWindowContent.setLayout(new GridBagLayout());
     }
 
     public void createQRCode(){
@@ -36,11 +39,19 @@ public class CCToolWindow implements ApplicationService.ApplicationServiceListen
             BufferedImage qrCodeImage = ImageIO.read(bis);
 
             JLabel qrCode = new JLabel(new ImageIcon(qrCodeImage));
-            myToolWindowContent.add(qrCode);
+            GridBagConstraints c = new GridBagConstraints();
+            c.gridx = GridBagConstraints.CENTER;
+            c.gridy = 0;
+            myToolWindowContent.add(qrCode,c);
 
         } catch (WriterException | IOException e) {
             e.printStackTrace();
         }
+        JLabel id = new JLabel("ID: " + webRTC.getId());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = GridBagConstraints.CENTER;
+        c.gridy = 1;
+        myToolWindowContent.add(id,c);
         myToolWindowContent.updateUI();
     }
 
@@ -77,14 +88,20 @@ public class CCToolWindow implements ApplicationService.ApplicationServiceListen
     private void onConnecting(){
         myToolWindowContent.removeAll();
         JLabel connecting = new JLabel("Connecting...");
-        myToolWindowContent.add(connecting);
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = GridBagConstraints.CENTER;
+        c.gridy = 0;
+        myToolWindowContent.add(connecting,c);
         myToolWindowContent.updateUI();
     }
 
     private void onConnected(){
         myToolWindowContent.removeAll();
         JLabel connected = new JLabel("Connected!");
-        myToolWindowContent.add(connected);
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = GridBagConstraints.CENTER;
+        c.gridy = 0;
+        myToolWindowContent.add(connected,c);
         myToolWindowContent.updateUI();
     }
 }
