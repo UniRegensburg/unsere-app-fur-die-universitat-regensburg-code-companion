@@ -5,9 +5,11 @@ import app.TaskHandler;
 import app.WebRTC;
 import app.listeners.ListenerHelper;
 import com.intellij.openapi.components.ServiceManager;
+import dev.onvoid.webrtc.RTCPeerConnectionState;
+
 import java.util.UUID;
 
-public class ApplicationService {
+public class ApplicationService implements WebRTC.WebRTCListener {
 
     private boolean listenersAreReady = false;
     private MessageHandler messageHandler;
@@ -43,6 +45,7 @@ public class ApplicationService {
         String stringId = uuid.toString();
         webRTC.init(stringId);
         webRTC.startSignaling();
+        webRTC.setWebRTCListener(this);
         if(listener != null) {
             listener.onStarted();
         }
@@ -63,7 +66,15 @@ public class ApplicationService {
         this.listener = listener;
     }
 
+    @Override
+    public void onConnectionStateChanged(RTCPeerConnectionState state) {
+        if(listener != null){
+            listener.onConnectionStateChanged(state);
+        }
+    }
+
     public interface ApplicationServiceListener{
-        public void onStarted();
+        void onStarted();
+        void onConnectionStateChanged(RTCPeerConnectionState state);
     }
 }

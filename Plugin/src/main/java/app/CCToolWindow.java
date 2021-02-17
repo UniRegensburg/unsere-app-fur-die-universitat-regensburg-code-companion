@@ -4,6 +4,7 @@ import app.services.application.ApplicationService;
 import com.google.zxing.WriterException;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.wm.ToolWindow;
+import dev.onvoid.webrtc.RTCPeerConnectionState;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,11 +18,13 @@ public class CCToolWindow implements ApplicationService.ApplicationServiceListen
     private WebRTC webRTC;
     private QRCodeGenerator qrGenerator;
 
-    public CCToolWindow(ToolWindow toolWindow) {
+    public CCToolWindow() {
         myToolWindowContent = new JPanel();
     }
 
     public void createQRCode(){
+        myToolWindowContent.removeAll();
+
         webRTC = ApplicationService.getInstance().getWebRTC();
         qrGenerator = new QRCodeGenerator();
         webRTC.connect();
@@ -38,6 +41,7 @@ public class CCToolWindow implements ApplicationService.ApplicationServiceListen
         } catch (WriterException | IOException e) {
             e.printStackTrace();
         }
+        myToolWindowContent.updateUI();
     }
 
 
@@ -55,5 +59,32 @@ public class CCToolWindow implements ApplicationService.ApplicationServiceListen
     @Override
     public void onStarted() {
         createQRCode();
+    }
+
+    @Override
+    public void onConnectionStateChanged(RTCPeerConnectionState state) {
+        if(state == RTCPeerConnectionState.DISCONNECTED || state == RTCPeerConnectionState.CLOSED || state == RTCPeerConnectionState.FAILED){
+            createQRCode();
+        }
+        if(state == RTCPeerConnectionState.CONNECTING){
+            onConnecting();
+        }
+        if(state == RTCPeerConnectionState.CONNECTED){
+            onConnected();
+        }
+    }
+
+    private void onConnecting(){
+        myToolWindowContent.removeAll();
+        JLabel connecting = new JLabel("Connecting...");
+        myToolWindowContent.add(connecting);
+        myToolWindowContent.updateUI();
+    }
+
+    private void onConnected(){
+        myToolWindowContent.removeAll();
+        JLabel connected = new JLabel("Connected!");
+        myToolWindowContent.add(connected);
+        myToolWindowContent.updateUI();
     }
 }
