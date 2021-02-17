@@ -8,15 +8,12 @@
   },
   "tasks":[
     {
-      "headline":"Headline1",
-      "description": "Desc1"
+      "description": "Create a hello world programm, which prints your name on the command line"
     },
     {
-      "headline":"Headline2",
       "description": "Desc2"
     },
     {
-      "headline":"Headline3",
       "description": "Desc3"
     }
   ]

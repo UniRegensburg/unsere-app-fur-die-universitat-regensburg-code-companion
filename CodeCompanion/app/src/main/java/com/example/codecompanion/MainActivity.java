@@ -60,7 +60,9 @@ public class MainActivity extends AppCompatActivity {
             public void onMessageRecieved(String message) {
                 try {
                     if(message.contains("task")) {
-                        taskManager.handleTaskInfo(message);
+                        if(ConnectionStateManager.getInstance().getConnectionState() == PeerConnection.PeerConnectionState.CONNECTED) {
+                            taskManager.handleTaskInfo(message);
+                        }
                     } else {
                         messageManager.handleMessage(message);
                     }

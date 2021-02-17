@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class TaskManager {
 
@@ -19,9 +20,10 @@ public class TaskManager {
 
     private static TaskManager instance;
     private TaskManagerListener listener;
+    private List<JSONObject> tasks;
+    private HashMap<String, String> informationMap;
 
     private TaskManager() {
-
     }
 
     public static TaskManager getInstance() {
@@ -40,19 +42,31 @@ public class TaskManager {
     }
 
     public void handleTaskInfo(String message) throws JSONException {
-        HashMap<String, String> informationMap = unpackString(message);
-        JSONArray taskList = extractTaskObjects(message);
-/*        System.out.println(taskList.length());
-        for(int i = 0; i < taskList.length(); i++) {
-            System.out.println(taskList.getJSONObject(i).getString("headline"));
-        }*/
+        informationMap = unpackString(message);
+        tasks = extractTaskObjects(message);
+        if(listener != null) {
+            listener.onTaskReceived();
+        }
     }
 
-    private JSONArray extractTaskObjects(String message) throws JSONException {
+    public List<JSONObject> getTasks() {
+        return this.tasks;
+    }
+
+    public HashMap<String, String> getInformation() {
+        return this.informationMap;
+    }
+
+    private List<JSONObject> extractTaskObjects(String message) throws JSONException {
         JSONObject jsonObject = new JSONObject(message);
         JSONArray tasks = jsonObject.getJSONArray("tasks");
+        List<JSONObject> taskList = new ArrayList<>();
+        for(int i = 0; i < tasks.length(); i++) {
+            taskList.add((JSONObject) tasks.get(i));
+        }
 
-        return tasks;
+
+        return taskList;
     }
 
     private HashMap<String, String> unpackString(String message) throws JSONException {
