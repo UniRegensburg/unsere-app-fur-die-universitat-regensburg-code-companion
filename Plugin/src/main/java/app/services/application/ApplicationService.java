@@ -38,6 +38,7 @@ public class ApplicationService {
         state = ApplicationState.RECORDING;
         webRTC = new WebRTC();
         messageHandler = new MessageHandler();
+        taskHandler.init();
         UUID uuid = UUID.randomUUID();
         String stringId = uuid.toString();
         webRTC.init(stringId);

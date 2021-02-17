@@ -1,0 +1,20 @@
+
+{
+  "informations": {
+    "name" : "Testaufgabe 1.0",
+    "lecture" : "EIDI",
+    "date" : "2021-01-15",
+    "deadline" : "2021-03-15"
+  },
+  "tasks":[
+    {
+      "description": "Create a hello world programm, which prints your name on the command line"
+    },
+    {
+      "description": "Desc2"
+    },
+    {
+      "description": "Desc3"
+    }
+  ]
+}

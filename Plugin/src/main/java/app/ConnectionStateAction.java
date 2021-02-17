@@ -17,6 +17,7 @@ public class ConnectionStateAction extends AnAction {
     private WebRTC webRTC;
     private boolean connected;
 
+
     public ConnectionStateAction() {
         manager = ServiceManager.getService(ApplicationService.class);
     }
@@ -36,6 +37,13 @@ public class ConnectionStateAction extends AnAction {
                     e.getPresentation().setIcon(PluginIcons.Connected);
                     e.getPresentation().setText("Connected to #id");
                     connected = true;
+                    String task = manager.getTaskHandler().getTaskInfo();
+                    try {
+                        System.out.println("Test Send");
+                        manager.getMessageHandler().send(task);
+                    } catch (Exception i) {
+                        i.printStackTrace();
+                    }
                 }
 
             }else{

@@ -50,7 +50,7 @@ public class MessageHandler {
         }
     }
 
-    private void send(String data) throws Exception {
+    public void send(String data) throws Exception {
         if (webRTC == null) {
             webRTC = manager.getWebRTC();
         }

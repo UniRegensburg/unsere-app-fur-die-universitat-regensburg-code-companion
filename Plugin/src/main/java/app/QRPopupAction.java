@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
+
 public class QRPopupAction extends AnAction implements PluginIcons {
 
     private Project currentProject;
@@ -37,6 +38,7 @@ public class QRPopupAction extends AnAction implements PluginIcons {
     private WebRTC webRTC;
     private MessageHandler messageHandler;
     private JFrame frame;
+
 
     /**
      * Default method of intellij plugins
@@ -65,10 +67,13 @@ public class QRPopupAction extends AnAction implements PluginIcons {
             @Override
             public void onConnectionStateChanged(RTCPeerConnectionState state) {
                 System.out.println("CURRENT STATE:" + state);
-                if(state == RTCPeerConnectionState.CONNECTING || state == RTCPeerConnectionState.CONNECTED){
+                if(state == RTCPeerConnectionState.CONNECTING || state == RTCPeerConnectionState.CONNECTED) {
                     frame.setVisible(false);
                     frame.dispose();
                 }
+
+
+
             }
         });
 
