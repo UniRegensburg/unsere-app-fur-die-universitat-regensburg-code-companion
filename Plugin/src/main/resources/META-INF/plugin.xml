@@ -15,8 +15,9 @@
     <extensions defaultExtensionNs="com.intellij">
         <postStartupActivity implementation="app.App" />
         <applicationService serviceImplementation="app.services.application.ApplicationService"/>
-        <applicationService serviceImplementation="app.services.log.LogService"/>
         <!-- Add your extensions here -->
+        <toolWindow id="CodeCompanion" secondary="false" icon="AllIcons.General.Modified" anchor="right"
+                    factoryClass="app.CCToolWindowFactory"/>
     </extensions>
 
     <actions>

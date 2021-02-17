@@ -114,7 +114,9 @@ public class WebRTC {
                     @Override
                     public void onConnectionChange(RTCPeerConnectionState state) {
                         System.out.println("Connection State Changed: " + peerConnection.getConnectionState().toString());
-                        listener.onConnectionStateChanged(state);
+                        if(listener != null){
+                            listener.onConnectionStateChanged(state);
+                        }
                     }
                 });
             }

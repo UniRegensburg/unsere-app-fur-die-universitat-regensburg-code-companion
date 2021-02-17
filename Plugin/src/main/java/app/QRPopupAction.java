@@ -2,21 +2,13 @@ package app;
 
 import app.services.application.ApplicationService;
 import com.google.zxing.WriterException;
-import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.ComponentPopupBuilder;
-import com.intellij.openapi.ui.popup.JBPopup;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.util.ui.JBDimension;
 import dev.onvoid.webrtc.RTCPeerConnectionState;
 import icons.PluginIcons;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -25,8 +17,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.UUID;
+
 
 public class QRPopupAction extends AnAction implements PluginIcons {
 
