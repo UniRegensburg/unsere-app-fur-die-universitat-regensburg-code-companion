@@ -5,7 +5,6 @@ import app.TaskHandler;
 import app.WebRTC;
 import app.listeners.ListenerHelper;
 import com.intellij.openapi.components.ServiceManager;
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class ApplicationService {
@@ -15,6 +14,8 @@ public class ApplicationService {
     private WebRTC webRTC;
     private TaskHandler taskHandler = new TaskHandler();
     private ApplicationState state = ApplicationState.IDLE;
+    private ApplicationServiceListener listener;
+    public boolean isStarted;
 
     public static ApplicationService getInstance() {
         return ServiceManager.getService(ApplicationService.class);
@@ -42,6 +43,10 @@ public class ApplicationService {
         String stringId = uuid.toString();
         webRTC.init(stringId);
         webRTC.startSignaling();
+        if(listener != null) {
+            listener.onStarted();
+        }
+        isStarted = true;
     }
 
     public MessageHandler getMessageHandler(){
@@ -54,4 +59,11 @@ public class ApplicationService {
 
     public TaskHandler getTaskHandler(){return this.taskHandler; }
 
+    public void setListener(ApplicationServiceListener listener){
+        this.listener = listener;
+    }
+
+    public interface ApplicationServiceListener{
+        public void onStarted();
+    }
 }

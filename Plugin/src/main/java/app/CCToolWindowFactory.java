@@ -1,5 +1,6 @@
 package app;
 
+import app.services.application.ApplicationService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -15,6 +16,6 @@ public class CCToolWindowFactory implements ToolWindowFactory {
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(ccToolWindow.getContent(), "", false);
         toolWindow.getContentManager().addContent(content);
-
+        ccToolWindow.init();
     }
 }
