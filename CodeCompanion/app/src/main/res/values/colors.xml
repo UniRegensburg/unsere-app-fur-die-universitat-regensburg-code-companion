@@ -33,4 +33,20 @@
     <color name="light_white">#f2f2f7</color>
 
 
+    <!--Intellij colors -->
+    <color name="intellij_green">#6A8759</color>
+    <color name="intellij_orange">#CC7832</color>
+    <color name="intellij_white">#A9B7C6</color>
+    <color name="intellij_yellow">#FFC66D</color>
+    <color name="intellij_blue">#6897BB</color>
+    <color name="intellij_red">#FF0000</color>
+    <color name="intellij_purple">#9876AA</color>
+
+
+    <color name="primary_color1">#16A085</color>
+    <color name="primary_color2">#F4D03F</color>
+    <color name="primary_color3">#F4763F</color>
+
+
+
 </resources>

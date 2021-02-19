@@ -95,20 +95,20 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation = findViewById(R.id.nav_view);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_compiler, R.id.navigation_tasks, R.id.navigation_profile)
+                R.id.navigation_connect, R.id.navigation_compiler, R.id.navigation_tasks, R.id.navigation_profile)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(bottomNavigation, navController);
 
-        connectionState = bottomNavigation.getOrCreateBadge(R.id.navigation_compiler);
+        connectionState = bottomNavigation.getOrCreateBadge(R.id.navigation_connect);
         setBadgeForConnectionState("NOT_CONNECTED");
     }
 
     private void setBadgeForConnectionState(String state) {
         if(state == "CONNECTED") {
-            connectionState.setBackgroundColor(Color.parseColor("#30d158"));
+            connectionState.setBackgroundColor(getResources().getColor(R.color.primary_color1));
         }else {
-            connectionState.setBackgroundColor(Color.parseColor("#ff443a"));
+            connectionState.setBackgroundColor(getResources().getColor(R.color.primary_color2));
         }
         connectionState.isVisible();
     }

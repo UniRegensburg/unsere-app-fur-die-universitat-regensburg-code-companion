@@ -19,12 +19,9 @@ import org.webrtc.PeerConnection;
 
 public class HomeFragment extends Fragment {
     private Button connect;
-    private View connectionStateView;
-    private TextView connectionStateValue;
     private ConnectionStateManager connectionStateManager;
-    private TextView connectionStateId;
-    private Drawable connectedIcon;
-    private Drawable disconnectedIcon;
+    private TextView connectionCode;
+    private TextView connectionCodeText;
 
     private QrScanner qrScanner;
 
@@ -34,11 +31,8 @@ public class HomeFragment extends Fragment {
         qrScanner = new QrScanner();
 
         connectionStateManager = ConnectionStateManager.getInstance();
-        connectionStateValue = root.findViewById(R.id.connection_state_value);
-        connectionStateView = root.findViewById(R.id.connection_state_view);
-        connectionStateId = root.findViewById(R.id.connection_state_id);
-        connectedIcon = getResources().getDrawable(R.drawable.ic_baseline_phonelink_24);
-        disconnectedIcon = getResources().getDrawable(R.drawable.ic_baseline_phonelink_off_24);
+        connectionCode = root.findViewById(R.id.connection_code);
+        connectionCodeText = root.findViewById(R.id.connection_code_text);
         connect = root.findViewById(R.id.connect_button);
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,12 +70,12 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 connect.setEnabled(false);
+                connect.setText("CONNECTED");
                 connect.setBackgroundResource(R.drawable.button_grey);
                 connect.setAlpha(.5f);
-                connectionStateView.setBackgroundResource(R.drawable.button_green);
-                connectionStateValue.setText("CONNECTED");
-                connectionStateId.setText("to " + connectionStateManager.getConnectedToId());
-                connectionStateValue.setCompoundDrawablesRelativeWithIntrinsicBounds(connectedIcon, null, null, null);
+                connectionCode.setText("200");
+                connectionCode.setTextColor(getResources().getColor(R.color.primary_color1));
+                connectionCodeText.setText("ah there you are!");
             }
         });
     }
@@ -91,12 +85,12 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 connect.setEnabled(true);
+                connect.setText("CONNECT");
                 connect.setBackgroundResource(R.drawable.button_green);
                 connect.setAlpha(1f);
-                connectionStateView.setBackgroundResource(R.drawable.button_red);
-                connectionStateValue.setText("NOT CONNECTED");
-                connectionStateId.setText("");
-                connectionStateValue.setCompoundDrawablesRelativeWithIntrinsicBounds(disconnectedIcon, null, null, null);
+                connectionCode.setText("404");
+                connectionCode.setTextColor(getResources().getColor(R.color.primary_color2));
+                connectionCodeText.setText("oops, can't find you...");
             }
         });
     }
