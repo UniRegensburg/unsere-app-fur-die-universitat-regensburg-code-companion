@@ -38,11 +38,16 @@ public class ConnectionStateAction extends AnAction {
                     e.getPresentation().setText("Connected to #id");
                     connected = true;
                     String task = manager.getTaskHandler().getTaskInfo();
-                    try {
-                        System.out.println("Test Send");
-                        manager.getMessageHandler().send(task);
-                    } catch (Exception i) {
-                        i.printStackTrace();
+                    if(task != "") {
+                        try {
+                            System.out.println("Sending TaskInfo");
+                            manager.getMessageHandler().send(task);
+                        } catch (Exception i) {
+                            i.printStackTrace();
+                        }
+                    }
+                    else{
+                        System.out.println("No Task to send");
                     }
                 }
 
