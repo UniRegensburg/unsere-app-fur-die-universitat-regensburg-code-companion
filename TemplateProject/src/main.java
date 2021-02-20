@@ -1,6 +1,3 @@
 public class main {
-    public void main
+    public voifghfg
 }
-sdas
-asd
-        asd

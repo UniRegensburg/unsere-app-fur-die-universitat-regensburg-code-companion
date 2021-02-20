@@ -35,12 +35,15 @@ public class TasksFragment extends Fragment {
     private TaskViewAdapter adapter;
     private List<JSONObject> data;
 
+    private TextView taskMessageField;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_tasks, container, false);
         taskManager = TaskManager.getInstance();
         tasksView = root.findViewById(R.id.task_list);
         tasksView.setLayoutManager(new LinearLayoutManager(root.getContext()));
+        taskMessageField = root.findViewById(R.id.task_message_field);
 
         data = new ArrayList<>();
         if(taskManager.getTasks() != null) {
@@ -63,6 +66,7 @@ public class TasksFragment extends Fragment {
                     public void run() {
                         for(JSONObject task: taskManager.getTasks()) {
                             data.add(task);
+                            taskMessageField.setText("> plenty work to do...");
                         }
                         adapter.notifyDataSetChanged();
                     }
