@@ -47,6 +47,11 @@ public class CompilerFragment extends Fragment {
 
     @Override
     public void onResume() {
+        if(data.size() > 0) {
+            compilerMessageField.setText("> i think you have some errors...");
+        } else {
+            compilerMessageField.setText("> seems to work correctly.");
+        }
         super.onResume();
         messageManager.setListener(new MessageManager.MessageManagerListener() {
             @Override

@@ -19,14 +19,9 @@ import com.example.codecompanion.R;
 import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.TaskManager;
 import com.example.codecompanion.util.TaskViewAdapter;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import static com.example.codecompanion.R.drawable.button_blue;
 
 public class TasksFragment extends Fragment {
 
@@ -66,13 +61,18 @@ public class TasksFragment extends Fragment {
                     public void run() {
                         for(JSONObject task: taskManager.getTasks()) {
                             data.add(task);
-                            taskMessageField.setText("> plenty work to do...");
+                            taskMessageField.setText("> plenty work to do!");
                         }
                         adapter.notifyDataSetChanged();
                     }
                 });
             }
         });
+        if(data.size() > 0) {
+            taskMessageField.setText("> plenty work to do!");
+        } else {
+            taskMessageField.setText("> nothing to do here.");
+        }
     }
 
     @Override

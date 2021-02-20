@@ -3,6 +3,6 @@
     android:shape="rectangle"
     android:id="@+id/message_warning_template">
     <stroke android:width="2dp" android:color="@color/primary_color2"/>
-    <solid android:color="@color/ios_grey"/>
+    <solid android:color="@color/secondary_background"/>
     <corners android:radius="10dp" />
 </shape>

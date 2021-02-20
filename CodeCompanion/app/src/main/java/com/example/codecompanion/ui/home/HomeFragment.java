@@ -22,6 +22,7 @@ public class HomeFragment extends Fragment {
     private ConnectionStateManager connectionStateManager;
     private TextView connectionCode;
     private TextView connectionCodeText;
+    private TextView homeMessageField;
 
     private QrScanner qrScanner;
 
@@ -29,7 +30,7 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         qrScanner = new QrScanner();
-
+        homeMessageField = root.findViewById(R.id.home_message_field);
         connectionStateManager = ConnectionStateManager.getInstance();
         connectionCode = root.findViewById(R.id.connection_code);
         connectionCodeText = root.findViewById(R.id.connection_code_text);
@@ -41,7 +42,33 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        startTyping("> hi, mate!");
+
         return root;
+    }
+
+    private void startTyping(String text) {
+        Thread thread = new Thread() {
+            int i;
+
+            @Override
+            public void run() {
+                try {
+                    for (i = 0; i < text.length(); i++) {
+                        Thread.sleep(75);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                homeMessageField.setText(text.substring(0, i));
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+
+        thread.start();
     }
 
     public void onResume() {
