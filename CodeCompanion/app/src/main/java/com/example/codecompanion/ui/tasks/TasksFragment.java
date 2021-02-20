@@ -59,6 +59,7 @@ public class TasksFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        data.clear();
                         for(JSONObject task: taskManager.getTasks()) {
                             data.add(task);
                             taskMessageField.setText("> plenty work to do!");
