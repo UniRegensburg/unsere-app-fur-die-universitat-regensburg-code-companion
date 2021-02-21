@@ -1,11 +1,15 @@
 package com.example.codecompanion;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 
+import com.example.codecompanion.services.ErrorMessageReceiverService;
 import com.example.codecompanion.util.ConnectionStateManager;
 import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.TaskManager;
@@ -34,7 +38,9 @@ public class MainActivity extends AppCompatActivity {
     private MessageManager messageManager;
     private TaskManager taskManager;
     private ConnectionStateManager connectionStateManager;
+    private ErrorMessageReceiverService errorMessageReceiverService;
     private String id;
+    private boolean errorServiceBound = false;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -42,9 +48,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        messageManager = MessageManager.getInstance();
         taskManager = TaskManager.getInstance();
         connectionStateManager = ConnectionStateManager.getInstance();
+        Intent intent = (new Intent(this, ErrorMessageReceiverService.class));
+        bindService(intent, errorMessageConnection, Context.BIND_AUTO_CREATE);
+        messageManager = MessageManager.getInstance();
         createNavigation();
         webRTC = new WebRTC();
         webRTC.setWebRTCListener(new WebRTC.WebRTCListener() {
@@ -57,14 +65,14 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onMessageRecieved(String message) {
+            public void onMessageReceived(String message) {
                 try {
                     if(message.contains("task")) {
                         if(ConnectionStateManager.getInstance().getConnectionState() == PeerConnection.PeerConnectionState.CONNECTED) {
                             taskManager.handleTaskInfo(message);
                         }
                     } else {
-                        messageManager.handleMessage(message);
+                        errorMessageReceiverService.handleMessage(message);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -112,5 +120,20 @@ public class MainActivity extends AppCompatActivity {
         }
         connectionState.isVisible();
     }
+
+    private ServiceConnection errorMessageConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            ErrorMessageReceiverService.ErrorMessageBinder binder = (ErrorMessageReceiverService.ErrorMessageBinder) iBinder;
+            errorMessageReceiverService = binder.getService();
+            errorServiceBound = true;
+            messageManager.setErrorMessageReceiverService(errorMessageReceiverService);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            errorServiceBound = false;
+        }
+    };
 
 }

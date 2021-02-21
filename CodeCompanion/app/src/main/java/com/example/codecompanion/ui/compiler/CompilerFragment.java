@@ -53,30 +53,18 @@ public class CompilerFragment extends Fragment {
             compilerMessageField.setText("> seems to work correctly.");
         }
         super.onResume();
-        messageManager.setListener(new MessageManager.MessageManagerListener() {
-            @Override
-            public void onDataChanged() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        data.clear();
-                        for (Map error: messageManager.getErrors()) {
-                            data.add(error);
-                        }
-                        for (Map warning:messageManager.getWarnings()) {
-                            data.add(warning);
-                        }
+        messageManager.setListener(() -> getActivity().runOnUiThread(() -> {
+            data.clear();
+            data.addAll(messageManager.getErrors());
+            data.addAll(messageManager.getWarnings());
 
-                        if(data.size() > 0) {
-                            compilerMessageField.setText("> i think you have some errors...");
-                        } else {
-                            compilerMessageField.setText("> seems to work correctly.");
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+            if(data.size() > 0) {
+                compilerMessageField.setText("> i think you have some errors...");
+            } else {
+                compilerMessageField.setText("> seems to work correctly.");
             }
-        });
+            adapter.notifyDataSetChanged();
+        }));
     }
 
     @Override
