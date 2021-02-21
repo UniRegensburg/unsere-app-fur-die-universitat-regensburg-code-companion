@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class ErrorMessageRecieverService extends Service {
+public class ErrorMessageReceiverService extends Service {
 
 	private final IBinder binder = new ErrorMessageBinder();
 
@@ -30,7 +30,7 @@ public class ErrorMessageRecieverService extends Service {
 	private final List<Map<String, String>> warnings;
 	private MessageManager.MessageManagerListener listener;
 
-	public ErrorMessageRecieverService() {
+	public ErrorMessageReceiverService() {
 		errors = new ArrayList<>();
 		warnings = new ArrayList<>();
 	}
@@ -69,8 +69,8 @@ public class ErrorMessageRecieverService extends Service {
 	}
 
 	public class ErrorMessageBinder extends Binder {
-		public ErrorMessageRecieverService getService() {
-			return ErrorMessageRecieverService.this;
+		public ErrorMessageReceiverService getService() {
+			return ErrorMessageReceiverService.this;
 		}
 	}
 

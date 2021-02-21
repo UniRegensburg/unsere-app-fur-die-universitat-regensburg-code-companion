@@ -34,7 +34,7 @@
             tools:replace="screenOrientation" />
 
         <service
-            android:name=".services.ErrorMessageRecieverService"
+            android:name=".services.ErrorMessageReceiverService"
             >
         </service>
     </application>

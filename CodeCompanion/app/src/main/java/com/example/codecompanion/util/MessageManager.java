@@ -1,20 +1,9 @@
 package com.example.codecompanion.util;
 
-import android.util.Log;
+import com.example.codecompanion.services.ErrorMessageReceiverService;
 
-import com.example.codecompanion.services.ErrorMessageRecieverService;
-import com.google.gson.Gson;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class MessageManager {
 
@@ -23,7 +12,7 @@ public class MessageManager {
     }
 
     private static MessageManager instance;
-    private ErrorMessageRecieverService errorMessageRecieverService;
+    private ErrorMessageReceiverService errorMessageReceiverService;
 
     private MessageManager() {
 
@@ -37,26 +26,26 @@ public class MessageManager {
     }
 
     public List<Map<String, String>> getErrors() {
-        return errorMessageRecieverService.getErrors();
+        return errorMessageReceiverService.getErrors();
     }
 
     public List<Map<String, String>> getWarnings() {
-        return errorMessageRecieverService.getWarnings();
+        return errorMessageReceiverService.getWarnings();
     }
 
     public void setListener(MessageManagerListener listener){
-        errorMessageRecieverService.setListener(listener);
+        errorMessageReceiverService.setListener(listener);
     }
 
     public void removeListener(){
-        errorMessageRecieverService.setListener(null);
+        errorMessageReceiverService.setListener(null);
     }
 
-    public ErrorMessageRecieverService getErrorMessageRecieverService() {
-        return errorMessageRecieverService;
+    public ErrorMessageReceiverService getErrorMessageReceiverService() {
+        return errorMessageReceiverService;
     }
 
-    public void setErrorMessageRecieverService(ErrorMessageRecieverService errorMessageRecieverService) {
-        this.errorMessageRecieverService = errorMessageRecieverService;
+    public void setErrorMessageReceiverService(ErrorMessageReceiverService errorMessageReceiverService) {
+        this.errorMessageReceiverService = errorMessageReceiverService;
     }
 }

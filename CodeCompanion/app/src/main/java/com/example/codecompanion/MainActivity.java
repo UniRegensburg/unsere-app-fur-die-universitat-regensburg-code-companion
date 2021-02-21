@@ -4,13 +4,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.example.codecompanion.services.ErrorMessageRecieverService;
+import com.example.codecompanion.services.ErrorMessageReceiverService;
 import com.example.codecompanion.util.ConnectionStateManager;
 import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.TaskManager;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private MessageManager messageManager;
     private TaskManager taskManager;
     private ConnectionStateManager connectionStateManager;
-    private ErrorMessageRecieverService errorMessageRecieverService;
+    private ErrorMessageReceiverService errorMessageReceiverService;
     private String id;
     private boolean errorServiceBound = false;
 
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         taskManager = TaskManager.getInstance();
         connectionStateManager = ConnectionStateManager.getInstance();
-        Intent intent = (new Intent(this, ErrorMessageRecieverService.class));
+        Intent intent = (new Intent(this, ErrorMessageReceiverService.class));
         bindService(intent, errorMessageConnection, Context.BIND_AUTO_CREATE);
         messageManager = MessageManager.getInstance();
         createNavigation();
@@ -73,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                             taskManager.handleTaskInfo(message);
                         }
                     } else {
-                        errorMessageRecieverService.handleMessage(message);
+                        errorMessageReceiverService.handleMessage(message);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -125,10 +124,10 @@ public class MainActivity extends AppCompatActivity {
     private ServiceConnection errorMessageConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            ErrorMessageRecieverService.ErrorMessageBinder binder = (ErrorMessageRecieverService.ErrorMessageBinder) iBinder;
-            errorMessageRecieverService = binder.getService();
+            ErrorMessageReceiverService.ErrorMessageBinder binder = (ErrorMessageReceiverService.ErrorMessageBinder) iBinder;
+            errorMessageReceiverService = binder.getService();
             errorServiceBound = true;
-            messageManager.setErrorMessageRecieverService(errorMessageRecieverService);
+            messageManager.setErrorMessageReceiverService(errorMessageReceiverService);
         }
 
         @Override
