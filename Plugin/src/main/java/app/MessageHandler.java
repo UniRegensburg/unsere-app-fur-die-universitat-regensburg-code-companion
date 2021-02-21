@@ -8,46 +8,96 @@ import com.intellij.openapi.editor.Document;
 import dev.onvoid.webrtc.RTCDataChannelState;
 import dev.onvoid.webrtc.RTCPeerConnectionState;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MessageHandler {
 
     private final ApplicationService manager;
     private WebRTC webRTC;
+    private final Map<HighlightInfo, Long> alreadyPresentErrors = new HashMap<>();
+    private List<String> messages;
+    private final Gson gson = new Gson();
+    private final String ADD_ERROR_TAG = "add";
+    private final String REMOVE_ERROR_TAG = "remove";
+    private long messageId = 0;
 
     public MessageHandler() {
         manager = ServiceManager.getService(ApplicationService.class);
     }
 
     public void handleMessage(List<HighlightInfo> highlightInfoList, Document document) throws Exception {
+        messages = new ArrayList<>();
         makeString(highlightInfoList, document);
+        checkForRemovedErrors(highlightInfoList);
+        send(gson.toJson(messages));
+    }
+
+    /**
+     * Checks for errors that were recorded but are no longer present
+     * Use {@link Iterator} in loop instead of foreach to avoid {@link ConcurrentModificationException}
+     * @param highlightInfoList the List of currently present errors
+     */
+    private void checkForRemovedErrors(List<HighlightInfo> highlightInfoList) {
+        for (Iterator<HighlightInfo> iterator = alreadyPresentErrors.keySet().iterator(); iterator.hasNext();) {
+            HighlightInfo alreadyPresentError = iterator.next();
+            if (!highlightInfoList.contains(alreadyPresentError)) {
+                addRemoveErrorMessage(alreadyPresentError);
+                iterator.remove();
+            }
+        }
+    }
+
+    /**
+     * Add a message that specifies removal of a no longer present error
+     * @param alreadyPresentError the error that should be removed from the list in the app
+     */
+    private void addRemoveErrorMessage(HighlightInfo alreadyPresentError) {
+        Map<String, String> message = new HashMap<>();
+
+        message.put("add/remove", REMOVE_ERROR_TAG);
+        message.put("id", "" + alreadyPresentErrors.get(alreadyPresentError));
+
+        String json = gson.toJson(message);
+        messages.add(json);
+    }
+
+    /**
+     * Add a message that adds a new error to the list in our app
+     * @param highlightInfo contains all information about the error
+     * @param document the current document, needed to determine the line of the error
+     */
+    private void addNewErrorMessage(HighlightInfo highlightInfo, Document document) {
+        Map<String,String> message = new HashMap<>();
+
+        String type = highlightInfo.type.getAttributesKey().toString();
+        String line = Integer.toString(1 + document.getLineNumber(highlightInfo.startOffset));
+        String description = highlightInfo.getDescription();
+        String occurence = highlightInfo.getText();
+        String tag = highlightInfo.getSeverity().toString();
+
+        message.put("add/remove", ADD_ERROR_TAG);
+        message.put("tag",tag);
+        message.put("type",type);
+        message.put("ocurence", occurence); // typo --> occurrence / used on android side? fix later?
+        message.put("line", line);
+        message.put("description", description);
+        message.put("id", "" + ++messageId);
+
+        String json = gson.toJson(message);
+        messages.add(json);
     }
 
     private void makeString(List<HighlightInfo> highlightInfoList, Document document) throws Exception {
-        send("ERROR LOG STARTED");
-        for(int i = 0; i < highlightInfoList.size();i++){
-            Map<String,String> message = new HashMap();
 
-            String type = highlightInfoList.get(i).type.getAttributesKey().toString();
-            String line = Integer.toString(1 + document.getLineNumber(highlightInfoList.get(i).startOffset));
-            String description = highlightInfoList.get(i).getDescription();
-            String occurence = highlightInfoList.get(i).getText();
-            String tag = highlightInfoList.get(i).getSeverity().toString();
+        for (HighlightInfo highlightInfo : highlightInfoList) {
+            if (alreadyPresentErrors.containsKey(highlightInfo)) {
+                continue;
+            }
 
-            message.put("tag",tag);
-            message.put("type",type);
-            message.put("ocurence", occurence);
-            message.put("line", line);
-            message.put("description", description);
-
-            String json = new Gson().toJson(message);
-            System.out.println(json);
-            send(json);
-
+            addNewErrorMessage(highlightInfo, document);
+            alreadyPresentErrors.put(highlightInfo, messageId);
         }
+
     }
 
     public void send(String data) throws Exception {

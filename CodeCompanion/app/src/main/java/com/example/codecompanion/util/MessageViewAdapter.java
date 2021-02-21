@@ -96,7 +96,7 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        String message = (String) localDataSet.get(position).get("text");
+        String message = (String) localDataSet.get(position).get("description");
         if(getItemViewType(position) == TYPE_ERROR) {
             ((ErrorViewHolder) holder).textView.setText(message);
         } else {

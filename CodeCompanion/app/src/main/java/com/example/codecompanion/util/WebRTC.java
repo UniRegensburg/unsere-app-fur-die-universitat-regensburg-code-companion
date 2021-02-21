@@ -26,7 +26,6 @@ import io.socket.client.Socket;
 import static io.socket.client.Socket.EVENT_CONNECT;
 import static io.socket.client.Socket.EVENT_DISCONNECT;
 import static org.webrtc.SessionDescription.Type.ANSWER;
-import static org.webrtc.SessionDescription.Type.OFFER;
 
 public class WebRTC {
 
@@ -147,7 +146,7 @@ public class WebRTC {
                         final byte[] bytes = new byte[data.capacity()];
                         data.get(bytes);
                         String strData = new String(bytes);
-                        listener.onMessageRecieved(strData);
+                        listener.onMessageReceived(strData);
                         Log.d(TAG, "Got msg: " + strData + " over " + dc1);
                     }
                 });
@@ -180,6 +179,6 @@ public class WebRTC {
 
     public interface WebRTCListener{
         public void onConnectionStateChanged(PeerConnection.PeerConnectionState state);
-        public void onMessageRecieved(String message);
+        public void onMessageReceived(String message);
     }
 }

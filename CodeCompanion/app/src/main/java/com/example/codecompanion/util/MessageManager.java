@@ -2,6 +2,7 @@ package com.example.codecompanion.util;
 
 import android.util.Log;
 
+import com.example.codecompanion.services.ErrorMessageRecieverService;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -10,23 +11,22 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class MessageManager {
 
     public interface MessageManagerListener{
-        public void onDataChanged();
+        void onDataChanged();
     }
 
-    private List<Map> errors;
-    private List<Map> warnings;
-    private MessageManagerListener listener;
     private static MessageManager instance;
+    private ErrorMessageRecieverService errorMessageRecieverService;
 
     private MessageManager() {
-        errors = new ArrayList<>();
-        warnings = new ArrayList<>();
+
     }
 
     public static MessageManager getInstance(){
@@ -36,68 +36,27 @@ public class MessageManager {
         return MessageManager.instance;
     }
 
-    public void handleMessage(String message) throws JSONException {
-        if(message.equals("ERROR LOG STARTED")){
-            removeAll();
-        }else{
-            HashMap<String, String> messageMap = unpackString(message);
-            String desc = messageMap.get("description");
-            String line = messageMap.get("line");
-            String type = messageMap.get("type");
-            String oc = messageMap.get("ocurence");
-            String messageText = oc + ": " + line + "\n" + type + "\n" + desc;
-
-            Map convertedMessage = new HashMap();
-            convertedMessage.put("tag", messageMap.get("tag"));
-            convertedMessage.put("text", messageText);
-
-            addMessage(convertedMessage);
-        }
+    public List<Map<String, String>> getErrors() {
+        return errorMessageRecieverService.getErrors();
     }
 
-    public void addMessage(Map message){
-        Object tag = message.get("tag");
-        if ("WARNING".equals(tag)) {
-            warnings.add(message);
-        } else if ("ERROR".equals(tag)) {
-            errors.add(message);
-        }
-        if(listener != null) {
-            listener.onDataChanged();
-        }
-    }
-
-    public void removeAll(){
-        errors.clear();
-        warnings.clear();
-        if(listener != null) {
-            listener.onDataChanged();
-        }
-    }
-
-    public List<Map> getErrors() {
-        return errors;
-    }
-
-    public List<Map> getWarnings() {
-        return warnings;
+    public List<Map<String, String>> getWarnings() {
+        return errorMessageRecieverService.getWarnings();
     }
 
     public void setListener(MessageManagerListener listener){
-        this.listener = listener;
+        errorMessageRecieverService.setListener(listener);
     }
 
     public void removeListener(){
-        this.listener = null;
+        errorMessageRecieverService.setListener(null);
     }
 
-
-    private HashMap<String,String> unpackString(String message) throws JSONException {
-        JSONObject jsonObject = new JSONObject(message);
-        HashMap<String, String> messageMap = new Gson().fromJson(jsonObject.toString(), HashMap.class);
-        Log.d("Test",messageMap.toString());
-        return messageMap;
+    public ErrorMessageRecieverService getErrorMessageRecieverService() {
+        return errorMessageRecieverService;
     }
-    
 
+    public void setErrorMessageRecieverService(ErrorMessageRecieverService errorMessageRecieverService) {
+        this.errorMessageRecieverService = errorMessageRecieverService;
+    }
 }
