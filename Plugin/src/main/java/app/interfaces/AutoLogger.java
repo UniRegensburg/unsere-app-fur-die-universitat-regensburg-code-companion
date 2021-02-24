@@ -1,9 +1,7 @@
-package app.services.application;
+package app.interfaces;
 
 public interface AutoLogger {
-
     public boolean isRunning();
     public void start();
     public void stop();
-
 }

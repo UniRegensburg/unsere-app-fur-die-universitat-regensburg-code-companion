@@ -1,5 +1,6 @@
 package app;
 
+import app.interfaces.WebRTCListener;
 import dev.onvoid.webrtc.*;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -251,7 +252,5 @@ public class WebRTC {
         this.listener = listener;
     }
 
-    public interface WebRTCListener{
-        public void onConnectionStateChanged(RTCPeerConnectionState state);
-    }
+
 }
