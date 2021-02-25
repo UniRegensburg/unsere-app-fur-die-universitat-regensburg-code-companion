@@ -177,6 +177,11 @@ public class WebRTC {
         this.listener = listener;
     }
 
+    public void sendData(final String data) throws Exception {
+        ByteBuffer buffer = ByteBuffer.wrap(data.getBytes());
+        dc1.send(new DataChannel.Buffer(buffer, false));
+    }
+
     public interface WebRTCListener{
         public void onConnectionStateChanged(PeerConnection.PeerConnectionState state);
         public void onMessageReceived(String message);
