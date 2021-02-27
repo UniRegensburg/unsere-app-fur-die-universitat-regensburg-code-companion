@@ -22,6 +22,7 @@ import com.example.codecompanion.util.TaskViewAdapter;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class TasksFragment extends Fragment {
 
@@ -29,6 +30,8 @@ public class TasksFragment extends Fragment {
     private TaskManager taskManager;
     private TaskViewAdapter adapter;
     private List<JSONObject> data;
+    private String[] funMessages;
+    private String[] funMessagesEmpty;
 
     private TextView taskMessageField;
 
@@ -47,6 +50,9 @@ public class TasksFragment extends Fragment {
 
         adapter = new TaskViewAdapter(root.getContext(), data);
         tasksView.setAdapter(adapter);
+
+        funMessages = root.getResources().getStringArray(R.array.fun_messages_tasks);
+        funMessagesEmpty = root.getResources().getStringArray(R.array.fun_messages_tasks_empty);
         return root;
     }
 
@@ -62,7 +68,7 @@ public class TasksFragment extends Fragment {
                         data.clear();
                         for(JSONObject task: taskManager.getTasks()) {
                             data.add(task);
-                            taskMessageField.setText("> plenty work to do!");
+                            taskMessageField.setText(funMessages[new Random().nextInt(funMessages.length)]);
                         }
                         adapter.notifyDataSetChanged();
                     }
@@ -70,9 +76,9 @@ public class TasksFragment extends Fragment {
             }
         });
         if(data.size() > 0) {
-            taskMessageField.setText("> plenty work to do!");
+            taskMessageField.setText(funMessages[new Random().nextInt(funMessages.length)]);
         } else {
-            taskMessageField.setText("> nothing to do here.");
+            taskMessageField.setText(funMessagesEmpty[new Random().nextInt(funMessagesEmpty.length)]);
         }
     }
 

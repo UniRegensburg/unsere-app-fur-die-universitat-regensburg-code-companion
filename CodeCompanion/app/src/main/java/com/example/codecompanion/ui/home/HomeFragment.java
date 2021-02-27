@@ -17,6 +17,8 @@ import com.example.codecompanion.R;
 
 import org.webrtc.PeerConnection;
 
+import java.util.Random;
+
 public class HomeFragment extends Fragment {
     private Button connect;
     private ConnectionStateManager connectionStateManager;
@@ -41,8 +43,9 @@ public class HomeFragment extends Fragment {
                 qrScanner.start(getActivity());
             }
         });
-
-        startTyping("> hi, mate!");
+        String[] funMessages = root.getResources().getStringArray(R.array.fun_messages_connect);
+        String randomMessage = funMessages[new Random().nextInt(funMessages.length)];
+        startTyping(randomMessage);
 
         return root;
     }

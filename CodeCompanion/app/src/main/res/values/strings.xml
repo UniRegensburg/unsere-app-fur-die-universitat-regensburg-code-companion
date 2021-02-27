@@ -16,4 +16,43 @@
     <string name="menu_information">Information</string>
     <string name="menu_profile">Profile</string>
 
+    <string-array name="fun_messages_connect">
+        <item>> ready to code\?</item>
+        <item>> hi, mate\!</item>
+        <item>> let\'s rock\!</item>
+        <item>> warming up\!</item>
+        <item>> let\'s do this\!</item>
+        <item>> i\'m ready\! you too\?</item>
+    </string-array>
+
+    <string-array name="fun_messages_tasks_empty">
+        <item>> nothing to do here.</item>
+        <item>> all tasks solved\!</item>
+        <item>> you can take a day off.</item>
+        <item>> you made it\!</item>
+        <item>> wow\! you are good\!</item>
+    </string-array>
+
+    <string-array name="fun_messages_tasks">
+        <item>> check your todo-list\!</item>
+        <item>> plenty work to do\!</item>
+        <item>> you got this\!</item>
+        <item>> which to go first\?</item>
+        <item>> pick a task and let\'s go\!</item>
+    </string-array>
+
+    <string-array name="fun_messages_compiler_empty">
+        <item>> your code seems to work.</item>
+        <item>> captain here, no errors found\!</item>
+        <item>> congrats, no errors\!</item>
+        <item>> works like a charm &lt;3</item>
+    </string-array>
+
+    <string-array name="fun_messages_compiler">
+        <item>> i think you have some errors ...</item>
+        <item>> some bugs incoming\!</item>
+        <item>> something is broken ...</item>
+        <item>> no this doesn\'t work. try again\!</item>
+    </string-array>
+
 </resources>
