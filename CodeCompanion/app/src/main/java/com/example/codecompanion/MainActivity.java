@@ -40,7 +40,9 @@ public class MainActivity extends AppCompatActivity {
     private ConnectionStateManager connectionStateManager;
     private ErrorMessageReceiverService errorMessageReceiverService;
     private String id;
+
     private boolean errorServiceBound = false;
+    private boolean webRTCServiceBound = false;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -50,35 +52,12 @@ public class MainActivity extends AppCompatActivity {
 
         taskManager = TaskManager.getInstance();
         connectionStateManager = ConnectionStateManager.getInstance();
-        Intent intent = (new Intent(this, ErrorMessageReceiverService.class));
-        bindService(intent, errorMessageConnection, Context.BIND_AUTO_CREATE);
+        Intent errorMessageIntent = (new Intent(this, ErrorMessageReceiverService.class));
+        bindService(errorMessageIntent, errorMessageConnection, Context.BIND_AUTO_CREATE);
         messageManager = MessageManager.getInstance();
         createNavigation();
-        webRTC = new WebRTC();
-        webRTC.setWebRTCListener(new WebRTC.WebRTCListener() {
-            @Override
-            public void onConnectionStateChanged(PeerConnection.PeerConnectionState state) {
-                connectionStateManager.getInstance().stateChanged(state);
-                connectionStateManager.setConnectedToId(id);
-                setBadgeForConnectionState(state.toString());
-                Log.d(TAG,state.toString());
-            }
-
-            @Override
-            public void onMessageReceived(String message) {
-                try {
-                    if(message.contains("task")) {
-                        if(ConnectionStateManager.getInstance().getConnectionState() == PeerConnection.PeerConnectionState.CONNECTED) {
-                            taskManager.handleTaskInfo(message);
-                        }
-                    } else {
-                        errorMessageReceiverService.handleMessage(message);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        Intent webRTCIntent = (new Intent(this, WebRTC.class));
+        bindService(webRTCIntent, webRTCServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -113,15 +92,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setBadgeForConnectionState(String state) {
-        if(state == "CONNECTED") {
+        if (state.equals("CONNECTED")) {
             connectionState.setBackgroundColor(getResources().getColor(R.color.primary_color1));
-        }else {
+        } else {
             connectionState.setBackgroundColor(getResources().getColor(R.color.primary_color2));
         }
         connectionState.isVisible();
     }
 
-    private ServiceConnection errorMessageConnection = new ServiceConnection() {
+    private final ServiceConnection errorMessageConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             ErrorMessageReceiverService.ErrorMessageBinder binder = (ErrorMessageReceiverService.ErrorMessageBinder) iBinder;
@@ -133,6 +112,44 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             errorServiceBound = false;
+        }
+    };
+
+    private final ServiceConnection webRTCServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            WebRTC.WebRTCServiceBinder binder = (WebRTC.WebRTCServiceBinder) iBinder;
+            webRTC = binder.getService();
+            webRTCServiceBound = true;
+            webRTC.setWebRTCListener(new WebRTC.WebRTCListener() {
+                @Override
+                public void onConnectionStateChanged(PeerConnection.PeerConnectionState state) {
+                    connectionStateManager.getInstance().stateChanged(state);
+                    connectionStateManager.setConnectedToId(id);
+                    setBadgeForConnectionState(state.toString());
+                    Log.d(TAG,state.toString());
+                }
+
+                @Override
+                public void onMessageReceived(String message) {
+                    try {
+                        if(message.contains("task")) {
+                            if(ConnectionStateManager.getInstance().getConnectionState() == PeerConnection.PeerConnectionState.CONNECTED) {
+                                taskManager.handleTaskInfo(message);
+                            }
+                        } else {
+                            errorMessageReceiverService.handleMessage(message);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            webRTCServiceBound = false;
         }
     };
 

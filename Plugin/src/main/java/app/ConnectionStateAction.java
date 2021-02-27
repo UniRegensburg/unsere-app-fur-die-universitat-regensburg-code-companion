@@ -38,7 +38,7 @@ public class ConnectionStateAction extends AnAction {
                     e.getPresentation().setText("Connected to #id");
                     connected = true;
                     String task = manager.getTaskHandler().getTaskInfo();
-                    if(task != "") {
+                    if(!task.equals("")) {
                         try {
                             System.out.println("Sending TaskInfo");
                             manager.getMessageHandler().send(task);
