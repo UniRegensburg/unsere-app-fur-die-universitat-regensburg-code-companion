@@ -3,6 +3,7 @@ package app.services.application;
 import app.MessageHandler;
 import app.TaskHandler;
 import app.WebRTC;
+import app.interfaces.ApplicationServiceListener;
 import app.listeners.ListenerHelper;
 import app.interfaces.WebRTCListener;
 import com.intellij.openapi.components.ServiceManager;
@@ -79,8 +80,5 @@ public class ApplicationService implements WebRTCListener {
         }
     }
 
-    public interface ApplicationServiceListener{
-        void onStarted();
-        void onConnectionStateChanged(RTCPeerConnectionState state);
-    }
+
 }
