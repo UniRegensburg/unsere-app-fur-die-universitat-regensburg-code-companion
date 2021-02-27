@@ -18,12 +18,15 @@ import com.example.codecompanion.util.MessageViewAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class CompilerFragment extends Fragment {
 
     private MessageManager messageManager;
     private MessageViewAdapter adapter;
     private List<Map> data;
+    private String[] funMessages;
+    private String[] funMessagesEmpty;
 
     private TextView compilerMessageField;
     private RecyclerView messages;
@@ -42,15 +45,19 @@ public class CompilerFragment extends Fragment {
         
         adapter = new MessageViewAdapter(root.getContext(), data);
         messages.setAdapter(adapter);
+
+        funMessages = root.getResources().getStringArray(R.array.fun_messages_compiler);
+        funMessagesEmpty = root.getResources().getStringArray(R.array.fun_messages_compiler_empty);
+
         return root;
     }
 
     @Override
     public void onResume() {
         if(data.size() > 0) {
-            compilerMessageField.setText("> i think you have some errors...");
+            compilerMessageField.setText(funMessages[new Random().nextInt(funMessages.length)]);
         } else {
-            compilerMessageField.setText("> seems to work correctly.");
+            compilerMessageField.setText(funMessagesEmpty[new Random().nextInt(funMessagesEmpty.length)]);
         }
         super.onResume();
         messageManager.setListener(() -> getActivity().runOnUiThread(() -> {
@@ -59,9 +66,9 @@ public class CompilerFragment extends Fragment {
             data.addAll(messageManager.getWarnings());
 
             if(data.size() > 0) {
-                compilerMessageField.setText("> i think you have some errors...");
+                compilerMessageField.setText(funMessages[new Random().nextInt(funMessages.length)]);
             } else {
-                compilerMessageField.setText("> seems to work correctly.");
+                compilerMessageField.setText(funMessagesEmpty[new Random().nextInt(funMessagesEmpty.length)]);
             }
             adapter.notifyDataSetChanged();
         }));
