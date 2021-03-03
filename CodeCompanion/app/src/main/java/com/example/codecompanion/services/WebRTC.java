@@ -42,7 +42,7 @@ public class WebRTC extends Service {
 
     private PeerConnection peerConnection;
     private PeerConnectionFactory factory;
-    private DataChannel dc1;
+    private static DataChannel dc1;
     private MediaConstraints constraints;
     private String id;
     private WebRTCListener listener;
@@ -194,7 +194,7 @@ public class WebRTC extends Service {
         this.listener = listener;
     }
 
-    public void sendData(final String data) throws Exception {
+    public static void sendData(final String data) throws Exception {
         ByteBuffer buffer = ByteBuffer.wrap(data.getBytes());
         dc1.send(new DataChannel.Buffer(buffer, false));
     }

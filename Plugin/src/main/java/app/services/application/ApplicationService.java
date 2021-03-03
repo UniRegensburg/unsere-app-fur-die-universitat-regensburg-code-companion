@@ -3,6 +3,7 @@ package app.services.application;
 import app.MessageHandler;
 import app.TaskHandler;
 import app.WebRTC;
+import app.data.Const;
 import app.listeners.ListenerHelper;
 import com.intellij.openapi.components.ServiceManager;
 import dev.onvoid.webrtc.RTCDataChannelState;
@@ -75,6 +76,13 @@ public class ApplicationService implements WebRTC.WebRTCListener {
 
         if (state == RTCPeerConnectionState.CONNECTED) {
             messageHandler = new MessageHandler();
+        }
+    }
+
+    @Override
+    public void onMessageReceived(String message) {
+        if (message.equals(Const.Events.REFRESH_DATA_MESSAGE)) {
+            messageHandler.handleRefreshData();
         }
     }
 

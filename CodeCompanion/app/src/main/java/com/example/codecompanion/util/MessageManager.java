@@ -48,4 +48,10 @@ public class MessageManager {
     public void setErrorMessageReceiverService(ErrorMessageReceiverService errorMessageReceiverService) {
         this.errorMessageReceiverService = errorMessageReceiverService;
     }
+
+    public void clearAllMessages() {
+        if (errorMessageReceiverService != null) {
+            errorMessageReceiverService.clearAllMessages();
+        }
+    }
 }

@@ -10,8 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.codecompanion.R;
+import com.example.codecompanion.services.WebRTC;
 import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.MessageViewAdapter;
 
@@ -24,6 +26,7 @@ public class CompilerFragment extends Fragment {
     private MessageManager messageManager;
     private MessageViewAdapter adapter;
     private List<Map> data;
+    public static final String REFRESH_DATA_MESSAGE = "REFRESH_DATA";
 
     private TextView compilerMessageField;
     private RecyclerView messages;
@@ -42,7 +45,23 @@ public class CompilerFragment extends Fragment {
         
         adapter = new MessageViewAdapter(root.getContext(), data);
         messages.setAdapter(adapter);
+
+        addRefreshListener(root);
         return root;
+    }
+
+    private void addRefreshListener(View root) {
+        final SwipeRefreshLayout pullToRefresh = root.findViewById(R.id.pullToRefreshCompiler);
+        pullToRefresh.setOnRefreshListener(() -> {
+            try {
+                messageManager.clearAllMessages();
+                WebRTC.sendData(REFRESH_DATA_MESSAGE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            pullToRefresh.setRefreshing(false);
+        });
+
     }
 
     @Override
