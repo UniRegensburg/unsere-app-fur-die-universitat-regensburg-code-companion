@@ -13,7 +13,7 @@ import com.example.codecompanion.services.ErrorMessageReceiverService;
 import com.example.codecompanion.util.ConnectionStateManager;
 import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.TaskManager;
-import com.example.codecompanion.util.WebRTC;
+import com.example.codecompanion.services.WebRTC;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -52,12 +52,12 @@ public class MainActivity extends AppCompatActivity {
 
         taskManager = TaskManager.getInstance();
         connectionStateManager = ConnectionStateManager.getInstance();
+        Intent webRTCIntent = (new Intent(this, WebRTC.class));
+        bindService(webRTCIntent, webRTCServiceConnection, Context.BIND_AUTO_CREATE);
         Intent errorMessageIntent = (new Intent(this, ErrorMessageReceiverService.class));
         bindService(errorMessageIntent, errorMessageConnection, Context.BIND_AUTO_CREATE);
         messageManager = MessageManager.getInstance();
         createNavigation();
-        Intent webRTCIntent = (new Intent(this, WebRTC.class));
-        bindService(webRTCIntent, webRTCServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             webRTC.setWebRTCListener(new WebRTC.WebRTCListener() {
                 @Override
                 public void onConnectionStateChanged(PeerConnection.PeerConnectionState state) {
-                    connectionStateManager.getInstance().stateChanged(state);
+                    ConnectionStateManager.getInstance().stateChanged(state);
                     connectionStateManager.setConnectedToId(id);
                     setBadgeForConnectionState(state.toString());
                     Log.d(TAG,state.toString());

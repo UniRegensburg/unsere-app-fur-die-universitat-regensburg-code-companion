@@ -1,4 +1,4 @@
-package com.example.codecompanion.util;
+package com.example.codecompanion.services;
 
 import android.app.Service;
 import android.content.Context;
