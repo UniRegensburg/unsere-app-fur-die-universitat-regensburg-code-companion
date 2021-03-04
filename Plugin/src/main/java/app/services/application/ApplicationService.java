@@ -4,14 +4,16 @@ import app.MessageHandler;
 import app.TaskHandler;
 import app.WebRTC;
 import app.data.Const;
+import app.interfaces.ApplicationServiceListener;
 import app.listeners.ListenerHelper;
+import app.interfaces.WebRTCListener;
 import com.intellij.openapi.components.ServiceManager;
 import dev.onvoid.webrtc.RTCDataChannelState;
 import dev.onvoid.webrtc.RTCPeerConnectionState;
 
 import java.util.UUID;
 
-public class ApplicationService implements WebRTC.WebRTCListener {
+public class ApplicationService implements WebRTCListener {
 
     private boolean listenersAreReady = false;
     private MessageHandler messageHandler;
@@ -79,6 +81,7 @@ public class ApplicationService implements WebRTC.WebRTCListener {
         }
     }
 
+
     @Override
     public void onMessageReceived(String message) {
         if (message.equals(Const.Events.REFRESH_DATA_MESSAGE)) {
@@ -90,4 +93,5 @@ public class ApplicationService implements WebRTC.WebRTCListener {
         void onStarted();
         void onConnectionStateChanged(RTCPeerConnectionState state);
     }
+
 }

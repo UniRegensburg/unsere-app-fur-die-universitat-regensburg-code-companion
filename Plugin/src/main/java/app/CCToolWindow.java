@@ -1,5 +1,6 @@
 package app;
 
+import app.interfaces.ApplicationServiceListener;
 import app.services.application.ApplicationService;
 import com.google.zxing.WriterException;
 import com.intellij.openapi.components.ServiceManager;
@@ -13,7 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-public class CCToolWindow implements ApplicationService.ApplicationServiceListener {
+public class CCToolWindow implements ApplicationServiceListener {
 
     private JPanel myToolWindowContent;
     private WebRTC webRTC;

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -18,8 +19,11 @@ import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.MessageViewAdapter;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class CompilerFragment extends Fragment {
 
@@ -27,6 +31,8 @@ public class CompilerFragment extends Fragment {
     private MessageViewAdapter adapter;
     private List<Map> data;
     public static final String REFRESH_DATA_MESSAGE = "REFRESH_DATA";
+    private String[] funMessages;
+    private String[] funMessagesEmpty;
 
     private TextView compilerMessageField;
     private RecyclerView messages;
@@ -44,9 +50,35 @@ public class CompilerFragment extends Fragment {
         data.addAll(messageManager.getWarnings());
         
         adapter = new MessageViewAdapter(root.getContext(), data);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                int swipeFlags = 0;
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                int sourcePos = viewHolder.getAdapterPosition();
+                int targetPos = target.getAdapterPosition();
+                Collections.swap(data, sourcePos,targetPos);
+                adapter.notifyItemMoved(sourcePos,targetPos);
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            }
+        });
+        touchHelper.attachToRecyclerView(messages);
         messages.setAdapter(adapter);
 
         addRefreshListener(root);
+        funMessages = root.getResources().getStringArray(R.array.fun_messages_compiler);
+        funMessagesEmpty = root.getResources().getStringArray(R.array.fun_messages_compiler_empty);
+
         return root;
     }
 
@@ -67,9 +99,9 @@ public class CompilerFragment extends Fragment {
     @Override
     public void onResume() {
         if(data.size() > 0) {
-            compilerMessageField.setText("> i think you have some errors...");
+            compilerMessageField.setText(funMessages[new Random().nextInt(funMessages.length)]);
         } else {
-            compilerMessageField.setText("> seems to work correctly.");
+            compilerMessageField.setText(funMessagesEmpty[new Random().nextInt(funMessagesEmpty.length)]);
         }
         super.onResume();
         messageManager.setListener(() -> getActivity().runOnUiThread(() -> {
@@ -78,9 +110,9 @@ public class CompilerFragment extends Fragment {
             data.addAll(messageManager.getWarnings());
 
             if(data.size() > 0) {
-                compilerMessageField.setText("> i think you have some errors...");
+                compilerMessageField.setText(funMessages[new Random().nextInt(funMessages.length)]);
             } else {
-                compilerMessageField.setText("> seems to work correctly.");
+                compilerMessageField.setText(funMessagesEmpty[new Random().nextInt(funMessagesEmpty.length)]);
             }
             adapter.notifyDataSetChanged();
         }));

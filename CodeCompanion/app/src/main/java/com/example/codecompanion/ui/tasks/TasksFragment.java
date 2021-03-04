@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +22,9 @@ import com.example.codecompanion.util.TaskManager;
 import com.example.codecompanion.util.TaskViewAdapter;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class TasksFragment extends Fragment {
 
@@ -29,6 +32,8 @@ public class TasksFragment extends Fragment {
     private TaskManager taskManager;
     private TaskViewAdapter adapter;
     private List<JSONObject> data;
+    private String[] funMessages;
+    private String[] funMessagesEmpty;
 
     private TextView taskMessageField;
 
@@ -46,7 +51,34 @@ public class TasksFragment extends Fragment {
         }
 
         adapter = new TaskViewAdapter(root.getContext(), data);
+
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                int swipeFlags = 0;
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                int sourcePos = viewHolder.getAdapterPosition();
+                int targetPos = target.getAdapterPosition();
+                Collections.swap(data, sourcePos,targetPos);
+                adapter.notifyItemMoved(sourcePos,targetPos);
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            }
+        });
+        touchHelper.attachToRecyclerView(tasksView);
         tasksView.setAdapter(adapter);
+
+        funMessages = root.getResources().getStringArray(R.array.fun_messages_tasks);
+        funMessagesEmpty = root.getResources().getStringArray(R.array.fun_messages_tasks_empty);
         return root;
     }
 
@@ -62,7 +94,7 @@ public class TasksFragment extends Fragment {
                         data.clear();
                         for(JSONObject task: taskManager.getTasks()) {
                             data.add(task);
-                            taskMessageField.setText("> plenty work to do!");
+                            taskMessageField.setText(funMessages[new Random().nextInt(funMessages.length)]);
                         }
                         adapter.notifyDataSetChanged();
                     }
@@ -70,9 +102,9 @@ public class TasksFragment extends Fragment {
             }
         });
         if(data.size() > 0) {
-            taskMessageField.setText("> plenty work to do!");
+            taskMessageField.setText(funMessages[new Random().nextInt(funMessages.length)]);
         } else {
-            taskMessageField.setText("> nothing to do here.");
+            taskMessageField.setText(funMessagesEmpty[new Random().nextInt(funMessagesEmpty.length)]);
         }
     }
 
