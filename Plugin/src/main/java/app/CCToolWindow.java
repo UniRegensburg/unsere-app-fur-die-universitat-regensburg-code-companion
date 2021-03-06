@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-public class CCToolWindow implements ApplicationServiceListener {
+public class CCToolWindow implements ApplicationService.ApplicationServiceListener {
 
     private JPanel myToolWindowContent;
     private WebRTC webRTC;

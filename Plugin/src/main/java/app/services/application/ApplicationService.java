@@ -13,7 +13,7 @@ import dev.onvoid.webrtc.RTCPeerConnectionState;
 
 import java.util.UUID;
 
-public class ApplicationService implements WebRTCListener {
+public class ApplicationService implements WebRTC.WebRTCListener {
 
     private boolean listenersAreReady = false;
     private MessageHandler messageHandler;
