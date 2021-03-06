@@ -3,6 +3,7 @@ package app;
 import app.services.application.ApplicationService;
 import com.google.gson.Gson;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
+import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
@@ -74,12 +75,12 @@ public class MessageHandler {
         int line = 1 + document.getLineNumber(highlightInfo.startOffset);
         String description = highlightInfo.getDescription();
         String occurence = highlightInfo.getText();
-        String tag = highlightInfo.getSeverity().toString();
+        HighlightSeverity tag = highlightInfo.getSeverity();
 
         ErrorMessage errorMessage = new ErrorMessage(tag, type, occurence, line, description, ++messageId);
 
         message.put("add/remove", ADD_ERROR_TAG);
-        message.put("tag",tag);
+        message.put("tag",tag.toString());
         message.put("type",type.toString());
         message.put("ocurence", occurence); // typo --> occurrence / used on android side? fix later?
         message.put("line", Integer.toString(line));
@@ -123,7 +124,7 @@ public class MessageHandler {
         for (ErrorMessage error : alreadyPresentErrors.values()) {
             Map<String, String> message = new HashMap<>();
             message.put("add/remove", ADD_ERROR_TAG);
-            message.put("tag", error.getTag());
+            message.put("tag", error.getTag().toString());
             message.put("type",error.getType().toString());
             message.put("ocurence", error.getOccurrence()); // typo --> occurrence / used on android side? fix later?
             message.put("line", Integer.toString(error.getLine()));

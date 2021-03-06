@@ -1,30 +1,21 @@
 package app;
 
+import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 
 public class ErrorMessage {
 
     private String shortMessage;
     private String longMessage;
-    private String tag;
-    private TextAttributesKey type;
-    private String occurrence;
-    private int line;
-    private String description;
-    private long id;
+    private final HighlightSeverity tag;
+    private final TextAttributesKey type;
+    private final String occurrence;
+    private final int line;
+    private final String description;
+    private final long id;
 
-    public ErrorMessage(String shortMessage, String longMessage, String tag, TextAttributesKey type, String occurrence, int line, String description, long id) {
-        this.shortMessage = shortMessage;
-        this.longMessage = longMessage;
-        this.tag = tag;
-        this.type = type;
-        this.occurrence = occurrence;
-        this.line = line;
-        this.description = description;
-        this.id = id;
-    }
 
-    public ErrorMessage(String tag, TextAttributesKey type, String occurrence, int line, String description, long id) {
+    public ErrorMessage(HighlightSeverity tag, TextAttributesKey type, String occurrence, int line, String description, long id) {
         this.tag = tag;
         this.type = type;
         this.occurrence = occurrence;
@@ -41,7 +32,7 @@ public class ErrorMessage {
         return longMessage;
     }
 
-    public String getTag() {
+    public HighlightSeverity getTag() {
         return tag;
     }
 
