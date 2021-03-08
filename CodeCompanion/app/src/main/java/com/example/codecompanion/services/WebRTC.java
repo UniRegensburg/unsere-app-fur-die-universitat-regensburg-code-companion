@@ -1,7 +1,13 @@
-package com.example.codecompanion.util;
+package com.example.codecompanion.services;
 
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Binder;
+import android.os.IBinder;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import com.example.codecompanion.interfaces.CustomPeerConnectionObserver;
 import com.example.codecompanion.interfaces.*;
@@ -27,18 +33,29 @@ import static io.socket.client.Socket.EVENT_CONNECT;
 import static io.socket.client.Socket.EVENT_DISCONNECT;
 import static org.webrtc.SessionDescription.Type.ANSWER;
 
-public class WebRTC {
+public class WebRTC extends Service {
 
     private static final String TAG = "WebRTC";
+    private final IBinder binder = new WebRTCServiceBinder();
 
     private Socket socket;
 
     private PeerConnection peerConnection;
     private PeerConnectionFactory factory;
-    private DataChannel dc1;
+    private static DataChannel dc1;
     private MediaConstraints constraints;
     private String id;
     private WebRTCListener listener;
+
+    public WebRTC() {
+
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return binder;
+    }
 
     public void init(Context context, String id){
         this.id = id;
@@ -177,8 +194,19 @@ public class WebRTC {
         this.listener = listener;
     }
 
+    public static void sendData(final String data) throws Exception {
+        ByteBuffer buffer = ByteBuffer.wrap(data.getBytes());
+        dc1.send(new DataChannel.Buffer(buffer, false));
+    }
+
     public interface WebRTCListener{
-        public void onConnectionStateChanged(PeerConnection.PeerConnectionState state);
-        public void onMessageReceived(String message);
+        void onConnectionStateChanged(PeerConnection.PeerConnectionState state);
+        void onMessageReceived(String message);
+    }
+
+    public class WebRTCServiceBinder extends Binder {
+        public WebRTC getService() {
+            return WebRTC.this;
+        }
     }
 }

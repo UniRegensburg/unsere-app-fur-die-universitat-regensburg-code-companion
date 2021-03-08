@@ -130,4 +130,9 @@ public class ErrorMessageReceiverService extends Service {
 	public void setListener(MessageManager.MessageManagerListener listener) {
 		this.listener = listener;
 	}
+
+	public void clearAllMessages() {
+		errors.clear();
+		warnings.clear();
+	}
 }

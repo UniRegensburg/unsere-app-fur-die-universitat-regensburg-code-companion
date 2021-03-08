@@ -3,8 +3,10 @@ package app;
 import app.services.application.ApplicationService;
 import com.google.gson.Gson;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
+import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.colors.TextAttributesKey;
 import dev.onvoid.webrtc.RTCDataChannelState;
 import dev.onvoid.webrtc.RTCPeerConnectionState;
 
@@ -14,7 +16,7 @@ public class MessageHandler {
 
     private final ApplicationService manager;
     private WebRTC webRTC;
-    private final Map<HighlightInfo, Long> alreadyPresentErrors = new HashMap<>();
+    private final Map<HighlightInfo, ErrorMessage> alreadyPresentErrors = new HashMap<>();
     private List<String> messages;
     private final Gson gson = new Gson();
     private final String ADD_ERROR_TAG = "add";
@@ -55,7 +57,7 @@ public class MessageHandler {
         Map<String, String> message = new HashMap<>();
 
         message.put("add/remove", REMOVE_ERROR_TAG);
-        message.put("id", "" + alreadyPresentErrors.get(alreadyPresentError));
+        message.put("id", "" + alreadyPresentErrors.get(alreadyPresentError).getId());
 
         String json = gson.toJson(message);
         messages.add(json);
@@ -66,25 +68,28 @@ public class MessageHandler {
      * @param highlightInfo contains all information about the error
      * @param document the current document, needed to determine the line of the error
      */
-    private void addNewErrorMessage(HighlightInfo highlightInfo, Document document) {
+    private ErrorMessage addNewErrorMessage(HighlightInfo highlightInfo, Document document) {
         Map<String,String> message = new HashMap<>();
 
-        String type = highlightInfo.type.getAttributesKey().toString();
-        String line = Integer.toString(1 + document.getLineNumber(highlightInfo.startOffset));
+        TextAttributesKey type = highlightInfo.type.getAttributesKey();
+        int line = 1 + document.getLineNumber(highlightInfo.startOffset);
         String description = highlightInfo.getDescription();
         String occurence = highlightInfo.getText();
-        String tag = highlightInfo.getSeverity().toString();
+        HighlightSeverity tag = highlightInfo.getSeverity();
+
+        ErrorMessage errorMessage = new ErrorMessage(tag, type, occurence, line, description, ++messageId);
 
         message.put("add/remove", ADD_ERROR_TAG);
-        message.put("tag",tag);
-        message.put("type",type);
+        message.put("tag",tag.toString());
+        message.put("type",type.toString());
         message.put("ocurence", occurence); // typo --> occurrence / used on android side? fix later?
-        message.put("line", line);
+        message.put("line", Integer.toString(line));
         message.put("description", description);
         message.put("id", "" + ++messageId);
 
         String json = gson.toJson(message);
         messages.add(json);
+        return errorMessage;
     }
 
     private void makeString(List<HighlightInfo> highlightInfoList, Document document) throws Exception {
@@ -94,8 +99,8 @@ public class MessageHandler {
                 continue;
             }
 
-            addNewErrorMessage(highlightInfo, document);
-            alreadyPresentErrors.put(highlightInfo, messageId);
+            ErrorMessage errorMessage = addNewErrorMessage(highlightInfo, document);
+            alreadyPresentErrors.put(highlightInfo, errorMessage);
         }
 
     }
@@ -111,5 +116,31 @@ public class MessageHandler {
                 System.out.println("Upps something went wrong!");
             }
         }
+    }
+
+    public void handleRefreshData() {
+        List<String> messagesToSend = new ArrayList<>();
+
+        for (ErrorMessage error : alreadyPresentErrors.values()) {
+            Map<String, String> message = new HashMap<>();
+            message.put("add/remove", ADD_ERROR_TAG);
+            message.put("tag", error.getTag().toString());
+            message.put("type",error.getType().toString());
+            message.put("ocurence", error.getOccurrence()); // typo --> occurrence / used on android side? fix later?
+            message.put("line", Integer.toString(error.getLine()));
+            message.put("description", error.getDescription());
+            message.put("id", "" + error.getId());
+
+            String json = gson.toJson(message);
+            messagesToSend.add(json);
+        }
+
+        try {
+            send(gson.toJson(messagesToSend));
+        } catch (Exception e) {
+            System.out.println("Refresh data failed!");
+            e.printStackTrace();
+        }
+
     }
 }

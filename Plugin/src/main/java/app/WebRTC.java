@@ -103,6 +103,7 @@ public class WebRTC {
                                 data.get(bytes);
                                 String strData = new String(bytes);
                                 System.out.println("Got msg: " + strData + " over " + dc);
+                                listener.onMessageReceived(strData);
                             }
                         });
                     }
@@ -252,5 +253,8 @@ public class WebRTC {
         this.listener = listener;
     }
 
-
+    public interface WebRTCListener{
+        void onConnectionStateChanged(RTCPeerConnectionState state);
+        void onMessageReceived(String message);
+    }
 }

@@ -3,6 +3,7 @@ package app.services.application;
 import app.MessageHandler;
 import app.TaskHandler;
 import app.WebRTC;
+import app.data.Const;
 import app.interfaces.ApplicationServiceListener;
 import app.listeners.ListenerHelper;
 import app.interfaces.WebRTCListener;
@@ -12,7 +13,7 @@ import dev.onvoid.webrtc.RTCPeerConnectionState;
 
 import java.util.UUID;
 
-public class ApplicationService implements WebRTCListener {
+public class ApplicationService implements WebRTC.WebRTCListener {
 
     private boolean listenersAreReady = false;
     private MessageHandler messageHandler;
@@ -80,5 +81,17 @@ public class ApplicationService implements WebRTCListener {
         }
     }
 
+
+    @Override
+    public void onMessageReceived(String message) {
+        if (message.equals(Const.Events.REFRESH_DATA_MESSAGE)) {
+            messageHandler.handleRefreshData();
+        }
+    }
+
+    public interface ApplicationServiceListener{
+        void onStarted();
+        void onConnectionStateChanged(RTCPeerConnectionState state);
+    }
 
 }
