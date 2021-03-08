@@ -81,13 +81,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        bottomNavigation.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
-            @Override
-            public void onNavigationItemReselected(@NonNull MenuItem item) {
-                
-            }
-        });
     }
 
     @Override
@@ -119,6 +112,13 @@ public class MainActivity extends AppCompatActivity {
 
         connectionState = bottomNavigation.getOrCreateBadge(R.id.navigation_connect);
         setBadgeForConnectionState("NOT_CONNECTED");
+
+        bottomNavigation.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
+
+            }
+        });
     }
 
     private void setBadgeForConnectionState(String state) {
