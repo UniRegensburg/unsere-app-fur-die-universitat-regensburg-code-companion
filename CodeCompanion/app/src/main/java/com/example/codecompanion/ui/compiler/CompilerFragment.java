@@ -15,8 +15,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.codecompanion.R;
 import com.example.codecompanion.services.WebRTC;
+import com.example.codecompanion.util.ConnectionStateManager;
 import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.MessageViewAdapter;
+
+import org.webrtc.PeerConnection;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,7 +51,7 @@ public class CompilerFragment extends Fragment {
         data = new ArrayList<>();
         data.addAll(messageManager.getErrors());
         data.addAll(messageManager.getWarnings());
-        
+
         adapter = new MessageViewAdapter(root.getContext(), data);
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
@@ -85,11 +88,13 @@ public class CompilerFragment extends Fragment {
     private void addRefreshListener(View root) {
         final SwipeRefreshLayout pullToRefresh = root.findViewById(R.id.pullToRefreshCompiler);
         pullToRefresh.setOnRefreshListener(() -> {
-            try {
-                messageManager.clearAllMessages();
-                WebRTC.sendData(REFRESH_DATA_MESSAGE);
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (ConnectionStateManager.getInstance().getConnectionState() == PeerConnection.PeerConnectionState.CONNECTED) {
+                try {
+                    messageManager.clearAllMessages();
+                    WebRTC.sendData(REFRESH_DATA_MESSAGE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             pullToRefresh.setRefreshing(false);
         });
