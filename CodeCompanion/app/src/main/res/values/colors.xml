@@ -21,7 +21,12 @@
 
     <color name="primary_color1">#27ae60</color>
     <color name="primary_color2">#f1c40f</color>
-    <color name="primary_color3">#e67e22</color>
+    <color name="primary_color3">#C54D57</color>
+    <color name="primary_color4">#4ECDC4</color>
+
+    <!--<color name="primary_color1">#27ae60</color>
+    <color name="primary_color2">#f1c40f</color>
+    <color name="primary_color3">#e67e22</color>-->
 
 
 

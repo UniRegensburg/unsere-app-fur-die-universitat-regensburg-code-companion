@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/primary_background"
     android:padding="8dp"
+    android:id="@+id/tasks_fragment"
     tools:context=".ui.tasks.TasksFragment">
 
     <TextView
