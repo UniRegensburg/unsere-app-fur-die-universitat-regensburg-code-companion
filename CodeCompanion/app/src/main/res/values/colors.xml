@@ -8,25 +8,26 @@
     <color name="black">#FF000000</color>
 
     <!-- Darkmode Background colors -->
-    <color name="primary_background">#222222</color>
-    <color name="secondary_background">#3b3b3b</color>
+<!--    <color name="primary_background">#222222</color>
+    <color name="secondary_background">#3b3b3b</color>-->
+
+    <color name="primary_background">#282a36</color>
+    <color name="secondary_background">#44475a</color>
+    <color name="tertiary_background">#6272a4</color>
 
     <!-- Lightmode Background colors -->
     <color name="white">#ffffff</color>
-
-
-<!--    <color name="primary_color1">#16A085</color>
-    <color name="primary_color2">#F4D03F</color>
-    <color name="primary_color3">#F4763F</color>-->
-
-    <color name="primary_color1">#27ae60</color>
-    <color name="primary_color2">#f1c40f</color>
-    <color name="primary_color3">#C54D57</color>
-    <color name="primary_color4">#4ECDC4</color>
+    <color name="selected">#f8f8f2</color>
 
     <!--<color name="primary_color1">#27ae60</color>
     <color name="primary_color2">#f1c40f</color>
-    <color name="primary_color3">#e67e22</color>-->
+    <color name="primary_color3">#C54D57</color>
+    <color name="primary_color4">#4ECDC4</color>-->
+
+    <color name="primary_color1">#50fa7b</color>
+    <color name="primary_color2">#f1c40f</color>
+    <color name="primary_color3">#ff5555</color>
+    <color name="primary_color4">#8be9fd</color>
 
 
 
