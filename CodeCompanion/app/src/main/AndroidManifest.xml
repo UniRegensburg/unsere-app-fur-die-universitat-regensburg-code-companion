@@ -35,6 +35,10 @@
 
         <service android:name=".services.ErrorMessageReceiverService" />
         <service android:name=".services.WebRTC" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
