@@ -20,7 +20,7 @@ public class TaskManager {
 
     private static TaskManager instance;
     private TaskManagerListener listener;
-    private List<JSONObject> tasks;
+    private ArrayList<JSONObject> tasks;
     private HashMap<String, String> informationMap;
 
     private TaskManager() {
@@ -57,10 +57,10 @@ public class TaskManager {
         return this.informationMap;
     }
 
-    private List<JSONObject> extractTaskObjects(String message) throws JSONException {
+    private ArrayList<JSONObject> extractTaskObjects(String message) throws JSONException {
         JSONObject jsonObject = new JSONObject(message);
         JSONArray tasks = jsonObject.getJSONArray("tasks");
-        List<JSONObject> taskList = new ArrayList<>();
+        ArrayList<JSONObject> taskList = new ArrayList<>();
         for(int i = 0; i < tasks.length(); i++) {
             taskList.add((JSONObject) tasks.get(i));
         }
