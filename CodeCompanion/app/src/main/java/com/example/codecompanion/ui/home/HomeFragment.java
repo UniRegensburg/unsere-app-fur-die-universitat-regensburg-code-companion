@@ -116,10 +116,10 @@ public class HomeFragment extends Fragment {
             public void run() {
                 connect.setEnabled(true);
                 connect.setText("CONNECT");
-                connect.setBackgroundResource(R.drawable.button_green);
+                connect.setBackgroundResource(R.drawable.button_grey);
                 connect.setAlpha(1f);
                 connectionCode.setText("404");
-                connectionCode.setTextColor(getResources().getColor(R.color.primary_color2));
+                connectionCode.setTextColor(getResources().getColor(R.color.primary_color3));
                 connectionCodeText.setText("oops, can't find you...");
             }
         });

@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         if (state.equals("CONNECTED")) {
             connectionState.setBackgroundColor(getResources().getColor(R.color.primary_color1));
         } else {
-            connectionState.setBackgroundColor(getResources().getColor(R.color.primary_color2));
+            connectionState.setBackgroundColor(getResources().getColor(R.color.primary_color3));
         }
         connectionState.isVisible();
     }
