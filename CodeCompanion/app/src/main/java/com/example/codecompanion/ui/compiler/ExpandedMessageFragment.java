@@ -19,8 +19,8 @@ public class ExpandedMessageFragment extends Fragment {
     private TextView errorDescription;
     private final String explanation;
 
-    public ExpandedMessageFragment(String explanation) {
-        this.explanation = explanation;
+    public ExpandedMessageFragment(String shortExplanation) {
+        this.explanation = shortExplanation;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,

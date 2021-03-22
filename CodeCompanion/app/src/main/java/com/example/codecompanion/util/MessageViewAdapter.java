@@ -3,20 +3,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.codecompanion.R;
-import com.example.codecompanion.ui.compiler.ExpandedMessageFragment;
 import com.example.codecompanion.models.CompilerMessage;
 import com.example.codecompanion.models.SeverityType;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 
 
 /**
@@ -98,14 +92,14 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         String message = localDataSet.get(position).getDescription();
-        String explanation = localDataSet.get(position).getShortExplanation();
+        String shortExplanation = localDataSet.get(position).getShortExplanation();
 
         if(getItemViewType(position) == TYPE_ERROR) {
             ((ErrorViewHolder) holder).getTextView().setText(message);
-            ((ErrorViewHolder) holder).setExplanation(explanation);
+            ((ErrorViewHolder) holder).setShortExplanation(shortExplanation);
         } else if (getItemViewType(position) == TYPE_WARNING) {
             ((WarningViewHolder) holder).getTextView().setText(message);
-            ((WarningViewHolder) holder).setExplanation(explanation);
+            ((WarningViewHolder) holder).setShortExplanation(shortExplanation);
         }
 
     }

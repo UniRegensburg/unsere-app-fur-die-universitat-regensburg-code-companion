@@ -14,7 +14,7 @@ public abstract class AbstractCompilerMessageViewHolder extends RecyclerView.Vie
 	private final TextView textView;
 	private final ConstraintLayout layout;
 	private ExpandedMessageFragment fragment;
-	private String explanation;
+	private String shortExplanation;
 
 	public AbstractCompilerMessageViewHolder(View view, int textViewId, int layoutId) {
 		super(view);
@@ -22,7 +22,7 @@ public abstract class AbstractCompilerMessageViewHolder extends RecyclerView.Vie
 		layout = (ConstraintLayout) view.findViewById(layoutId);
 		layout.setOnClickListener(v -> {
 			AppCompatActivity activity = (AppCompatActivity) view.getContext();
-			fragment = new ExpandedMessageFragment(explanation);
+			fragment = new ExpandedMessageFragment(shortExplanation);
 			activity.getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, fragment).addToBackStack(null).commit();
 		});
 	}
@@ -39,11 +39,11 @@ public abstract class AbstractCompilerMessageViewHolder extends RecyclerView.Vie
 		return fragment;
 	}
 
-	public String getExplanation() {
-		return explanation;
+	public String getShortExplanation() {
+		return shortExplanation;
 	}
 
-	public void setExplanation(String explanation) {
-		this.explanation = explanation;
+	public void setShortExplanation(String explanation) {
+		this.shortExplanation = explanation;
 	}
 }
