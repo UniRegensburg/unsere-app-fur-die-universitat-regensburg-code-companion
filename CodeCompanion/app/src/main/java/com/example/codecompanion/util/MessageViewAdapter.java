@@ -16,6 +16,7 @@ import com.example.codecompanion.models.SeverityType;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 
 /**
@@ -23,54 +24,28 @@ import java.util.Map;
  */
 public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<CompilerMessage> localDataSet;
-    private LayoutInflater mInflater;
+    private final List<CompilerMessage> localDataSet;
+    private final LayoutInflater mInflater;
 
-    private static int TYPE_ERROR = 1;
-    private static int TYPE_WARNING = 0;
+    private static final int TYPE_ERROR = 1;
+    private static final int TYPE_WARNING = 0;
 
 
     /**
      * ErrorViewHolder with error layout
      */
-    class ErrorViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
-        private final ConstraintLayout layout;
-
+    class ErrorViewHolder extends AbstractCompilerMessageViewHolder {
         public ErrorViewHolder(View view) {
-            super(view);
-            textView = (TextView) view.findViewById(R.id.error_rv_template);
-            layout = (ConstraintLayout) view.findViewById(R.id.error);
-            layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                    Fragment fragment = new ExpandedMessageFragment();
-                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, fragment).addToBackStack(null).commit();
-                }
-            });
+            super(view, R.id.error_rv_template, R.id.error);
         }
     }
 
     /**
      * WarningViewHolder with warning layout
      */
-    class WarningViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
-        private final ConstraintLayout layout;
-
+    class WarningViewHolder extends AbstractCompilerMessageViewHolder {
         public WarningViewHolder(View view) {
-            super(view);
-            textView = (TextView) view.findViewById(R.id.warning_rv_template);
-            layout = (ConstraintLayout) view.findViewById(R.id.warning);
-            layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                    Fragment fragment = new ExpandedMessageFragment();
-                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, fragment).addToBackStack(null).commit();
-                }
-            });
+            super(view, R.id.warning_rv_template, R.id.warning);
         }
     }
 
@@ -124,10 +99,13 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         String message = localDataSet.get(position).getDescription();
         String explanation = localDataSet.get(position).getShortExplanation();
+
         if(getItemViewType(position) == TYPE_ERROR) {
-            ((ErrorViewHolder) holder).textView.setText(message + "\n" + explanation);
-        } else {
-            ((WarningViewHolder) holder).textView.setText(message + "\n" + explanation);
+            ((ErrorViewHolder) holder).getTextView().setText(message);
+            ((ErrorViewHolder) holder).setExplanation(explanation);
+        } else if (getItemViewType(position) == TYPE_WARNING) {
+            ((WarningViewHolder) holder).getTextView().setText(message);
+            ((WarningViewHolder) holder).setExplanation(explanation);
         }
 
     }
