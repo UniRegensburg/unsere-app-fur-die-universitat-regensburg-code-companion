@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.example.codecompanion.services.ErrorMessageReceiverService;
 import com.example.codecompanion.util.ConnectionStateManager;
@@ -19,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -89,13 +91,20 @@ public class MainActivity extends AppCompatActivity {
 
         connectionState = bottomNavigation.getOrCreateBadge(R.id.navigation_connect);
         setBadgeForConnectionState("NOT_CONNECTED");
+
+        bottomNavigation.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
+
+            }
+        });
     }
 
     private void setBadgeForConnectionState(String state) {
         if (state.equals("CONNECTED")) {
             connectionState.setBackgroundColor(getResources().getColor(R.color.primary_color1));
         } else {
-            connectionState.setBackgroundColor(getResources().getColor(R.color.primary_color2));
+            connectionState.setBackgroundColor(getResources().getColor(R.color.primary_color3));
         }
         connectionState.isVisible();
     }

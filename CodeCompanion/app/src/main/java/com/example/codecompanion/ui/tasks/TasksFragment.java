@@ -1,6 +1,7 @@
 package com.example.codecompanion.ui.tasks;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.example.codecompanion.R;
 import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.TaskManager;
 import com.example.codecompanion.util.TaskViewAdapter;
+import com.example.codecompanion.util.TinyDB;
+
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,9 +34,10 @@ public class TasksFragment extends Fragment {
     private RecyclerView tasksView;
     private TaskManager taskManager;
     private TaskViewAdapter adapter;
-    private List<JSONObject> data;
+    private ArrayList<JSONObject> data;
     private String[] funMessages;
     private String[] funMessagesEmpty;
+    private TinyDB tinyDB;
 
     private TextView taskMessageField;
 
@@ -44,10 +48,30 @@ public class TasksFragment extends Fragment {
         tasksView = root.findViewById(R.id.task_list);
         tasksView.setLayoutManager(new LinearLayoutManager(root.getContext()));
         taskMessageField = root.findViewById(R.id.task_message_field);
+        tinyDB = new TinyDB(getContext());
 
         data = new ArrayList<>();
+        data = tinyDB.getListObject("tasks");
         if(taskManager.getTasks() != null) {
-            data.addAll(taskManager.getTasks());
+            if(data.isEmpty()){
+                data.addAll(taskManager.getTasks());
+            }else{
+                ArrayList<JSONObject> dataNew = new ArrayList<>();
+                dataNew.addAll(taskManager.getTasks());
+                ArrayList<String> compList = new ArrayList<>();
+                ArrayList<String> compListNew = new ArrayList<>();
+                for(int i = 0;i < data.size();i++){
+                    compList.add(data.get(i).toString());
+                }
+                for(int j = 0;j < dataNew.size();j++){
+                    compList.add(dataNew.get(j).toString());
+                }
+                if(!compList.containsAll(compListNew)){
+                    Log.d("CREATE","Not the same");
+                    data.clear();
+                    data.addAll(taskManager.getTasks());
+                }
+            }
         }
 
         adapter = new TaskViewAdapter(root.getContext(), data);
@@ -91,12 +115,31 @@ public class TasksFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        data.clear();
-                        for(JSONObject task: taskManager.getTasks()) {
-                            data.add(task);
-                            taskMessageField.setText(funMessages[new Random().nextInt(funMessages.length)]);
+                        ArrayList<JSONObject> dataNew = new ArrayList<>();
+                        if (data.isEmpty()) {
+                            for(JSONObject task: taskManager.getTasks()) {
+                                data.add(task);
+                            }
+                        }else{
+                            for(JSONObject task: taskManager.getTasks()) {
+                                dataNew.add(task);
+                            }
+                            ArrayList<String> compList = new ArrayList<>();
+                            ArrayList<String> compListNew = new ArrayList<>();
+                            for(int i = 0;i < data.size();i++){
+                                compList.add(data.get(i).toString());
+                            }
+                            for(int j = 0;j < dataNew.size();j++){
+                                compList.add(dataNew.get(j).toString());
+                            }
+                            if(!compList.containsAll(compListNew)){
+                                Log.d("ON TASK","Not the same");
+                                data.clear();
+                                data = dataNew;
+                            }
                         }
                         adapter.notifyDataSetChanged();
+                        taskMessageField.setText(funMessages[new Random().nextInt(funMessages.length)]);
                     }
                 });
             }
@@ -111,6 +154,7 @@ public class TasksFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        tinyDB.putListObject("tasks",data);
         taskManager.removeListener();
     }
 }
