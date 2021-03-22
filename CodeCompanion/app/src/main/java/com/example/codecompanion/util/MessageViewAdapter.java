@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.codecompanion.R;
 import com.example.codecompanion.ui.compiler.ExpandedMessageFragment;
+import com.example.codecompanion.models.CompilerMessage;
+import com.example.codecompanion.models.SeverityType;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +23,7 @@ import java.util.Map;
  */
 public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Map> localDataSet;
+    private List<CompilerMessage> localDataSet;
     private LayoutInflater mInflater;
 
     private static int TYPE_ERROR = 1;
@@ -72,7 +74,7 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    public MessageViewAdapter(Context context, List<Map> dataSet) {
+    public MessageViewAdapter(Context context, List<CompilerMessage> dataSet) {
         this.mInflater = LayoutInflater.from(context);
         localDataSet = dataSet;
     }
@@ -84,7 +86,7 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      */
     @Override
     public int getItemViewType(int position) {
-        if(localDataSet.get(position).get("tag").equals("WARNING")) {
+        if(localDataSet.get(position).getSeverityType() == SeverityType.WARNING) {
             return TYPE_WARNING;
         } else {
             return TYPE_ERROR;
@@ -120,11 +122,12 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        String message = (String) localDataSet.get(position).get("description");
+        String message = localDataSet.get(position).getDescription();
+        String explanation = localDataSet.get(position).getShortExplanation();
         if(getItemViewType(position) == TYPE_ERROR) {
-            ((ErrorViewHolder) holder).textView.setText(message);
+            ((ErrorViewHolder) holder).textView.setText(message + "\n" + explanation);
         } else {
-            ((WarningViewHolder) holder).textView.setText(message);
+            ((WarningViewHolder) holder).textView.setText(message + "\n" + explanation);
         }
 
     }

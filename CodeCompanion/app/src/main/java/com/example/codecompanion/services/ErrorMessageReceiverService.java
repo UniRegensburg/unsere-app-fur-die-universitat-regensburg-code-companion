@@ -8,6 +8,9 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.codecompanion.models.CompilerMessage;
+import com.example.codecompanion.models.CompilerMessageCatalogue;
+import com.example.codecompanion.models.SeverityType;
 import com.example.codecompanion.util.MessageManager;
 import com.google.gson.Gson;
 
@@ -28,11 +31,13 @@ public class ErrorMessageReceiverService extends Service {
 
 	private final List<Map<String, String>> errors;
 	private final List<Map<String, String>> warnings;
+	private final List<CompilerMessage> compilerMessages;
 	private MessageManager.MessageManagerListener listener;
 
 	public ErrorMessageReceiverService() {
 		errors = new ArrayList<>();
 		warnings = new ArrayList<>();
+		compilerMessages = new ArrayList<>();
 	}
 
 	@Nullable
@@ -76,10 +81,15 @@ public class ErrorMessageReceiverService extends Service {
 
 	private void addMessage(Map<String, String> message){
 		String tag = message.get("tag");
+		String description = message.get("description");
 		if ("WARNING".equals(tag)) {
-			warnings.add(message);
+			compilerMessages.add(new CompilerMessage(SeverityType.WARNING, description,
+					CompilerMessageCatalogue.getShortExplanationByDescription(description),
+					CompilerMessageCatalogue.getLongExplanationByDescription(description)));
 		} else if ("ERROR".equals(tag)) {
-			errors.add(message);
+			compilerMessages.add(new CompilerMessage(SeverityType.ERROR, description,
+					CompilerMessageCatalogue.getShortExplanationByDescription(description),
+					CompilerMessageCatalogue.getLongExplanationByDescription(description)));
 		}
 		notifyDataChanged();
 	}
@@ -129,6 +139,10 @@ public class ErrorMessageReceiverService extends Service {
 
 	public void setListener(MessageManager.MessageManagerListener listener) {
 		this.listener = listener;
+	}
+
+	public List<CompilerMessage> getCompilerMessages() {
+		return compilerMessages;
 	}
 
 	public void clearAllMessages() {
