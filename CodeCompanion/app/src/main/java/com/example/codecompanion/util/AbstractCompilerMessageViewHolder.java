@@ -22,7 +22,7 @@ public abstract class AbstractCompilerMessageViewHolder extends RecyclerView.Vie
 		layout = (ConstraintLayout) view.findViewById(layoutId);
 		layout.setOnClickListener(v -> {
 			AppCompatActivity activity = (AppCompatActivity) view.getContext();
-			fragment = new ExpandedMessageFragment(shortExplanation);
+			fragment = new ExpandedMessageFragment(shortExplanation, textViewId);
 			activity.getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, fragment).addToBackStack(null).commit();
 		});
 	}
