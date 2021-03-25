@@ -130,7 +130,7 @@ public class TasksFragment extends Fragment {
                                 compList.add(data.get(i).toString());
                             }
                             for(int j = 0;j < dataNew.size();j++){
-                                compList.add(dataNew.get(j).toString());
+                                compListNew.add(dataNew.get(j).toString());
                             }
                             if(!compList.containsAll(compListNew)){
                                 Log.d("ON TASK","Not the same");
