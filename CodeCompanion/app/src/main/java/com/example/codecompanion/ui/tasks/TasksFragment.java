@@ -135,7 +135,9 @@ public class TasksFragment extends Fragment {
                             if(!compList.containsAll(compListNew)){
                                 Log.d("ON TASK","Not the same");
                                 data.clear();
-                                data = dataNew;
+                                for(JSONObject task: taskManager.getTasks()) {
+                                    data.add(task);
+                                }
                             }
                         }
                         adapter.notifyDataSetChanged();
