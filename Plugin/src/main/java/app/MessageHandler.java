@@ -143,4 +143,11 @@ public class MessageHandler {
         }
 
     }
+
+    public void deleteAlreadyExistingErrors(){
+        for(int i = alreadyPresentErrors.size();i >= 0;i--){
+            alreadyPresentErrors.remove(i);
+        }
+        System.out.println(alreadyPresentErrors);
+    }
 }

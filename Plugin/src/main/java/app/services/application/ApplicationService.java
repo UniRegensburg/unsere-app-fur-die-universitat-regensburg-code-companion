@@ -81,6 +81,7 @@ public class ApplicationService implements WebRTC.WebRTCListener {
         }
 
         if(state == RTCPeerConnectionState.DISCONNECTED) {
+            messageHandler.deleteAlreadyExistingErrors();
             UUID uuid = UUID.randomUUID();
             String stringId = uuid.toString();
             webRTC.init(stringId);
