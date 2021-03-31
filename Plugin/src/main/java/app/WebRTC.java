@@ -111,6 +111,10 @@ public class WebRTC {
                     @Override
                     public void onIceConnectionChange(RTCIceConnectionState iceConnectionState) {
                         System.out.println("Ice Connection State Changed: " + peerConnection.getIceConnectionState().toString());
+                        if(peerConnection.getIceConnectionState() == RTCIceConnectionState.DISCONNECTED){
+                            System.out.println("STOPPED");
+
+                        }
                     }
 
                     @Override
