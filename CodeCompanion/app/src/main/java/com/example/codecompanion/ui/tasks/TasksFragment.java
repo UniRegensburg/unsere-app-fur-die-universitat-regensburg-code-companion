@@ -3,6 +3,7 @@ package com.example.codecompanion.ui.tasks;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.codecompanion.R;
+import com.example.codecompanion.interfaces.ListTouchListener;
+import com.example.codecompanion.interfaces.RecyclerViewClickListener;
 import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.TaskManager;
 import com.example.codecompanion.util.TaskViewAdapter;
@@ -100,6 +103,13 @@ public class TasksFragment extends Fragment {
         });
         touchHelper.attachToRecyclerView(tasksView);
         tasksView.setAdapter(adapter);
+
+        tasksView.addOnItemTouchListener(new ListTouchListener(getContext(), tasksView, new RecyclerViewClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                view.setBackgroundColor(root.getResources().getColor(R.color.purple_700));
+            }
+        }));
 
         funMessages = root.getResources().getStringArray(R.array.fun_messages_tasks);
         funMessagesEmpty = root.getResources().getStringArray(R.array.fun_messages_tasks_empty);
