@@ -16,7 +16,7 @@ public class MessageHandler {
 
     private final ApplicationService manager;
     private WebRTC webRTC;
-    private final Map<HighlightInfo, ErrorMessage> alreadyPresentErrors = new HashMap<>();
+    private Map<HighlightInfo, ErrorMessage> alreadyPresentErrors = new HashMap<>();
     private List<String> messages;
     private final Gson gson = new Gson();
     private final String ADD_ERROR_TAG = "add";
@@ -145,9 +145,7 @@ public class MessageHandler {
     }
 
     public void deleteAlreadyExistingErrors(){
-        for(int i = alreadyPresentErrors.size();i >= 0;i--){
-            alreadyPresentErrors.remove(i);
-        }
+        alreadyPresentErrors.clear();
         System.out.println(alreadyPresentErrors);
     }
 }

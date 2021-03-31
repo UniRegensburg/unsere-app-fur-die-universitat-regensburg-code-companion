@@ -86,7 +86,9 @@ public class ApplicationService implements WebRTC.WebRTCListener {
             String stringId = uuid.toString();
             webRTC.init(stringId);
             webRTC.startSignaling();
-            webRTC.setWebRTCListener(this);
+            if(listener != null) {
+                listener.onStarted();
+            }
         }
     }
 
@@ -98,9 +100,15 @@ public class ApplicationService implements WebRTC.WebRTCListener {
         }
     }
 
+    @Override
+    public void onConnectedToSignaling() {
+        listener.onConnectedToSignaling();
+    }
+
     public interface ApplicationServiceListener{
         void onStarted();
         void onConnectionStateChanged(RTCPeerConnectionState state);
+        void onConnectedToSignaling();
     }
 
 }

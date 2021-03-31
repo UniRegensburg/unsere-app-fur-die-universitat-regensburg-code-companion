@@ -1,5 +1,1 @@
-public class main {
-    pubasd
-
-hhpikhk
-            asdophahiodgiuoadiohasdiphoasdipohasd
+public class main
