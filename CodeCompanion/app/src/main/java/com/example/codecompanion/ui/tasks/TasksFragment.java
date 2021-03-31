@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.codecompanion.R;
+import com.example.codecompanion.entity.Task;
 import com.example.codecompanion.interfaces.ListTouchListener;
 import com.example.codecompanion.interfaces.RecyclerViewClickListener;
 import com.example.codecompanion.util.MessageManager;
@@ -37,7 +38,7 @@ public class TasksFragment extends Fragment {
     private RecyclerView tasksView;
     private TaskManager taskManager;
     private TaskViewAdapter adapter;
-    private ArrayList<JSONObject> data;
+    private ArrayList<Task> data;
     private String[] funMessages;
     private String[] funMessagesEmpty;
     private TinyDB tinyDB;
@@ -59,15 +60,15 @@ public class TasksFragment extends Fragment {
             if(data.isEmpty()){
                 data.addAll(taskManager.getTasks());
             }else{
-                ArrayList<JSONObject> dataNew = new ArrayList<>();
+                ArrayList<Task> dataNew = new ArrayList<>();
                 dataNew.addAll(taskManager.getTasks());
                 ArrayList<String> compList = new ArrayList<>();
                 ArrayList<String> compListNew = new ArrayList<>();
                 for(int i = 0;i < data.size();i++){
-                    compList.add(data.get(i).toString());
+                    compList.add(data.get(i).getDescription());
                 }
                 for(int j = 0;j < dataNew.size();j++){
-                    compList.add(dataNew.get(j).toString());
+                    compList.add(dataNew.get(j).getDescription());
                 }
                 if(!compList.containsAll(compListNew)){
                     Log.d("CREATE","Not the same");
@@ -107,7 +108,14 @@ public class TasksFragment extends Fragment {
         tasksView.addOnItemTouchListener(new ListTouchListener(getContext(), tasksView, new RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
-                view.setBackgroundColor(root.getResources().getColor(R.color.purple_700));
+                boolean isChecked = data.get(position).isChecked();
+                if(isChecked) {
+                    view.setAlpha((float) 1.0);
+                } else {
+                    view.setAlpha((float) 0.5);
+                }
+                data.get(position).setChecked(!isChecked);
+                adapter.notifyDataSetChanged();
             }
         }));
 
@@ -125,22 +133,18 @@ public class TasksFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ArrayList<JSONObject> dataNew = new ArrayList<>();
+                        ArrayList<Task> dataNew = new ArrayList<>();
                         if (data.isEmpty()) {
-                            for(JSONObject task: taskManager.getTasks()) {
-                                data.add(task);
-                            }
+                            data = taskManager.getTasks();
                         }else{
-                            for(JSONObject task: taskManager.getTasks()) {
-                                dataNew.add(task);
-                            }
+                            dataNew = taskManager.getTasks();
                             ArrayList<String> compList = new ArrayList<>();
                             ArrayList<String> compListNew = new ArrayList<>();
                             for(int i = 0;i < data.size();i++){
-                                compList.add(data.get(i).toString());
+                                compList.add(data.get(i).getDescription());
                             }
                             for(int j = 0;j < dataNew.size();j++){
-                                compList.add(dataNew.get(j).toString());
+                                compList.add(dataNew.get(j).getDescription());
                             }
                             if(!compList.containsAll(compListNew)){
                                 Log.d("ON TASK","Not the same");

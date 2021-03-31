@@ -40,6 +40,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.codecompanion.entity.Task;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -331,15 +332,15 @@ public class TinyDB {
 
 
 
-    public ArrayList<JSONObject> getListObject(String key){
+    public ArrayList<Task> getListObject(String key){
     	Gson gson = new Gson();
 
     	ArrayList<String> objStrings = getListString(key);
-    	ArrayList<JSONObject> objects =  new ArrayList<JSONObject>();
+    	ArrayList<Task> objects =  new ArrayList<Task>();
 
     	for(String jObjString : objStrings){
-    		JSONObject value  = gson.fromJson(jObjString,  JSONObject.class);
-    		objects.add(value);
+    	    Task task = gson.fromJson(jObjString, Task.class);
+    		objects.add(task);
     	}
     	return objects;
     }
@@ -493,7 +494,7 @@ public class TinyDB {
     	putString(key, gson.toJson(obj));
     }
 
-    public void putListObject(String key, ArrayList<JSONObject> objArray){
+    public void putListObject(String key, ArrayList<Task> objArray){
     	checkForNullKey(key);
     	Gson gson = new Gson();
     	ArrayList<String> objStrings = new ArrayList<String>();
