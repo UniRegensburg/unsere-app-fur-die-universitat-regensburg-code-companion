@@ -1,5 +1,6 @@
 package com.example.codecompanion.util;
 
+import com.example.codecompanion.entity.Task;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 
@@ -20,7 +21,7 @@ public class TaskManager {
 
     private static TaskManager instance;
     private TaskManagerListener listener;
-    private ArrayList<JSONObject> tasks;
+    private ArrayList<Task> tasks;
     private HashMap<String, String> informationMap;
 
     private TaskManager() {
@@ -49,7 +50,7 @@ public class TaskManager {
         }
     }
 
-    public List<JSONObject> getTasks() {
+    public ArrayList<Task> getTasks() {
         return this.tasks;
     }
 
@@ -57,12 +58,14 @@ public class TaskManager {
         return this.informationMap;
     }
 
-    private ArrayList<JSONObject> extractTaskObjects(String message) throws JSONException {
+    private ArrayList<Task> extractTaskObjects(String message) throws JSONException {
         JSONObject jsonObject = new JSONObject(message);
         JSONArray tasks = jsonObject.getJSONArray("tasks");
-        ArrayList<JSONObject> taskList = new ArrayList<>();
+        ArrayList<Task> taskList = new ArrayList<>();
         for(int i = 0; i < tasks.length(); i++) {
-            taskList.add((JSONObject) tasks.get(i));
+            String taskString = tasks.getJSONObject(i).getString("description");
+            Task task = new Task(taskString, false);
+            taskList.add(task);
         }
 
 
