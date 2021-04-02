@@ -27,7 +27,7 @@ public class ExpandedMessageFragment extends Fragment {
     public ExpandedMessageFragment(String shortExplanation, int textViewId) {
         this.explanation = shortExplanation;
         this.textViewId = textViewId;
-        MainActivity.expandedMessageIsOpen = true;
+        MainActivity.isExpandedMessageOpen = true;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,

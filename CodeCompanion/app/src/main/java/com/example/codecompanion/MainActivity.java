@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private ConnectionStateManager connectionStateManager;
     private ErrorMessageReceiverService errorMessageReceiverService;
     private String id;
-    public static boolean expandedMessageIsOpen = false;
+    public static boolean isExpandedMessageOpen = false;
 
     private boolean errorServiceBound = false;
     private boolean webRTCServiceBound = false;
@@ -166,10 +166,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (expandedMessageIsOpen) {
+        if (isExpandedMessageOpen) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.popBackStack("expandedMessage", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            expandedMessageIsOpen = false;
+            isExpandedMessageOpen = false;
         } else {
             super.onBackPressed();
         }
