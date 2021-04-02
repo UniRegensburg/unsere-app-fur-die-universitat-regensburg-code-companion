@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.codecompanion.MainActivity;
 import com.example.codecompanion.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +27,7 @@ public class ExpandedMessageFragment extends Fragment {
     public ExpandedMessageFragment(String shortExplanation, int textViewId) {
         this.explanation = shortExplanation;
         this.textViewId = textViewId;
-
+        MainActivity.expandedMessageIsOpen = true;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,

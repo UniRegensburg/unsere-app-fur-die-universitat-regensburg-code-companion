@@ -22,6 +22,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private ConnectionStateManager connectionStateManager;
     private ErrorMessageReceiverService errorMessageReceiverService;
     private String id;
+    public static boolean expandedMessageIsOpen = false;
 
     private boolean errorServiceBound = false;
     private boolean webRTCServiceBound = false;
@@ -161,5 +163,16 @@ public class MainActivity extends AppCompatActivity {
             webRTCServiceBound = false;
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        if (expandedMessageIsOpen) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.popBackStack("expandedMessage", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            expandedMessageIsOpen = false;
+        } else {
+            super.onBackPressed();
+        }
+    }
 
 }
