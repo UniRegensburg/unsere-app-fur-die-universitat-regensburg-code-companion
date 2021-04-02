@@ -85,30 +85,23 @@ public class ErrorMessageReceiverService extends Service {
 		if ("WARNING".equals(tag)) {
 			compilerMessages.add(new CompilerMessage(SeverityType.WARNING, description,
 					CompilerMessageCatalogue.getShortExplanationByDescription(description),
-					CompilerMessageCatalogue.getLongExplanationByDescription(description)));
+					CompilerMessageCatalogue.getLongExplanationByDescription(description),
+					Integer.parseInt(Objects.requireNonNull(message.get("id")))));
 		} else if ("ERROR".equals(tag)) {
 			compilerMessages.add(new CompilerMessage(SeverityType.ERROR, description,
 					CompilerMessageCatalogue.getShortExplanationByDescription(description),
-					CompilerMessageCatalogue.getLongExplanationByDescription(description)));
+					CompilerMessageCatalogue.getLongExplanationByDescription(description),
+					Integer.parseInt(Objects.requireNonNull(message.get("id")))));
 		}
 		notifyDataChanged();
 	}
 
 	private void removeMessage(Map<String, String> message) {
-		String id = message.get("id");
+		int id = Integer.parseInt(Objects.requireNonNull(message.get("id")));
 
-		for (Iterator<Map<String, String>> iterator = warnings.iterator(); iterator.hasNext();) {
-			Map<String, String> warning = iterator.next();
-			if (Objects.equals(warning.get("id"), id)) {
-				iterator.remove();
-				notifyDataChanged();
-				return;
-			}
-		}
-
-		for (Iterator<Map<String, String>> iterator = errors.iterator(); iterator.hasNext();) {
-			Map<String, String> error = iterator.next();
-			if (Objects.equals(error.get("id"), id)) {
+		for (Iterator<CompilerMessage> iterator = compilerMessages.iterator(); iterator.hasNext();) {
+			CompilerMessage warning = iterator.next();
+			if (warning.getId() == id) {
 				iterator.remove();
 				notifyDataChanged();
 				return;

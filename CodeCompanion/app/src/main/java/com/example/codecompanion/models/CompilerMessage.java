@@ -8,12 +8,14 @@ public class CompilerMessage {
 	private String description;
 	private String shortExplanation;
 	private String longExplanation;
+	private final int id;
 
-	public CompilerMessage(SeverityType severityType, String description, String shortExplanation, String longExplanation) {
+	public CompilerMessage(SeverityType severityType, String description, String shortExplanation, String longExplanation, int id) {
 		this.severityType = severityType;
 		this.description = description;
 		this.shortExplanation = shortExplanation;
 		this.longExplanation = longExplanation;
+		this.id = id;
 	}
 
 	@NotNull
@@ -36,5 +38,9 @@ public class CompilerMessage {
 
 	public String getLongExplanation() {
 		return longExplanation;
+	}
+
+	public int getId() {
+		return id;
 	}
 }
