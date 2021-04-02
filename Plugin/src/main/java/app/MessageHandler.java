@@ -28,10 +28,16 @@ public class MessageHandler {
     }
 
     public void handleMessage(List<HighlightInfo> highlightInfoList, Document document) throws Exception {
-        messages = new ArrayList<>();
-        makeString(highlightInfoList, document);
-        checkForRemovedErrors(highlightInfoList);
-        send(gson.toJson(messages));
+        if (webRTC == null) {
+            webRTC = manager.getWebRTC();
+        }
+
+        if (webRTC.getConnectionState() == RTCPeerConnectionState.CONNECTED && webRTC.getDataChannelState() == RTCDataChannelState.OPEN) {
+            messages = new ArrayList<>();
+            makeString(highlightInfoList, document);
+            checkForRemovedErrors(highlightInfoList);
+            send(gson.toJson(messages));
+        }
     }
 
     /**
