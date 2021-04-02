@@ -1,3 +1,1 @@
-public class main {
-    pubasd
-
+public class main
