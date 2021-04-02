@@ -28,10 +28,16 @@ public class MessageHandler {
     }
 
     public void handleMessage(List<HighlightInfo> highlightInfoList, Document document) throws Exception {
-        messages = new ArrayList<>();
-        makeString(highlightInfoList, document);
-        checkForRemovedErrors(highlightInfoList);
-        send(gson.toJson(messages));
+        if (webRTC == null) {
+            webRTC = manager.getWebRTC();
+        }
+
+        if (webRTC.getConnectionState() == RTCPeerConnectionState.CONNECTED && webRTC.getDataChannelState() == RTCDataChannelState.OPEN) {
+            messages = new ArrayList<>();
+            makeString(highlightInfoList, document);
+            checkForRemovedErrors(highlightInfoList);
+            send(gson.toJson(messages));
+        }
     }
 
     /**
@@ -85,14 +91,14 @@ public class MessageHandler {
         message.put("ocurence", occurence); // typo --> occurrence / used on android side? fix later?
         message.put("line", Integer.toString(line));
         message.put("description", description);
-        message.put("id", "" + ++messageId);
+        message.put("id", "" + messageId);
 
         String json = gson.toJson(message);
         messages.add(json);
         return errorMessage;
     }
 
-    private void makeString(List<HighlightInfo> highlightInfoList, Document document) throws Exception {
+    private void makeString(List<HighlightInfo> highlightInfoList, Document document) {
 
         for (HighlightInfo highlightInfo : highlightInfoList) {
             if (alreadyPresentErrors.containsKey(highlightInfo)) {
@@ -146,6 +152,5 @@ public class MessageHandler {
 
     public void deleteAlreadyExistingErrors(){
         alreadyPresentErrors.clear();
-        System.out.println(alreadyPresentErrors);
     }
 }

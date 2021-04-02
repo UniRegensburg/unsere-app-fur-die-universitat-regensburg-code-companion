@@ -8,6 +8,9 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.codecompanion.models.CompilerMessage;
+import com.example.codecompanion.models.CompilerMessageCatalogue;
+import com.example.codecompanion.models.SeverityType;
 import com.example.codecompanion.util.MessageManager;
 import com.google.gson.Gson;
 
@@ -28,11 +31,13 @@ public class ErrorMessageReceiverService extends Service {
 
 	private final List<Map<String, String>> errors;
 	private final List<Map<String, String>> warnings;
+	private final List<CompilerMessage> compilerMessages;
 	private MessageManager.MessageManagerListener listener;
 
 	public ErrorMessageReceiverService() {
 		errors = new ArrayList<>();
 		warnings = new ArrayList<>();
+		compilerMessages = new ArrayList<>();
 	}
 
 	@Nullable
@@ -76,29 +81,27 @@ public class ErrorMessageReceiverService extends Service {
 
 	private void addMessage(Map<String, String> message){
 		String tag = message.get("tag");
+		String description = message.get("description");
 		if ("WARNING".equals(tag)) {
-			warnings.add(message);
+			compilerMessages.add(new CompilerMessage(SeverityType.WARNING, description,
+					CompilerMessageCatalogue.getShortExplanationByDescription(description),
+					CompilerMessageCatalogue.getLongExplanationByDescription(description),
+					Integer.parseInt(Objects.requireNonNull(message.get("id")))));
 		} else if ("ERROR".equals(tag)) {
-			errors.add(message);
+			compilerMessages.add(new CompilerMessage(SeverityType.ERROR, description,
+					CompilerMessageCatalogue.getShortExplanationByDescription(description),
+					CompilerMessageCatalogue.getLongExplanationByDescription(description),
+					Integer.parseInt(Objects.requireNonNull(message.get("id")))));
 		}
 		notifyDataChanged();
 	}
 
 	private void removeMessage(Map<String, String> message) {
-		String id = message.get("id");
+		int id = Integer.parseInt(Objects.requireNonNull(message.get("id")));
 
-		for (Iterator<Map<String, String>> iterator = warnings.iterator(); iterator.hasNext();) {
-			Map<String, String> warning = iterator.next();
-			if (Objects.equals(warning.get("id"), id)) {
-				iterator.remove();
-				notifyDataChanged();
-				return;
-			}
-		}
-
-		for (Iterator<Map<String, String>> iterator = errors.iterator(); iterator.hasNext();) {
-			Map<String, String> error = iterator.next();
-			if (Objects.equals(error.get("id"), id)) {
+		for (Iterator<CompilerMessage> iterator = compilerMessages.iterator(); iterator.hasNext();) {
+			CompilerMessage warning = iterator.next();
+			if (warning.getId() == id) {
 				iterator.remove();
 				notifyDataChanged();
 				return;
@@ -129,6 +132,10 @@ public class ErrorMessageReceiverService extends Service {
 
 	public void setListener(MessageManager.MessageManagerListener listener) {
 		this.listener = listener;
+	}
+
+	public List<CompilerMessage> getCompilerMessages() {
+		return compilerMessages;
 	}
 
 	public void clearAllMessages() {

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.codecompanion.R;
+import com.example.codecompanion.models.CompilerMessage;
 import com.example.codecompanion.services.WebRTC;
 import com.example.codecompanion.util.ConnectionStateManager;
 import com.example.codecompanion.util.MessageManager;
@@ -32,7 +33,7 @@ public class CompilerFragment extends Fragment {
 
     private MessageManager messageManager;
     private MessageViewAdapter adapter;
-    private List<Map> data;
+    private List<CompilerMessage> data;
     public static final String REFRESH_DATA_MESSAGE = "REFRESH_DATA";
     private String[] funMessages;
     private String[] funMessagesEmpty;
@@ -49,8 +50,7 @@ public class CompilerFragment extends Fragment {
         compilerMessageField = root.findViewById(R.id.compiler_message_field);
 
         data = new ArrayList<>();
-        data.addAll(messageManager.getErrors());
-        data.addAll(messageManager.getWarnings());
+        data.addAll(messageManager.getCompilerMessages());
 
         adapter = new MessageViewAdapter(root.getContext(), data);
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
@@ -111,8 +111,7 @@ public class CompilerFragment extends Fragment {
         super.onResume();
         messageManager.setListener(() -> getActivity().runOnUiThread(() -> {
             data.clear();
-            data.addAll(messageManager.getErrors());
-            data.addAll(messageManager.getWarnings());
+            data.addAll(messageManager.getCompilerMessages());
 
             if(data.size() > 0) {
                 compilerMessageField.setText(funMessages[new Random().nextInt(funMessages.length)]);
