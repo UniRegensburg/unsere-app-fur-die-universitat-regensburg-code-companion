@@ -19,10 +19,6 @@ public class VFSListener implements BulkFileListener {
     @Override
     public void after(@NotNull List<? extends VFileEvent> events) {
         if(manager.getWebRTC().getConnectionState() == RTCPeerConnectionState.CONNECTED) {
-            System.out.println(events.toString()+manager.getTaskHandler().isSent());
-            if (!manager.getTaskHandler().isSent()) {
-                manager.getTaskHandler().sendTaskInfo();
-            }
             if (events.toString().contains("task.json")) {
                 System.out.println("JSON Changed");
                 manager.getTaskHandler().sendTaskInfo();
