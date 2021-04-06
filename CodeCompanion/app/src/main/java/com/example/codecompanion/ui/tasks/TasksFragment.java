@@ -68,7 +68,7 @@ public class TasksFragment extends Fragment {
                     compList.add(data.get(i).getDescription());
                 }
                 for(int j = 0;j < dataNew.size();j++){
-                    compList.add(dataNew.get(j).getDescription());
+                    compListNew.add(dataNew.get(j).getDescription());
                 }
                 if(!compList.containsAll(compListNew)){
                     Log.d("CREATE","Not the same");
@@ -144,12 +144,13 @@ public class TasksFragment extends Fragment {
                                 compList.add(data.get(i).getDescription());
                             }
                             for(int j = 0;j < dataNew.size();j++){
-                                compList.add(dataNew.get(j).getDescription());
+                              compListNew.add(dataNew.get(j).getDescription());
+
                             }
                             if(!compList.containsAll(compListNew)){
                                 Log.d("ON TASK","Not the same");
                                 data.clear();
-                                data = dataNew;
+                                data.addAll(taskManager.getTasks());
                             }
                         }
                         adapter.notifyDataSetChanged();

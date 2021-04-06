@@ -1,4 +1,6 @@
 package app;
+import app.services.application.ApplicationService;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.*;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -7,9 +9,15 @@ import com.intellij.openapi.vfs.VirtualFile;
 import java.io.IOException;
 
 public class TaskHandler {
+    private final ApplicationService manager;
     private Project projects[];
     private VirtualFile taskDescription;
     private String projectPath;
+    private boolean sent;
+
+    public TaskHandler() {
+        manager = ServiceManager.getService(ApplicationService.class);
+    }
 
     /* Init Method, meant to be run first*/
     public void init(){
@@ -40,6 +48,25 @@ public class TaskHandler {
         }
 
         return taskInfoString;
+    }
+
+    public boolean isSent(){
+        return sent;
+    }
+
+    public void sendTaskInfo() {
+        String task = getTaskInfo();
+        if (task != "") {
+            try {
+                System.out.println("Sending TaskInfo!");
+                manager.getMessageHandler().send(task);
+                sent = true;
+            } catch (Exception i) {
+                i.printStackTrace();
+                System.out.println(i);
+                sent = false;
+            }
+        }
     }
 
 

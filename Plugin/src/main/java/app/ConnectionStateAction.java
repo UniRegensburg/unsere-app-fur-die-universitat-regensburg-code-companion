@@ -41,18 +41,6 @@ public class ConnectionStateAction extends AnAction {
                     e.getPresentation().setIcon(PluginIcons.Connected);
                     e.getPresentation().setText("Connected to #id");
                     connected = true;
-                    String task = manager.getTaskHandler().getTaskInfo();
-                    if(!task.equals("")) {
-                        try {
-                            System.out.println("Sending TaskInfo");
-                            manager.getMessageHandler().send(task);
-                        } catch (Exception i) {
-                            i.printStackTrace();
-                        }
-                    }
-                    else{
-                        System.out.println("No Task to send");
-                    }
                 }
 
             }else{

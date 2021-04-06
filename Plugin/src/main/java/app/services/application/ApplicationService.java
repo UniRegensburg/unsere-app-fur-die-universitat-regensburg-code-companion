@@ -18,7 +18,7 @@ public class ApplicationService implements WebRTC.WebRTCListener {
     private boolean listenersAreReady = false;
     private MessageHandler messageHandler;
     private WebRTC webRTC;
-    private TaskHandler taskHandler = new TaskHandler();
+    private TaskHandler taskHandler;
     private ApplicationState state = ApplicationState.IDLE;
     private ApplicationServiceListener listener;
     public boolean isStarted;
@@ -46,6 +46,7 @@ public class ApplicationService implements WebRTC.WebRTCListener {
 
         state = ApplicationState.RECORDING;
         webRTC = new WebRTC();
+        taskHandler = new TaskHandler();
         taskHandler.init();
         UUID uuid = UUID.randomUUID();
         String stringId = uuid.toString();
