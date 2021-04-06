@@ -16,6 +16,9 @@ public class App implements StartupActivity {
 
     @Override
     public void runActivity(@NotNull Project project) {
+        if(ApplicationService.getInstance().isStarted){
+            ApplicationService.getInstance().killSession();
+        }
         currentProject = project;
         ApplicationService.getInstance().startSession();
         System.out.println("Started");
