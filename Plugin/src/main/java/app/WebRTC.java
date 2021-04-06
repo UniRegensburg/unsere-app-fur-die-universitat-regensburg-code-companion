@@ -1,6 +1,8 @@
 package app;
 
 import app.interfaces.WebRTCListener;
+import app.services.application.ApplicationService;
+import com.intellij.openapi.components.ServiceManager;
 import dev.onvoid.webrtc.*;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -90,6 +92,9 @@ public class WebRTC {
                             @Override
                             public void onStateChange() {
                                 System.out.println("Data channel state changed: " + dc.getLabel() + ": " + dc.getState());
+                                if(dc.getState() == RTCDataChannelState.OPEN){
+                                    ServiceManager.getService(ApplicationService.class).getTaskHandler().sendTaskInfo();
+                                }
                             }
 
                             @Override
@@ -172,7 +177,6 @@ public class WebRTC {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
                             }
 
                             @Override
