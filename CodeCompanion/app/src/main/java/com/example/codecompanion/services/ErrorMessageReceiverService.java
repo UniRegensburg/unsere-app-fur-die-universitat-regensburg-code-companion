@@ -139,7 +139,6 @@ public class ErrorMessageReceiverService extends Service {
 	}
 
 	public void clearAllMessages() {
-		errors.clear();
-		warnings.clear();
+		compilerMessages.clear();
 	}
 }
