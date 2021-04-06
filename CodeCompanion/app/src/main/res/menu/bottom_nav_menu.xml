@@ -2,23 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_baseline_home_white"
+        android:id="@+id/navigation_connect"
+        android:icon="@drawable/ic_baseline_phonelink_white"
+        android:menuCategory = "secondary"
         android:title="@string/menu_home" />
-
-    <item
-        android:id="@+id/navigation_compiler"
-        android:icon="@drawable/ic_baseline_code_white"
-        android:title="@string/menu_compiler" />
 
     <item
         android:id="@+id/navigation_tasks"
         android:icon="@drawable/ic_baseline_list_white"
+        android:menuCategory = "secondary"
         android:title="@string/menu_tasks" />
 
     <item
+        android:id="@+id/navigation_compiler"
+        android:icon="@drawable/ic_baseline_code_white"
+        android:menuCategory = "secondary"
+        android:title="@string/menu_compiler" />
+
+    <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/ic_baseline_person_white"
+        android:icon="@drawable/ic_baseline_equalizer_white"
+        android:menuCategory = "secondary"
         android:title="@string/menu_profile"/>
 
 </menu>

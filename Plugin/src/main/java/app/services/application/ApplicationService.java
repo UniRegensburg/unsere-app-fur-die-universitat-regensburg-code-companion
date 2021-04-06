@@ -1,23 +1,27 @@
 package app.services.application;
 
 import app.MessageHandler;
+import app.TaskHandler;
 import app.WebRTC;
+import app.data.Const;
+import app.interfaces.ApplicationServiceListener;
 import app.listeners.ListenerHelper;
-import app.listeners.base.Event;
-import app.services.log.LogService;
+import app.interfaces.WebRTCListener;
 import com.intellij.openapi.components.ServiceManager;
+import dev.onvoid.webrtc.RTCDataChannelState;
+import dev.onvoid.webrtc.RTCPeerConnectionState;
 
-import java.util.ArrayList;
+import java.util.UUID;
 
-public class ApplicationService {
+public class ApplicationService implements WebRTC.WebRTCListener {
 
-    private boolean logIsReady = false;
     private boolean listenersAreReady = false;
     private MessageHandler messageHandler;
     private WebRTC webRTC;
+    private TaskHandler taskHandler;
     private ApplicationState state = ApplicationState.IDLE;
-    private LogService logService;
-    private final ArrayList<AutoLogger> autoLoggers = new ArrayList<>();
+    private ApplicationServiceListener listener;
+    public boolean isStarted;
 
     public static ApplicationService getInstance() {
         return ServiceManager.getService(ApplicationService.class);
@@ -28,71 +32,103 @@ public class ApplicationService {
     }
 
     public void startSession() {
+  
         if (state == ApplicationState.RECORDING) {
+            System.out.println("Already Started");
             return;
         }
-        if(!logIsReady) {
-           logService = ServiceManager.getService(LogService.class);
-           logService.init();
-           logIsReady = true;
-        }
+
         if (!listenersAreReady) {
+            System.out.println("Listeners not running");
             ListenerHelper.initListener();
             listenersAreReady = true;
         }
-        startAutoLoggers();
-        logService.createSessionLog();
-        logService.logAction("Plugin", "Session started");
+
         state = ApplicationState.RECORDING;
-    }
-
-    public void saveSession() {
-        if (state == ApplicationState.IDLE) {
-            return;
+        webRTC = new WebRTC();
+        taskHandler = new TaskHandler();
+        taskHandler.init();
+        UUID uuid = UUID.randomUUID();
+        String stringId = uuid.toString();
+        webRTC.init(stringId);
+        webRTC.startSignaling();
+        webRTC.setWebRTCListener(this);
+        if(listener != null) {
+            listener.onStarted();
         }
-        stopAutoLoggers();
-        logService.logAction("Plugin", "Session saved");
-//        logService.syncCurrentLog();
-        state = ApplicationState.IDLE;
-    }
-
-    private void startAutoLoggers() {
-        for(AutoLogger logger: autoLoggers) {
-            logger.start();
-        }
-    }
-
-    private void stopAutoLoggers() {
-        for(AutoLogger logger: autoLoggers) {
-            logger.stop();
-        }
-    }
-
-    public void inspectEvent(Event event) {
-        if(state == ApplicationState.IDLE) {
-            return;
-        }
-        logService.logAction(event.label, event.msg);
-    }
-
-    public void registerAutoLogger(AutoLogger logger) {
-        autoLoggers.add(logger);
-    }
-
-    public void setMessageHandler(MessageHandler messageHandler){
-        this.messageHandler = messageHandler;
+        isStarted = true;
     }
 
     public MessageHandler getMessageHandler(){
         return this.messageHandler;
     }
 
-    public void setWebRTC(WebRTC webRTC){
-        this.webRTC = webRTC;
-    }
-
     public WebRTC getWebRTC(){
         return this.webRTC;
+    }
+
+    public TaskHandler getTaskHandler(){return this.taskHandler; }
+
+    public void setListener(ApplicationServiceListener listener){
+        this.listener = listener;
+    }
+
+    @Override
+    public void onConnectionStateChanged(RTCPeerConnectionState state) {
+        if(listener != null){
+            listener.onConnectionStateChanged(state);
+        }
+
+        if (state == RTCPeerConnectionState.CONNECTED) {
+            messageHandler = new MessageHandler();
+        }
+
+        if(state == RTCPeerConnectionState.DISCONNECTED) {
+            messageHandler.deleteAlreadyExistingErrors();
+            UUID uuid = UUID.randomUUID();
+            String stringId = uuid.toString();
+            webRTC.init(stringId);
+            webRTC.startSignaling();
+            if(listener != null) {
+                listener.onStarted();
+            }
+        }
+    }
+
+
+    @Override
+    public void onMessageReceived(String message) {
+        if (message.equals(Const.Events.REFRESH_DATA_MESSAGE)) {
+            messageHandler.handleRefreshData();
+        }
+    }
+
+    @Override
+    public void onConnectedToSignaling() {
+        listener.onConnectedToSignaling();
+    }
+
+    public interface ApplicationServiceListener{
+        void onStarted();
+        void onConnectionStateChanged(RTCPeerConnectionState state);
+        void onConnectedToSignaling();
+    }
+
+    public void killSession(){
+        if(webRTC != null){
+            webRTC.closeConnection();
+        }
+        if(messageHandler != null){
+            messageHandler.deleteAlreadyExistingErrors();
+        }
+        messageHandler = null;
+        webRTC = null;
+        state = ApplicationState.IDLE;
+        taskHandler = new TaskHandler();
+        listener = null;
+        isStarted = false;
+        listenersAreReady = false;
+
     }
 
 }

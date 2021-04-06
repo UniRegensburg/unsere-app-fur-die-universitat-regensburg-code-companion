@@ -36,11 +36,6 @@ public class BaseListener {
         }
     }
 
-    public void log(String msg) {
-        Event logEvent = new Event(label, msg);
-        manager.inspectEvent(logEvent);
-    }
-
     protected ApplicationService getApplicationService() {
         return manager;
     }

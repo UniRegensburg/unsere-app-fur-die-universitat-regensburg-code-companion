@@ -15,16 +15,18 @@
     <extensions defaultExtensionNs="com.intellij">
         <postStartupActivity implementation="app.App" />
         <applicationService serviceImplementation="app.services.application.ApplicationService"/>
-        <applicationService serviceImplementation="app.services.log.LogService"/>
         <!-- Add your extensions here -->
+        <toolWindow id="CodeCompanion" secondary="false" icon="AllIcons.General.Modified" anchor="right"
+                    factoryClass="app.CCToolWindowFactory"/>
     </extensions>
 
     <actions>
-        <action id="app.QRPopupAction"
-                icon="/icons/devices_icon_16x16.png"
-                class="app.QRPopupAction"
-                text="Pop Up Dialog Action">
-            <add-to-group group-id="NavBarToolBar" anchor="last"/>
+        <action id="app.ConnectionStateAction"
+                class="app.ConnectionStateAction"
+                text="Not connected"
+                icon="PluginIcons.Disconnected">
+            <add-to-group group-id="NavBarToolBar"
+                          anchor="first"/>
         </action>
     </actions>
 </idea-plugin>

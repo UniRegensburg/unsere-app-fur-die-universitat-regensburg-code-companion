@@ -15,16 +15,16 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     implementation("com.google.zxing:core:3.3.0")
     implementation("com.google.zxing:javase:3.3.0")
-    implementation("io.socket:socket.io-client:1.0.0")
+    implementation("io.socket:socket.io-client:1.0.1")
     implementation("dev.onvoid.webrtc:webrtc-java:0.2.0")
     implementation("dev.onvoid.webrtc:webrtc-java-windows-x86_64:0.1.0")
+    implementation("dev.onvoid.webrtc:webrtc-java-native:0.1.0")
     implementation("org.scijava:native-lib-loader:2.3.4")
-    implementation(files("libs/PluginHelper.jar"))
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = "2020.2.3"
+    version = "2020.3.2"
 }
 tasks.getByName("patchPluginXml") {
 }
