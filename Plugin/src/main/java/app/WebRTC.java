@@ -116,6 +116,10 @@ public class WebRTC {
                     @Override
                     public void onIceConnectionChange(RTCIceConnectionState iceConnectionState) {
                         System.out.println("Ice Connection State Changed: " + peerConnection.getIceConnectionState().toString());
+                        if(peerConnection.getIceConnectionState() == RTCIceConnectionState.DISCONNECTED){
+                            System.out.println("STOPPED");
+
+                        }
                     }
 
                     @Override
@@ -138,6 +142,7 @@ public class WebRTC {
         socket.on(EVENT_CONNECT, args -> {
             System.out.println("Connected to Signalling");
             socket.emit("create or join", id);
+            listener.onConnectedToSignaling();
         }).on("created", args -> {
             System.out.println("Room created");
         }).on("full", args -> {
@@ -260,5 +265,6 @@ public class WebRTC {
     public interface WebRTCListener{
         void onConnectionStateChanged(RTCPeerConnectionState state);
         void onMessageReceived(String message);
+        void onConnectedToSignaling();
     }
 }

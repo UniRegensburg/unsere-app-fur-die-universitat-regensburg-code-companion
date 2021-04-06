@@ -75,15 +75,30 @@ public class CCToolWindow implements ApplicationService.ApplicationServiceListen
 
     @Override
     public void onConnectionStateChanged(RTCPeerConnectionState state) {
-        if(state == RTCPeerConnectionState.DISCONNECTED || state == RTCPeerConnectionState.CLOSED || state == RTCPeerConnectionState.FAILED){
-            createQRCode();
-        }
         if(state == RTCPeerConnectionState.CONNECTING){
             onConnecting();
         }
         if(state == RTCPeerConnectionState.CONNECTED){
             onConnected();
         }
+        if(state == RTCPeerConnectionState.DISCONNECTED){
+            onDisconnected();
+        }
+    }
+
+    @Override
+    public void onConnectedToSignaling() {
+        createQRCode();
+    }
+
+    private void onDisconnected() {
+        myToolWindowContent.removeAll();
+        JLabel connecting = new JLabel("Reconnecting to Signaling Server...");
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = GridBagConstraints.CENTER;
+        c.gridy = 0;
+        myToolWindowContent.add(connecting,c);
+        myToolWindowContent.updateUI();
     }
 
     private void onConnecting(){

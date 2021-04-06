@@ -1,5 +1,6 @@
 package com.example.codecompanion.util;
 
+import com.example.codecompanion.models.CompilerMessage;
 import com.example.codecompanion.services.ErrorMessageReceiverService;
 
 import java.util.List;
@@ -31,6 +32,10 @@ public class MessageManager {
 
     public List<Map<String, String>> getWarnings() {
         return errorMessageReceiverService.getWarnings();
+    }
+
+    public List<CompilerMessage> getCompilerMessages() {
+        return errorMessageReceiverService.getCompilerMessages();
     }
 
     public void setListener(MessageManagerListener listener){

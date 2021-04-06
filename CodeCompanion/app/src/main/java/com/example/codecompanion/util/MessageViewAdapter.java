@@ -1,15 +1,16 @@
 package com.example.codecompanion.util;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.codecompanion.R;
+import com.example.codecompanion.models.CompilerMessage;
+import com.example.codecompanion.models.SeverityType;
+
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -17,38 +18,32 @@ import java.util.Map;
  */
 public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Map> localDataSet;
-    private LayoutInflater mInflater;
+    private final List<CompilerMessage> localDataSet;
+    private final LayoutInflater mInflater;
 
-    private static int TYPE_ERROR = 1;
-    private static int TYPE_WARNING = 0;
+    private static final int TYPE_ERROR = 1;
+    private static final int TYPE_WARNING = 0;
 
 
     /**
      * ErrorViewHolder with error layout
      */
-    class ErrorViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
-
+    class ErrorViewHolder extends AbstractCompilerMessageViewHolder {
         public ErrorViewHolder(View view) {
-            super(view);
-            textView = (TextView) view.findViewById(R.id.error_rv_template);
+            super(view, R.id.error_rv_template, R.id.error);
         }
     }
 
     /**
      * WarningViewHolder with warning layout
      */
-    class WarningViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
-
+    class WarningViewHolder extends AbstractCompilerMessageViewHolder {
         public WarningViewHolder(View view) {
-            super(view);
-            textView = (TextView) view.findViewById(R.id.warning_rv_template);
+            super(view, R.id.warning_rv_template, R.id.warning);
         }
     }
 
-    public MessageViewAdapter(Context context, List<Map> dataSet) {
+    public MessageViewAdapter(Context context, List<CompilerMessage> dataSet) {
         this.mInflater = LayoutInflater.from(context);
         localDataSet = dataSet;
     }
@@ -60,7 +55,7 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      */
     @Override
     public int getItemViewType(int position) {
-        if(localDataSet.get(position).get("tag").equals("WARNING")) {
+        if(localDataSet.get(position).getSeverityType() == SeverityType.WARNING) {
             return TYPE_WARNING;
         } else {
             return TYPE_ERROR;
@@ -96,11 +91,15 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        String message = (String) localDataSet.get(position).get("description");
+        String message = localDataSet.get(position).getDescription();
+        String shortExplanation = localDataSet.get(position).getShortExplanation();
+
         if(getItemViewType(position) == TYPE_ERROR) {
-            ((ErrorViewHolder) holder).textView.setText(message);
-        } else {
-            ((WarningViewHolder) holder).textView.setText(message);
+            ((ErrorViewHolder) holder).getTextView().setText(message);
+            ((ErrorViewHolder) holder).setShortExplanation(shortExplanation);
+        } else if (getItemViewType(position) == TYPE_WARNING) {
+            ((WarningViewHolder) holder).getTextView().setText(message);
+            ((WarningViewHolder) holder).setShortExplanation(shortExplanation);
         }
 
     }

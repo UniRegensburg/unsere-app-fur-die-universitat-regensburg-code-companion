@@ -80,6 +80,17 @@ public class ApplicationService implements WebRTC.WebRTCListener {
         if (state == RTCPeerConnectionState.CONNECTED) {
             messageHandler = new MessageHandler();
         }
+
+        if(state == RTCPeerConnectionState.DISCONNECTED) {
+            messageHandler.deleteAlreadyExistingErrors();
+            UUID uuid = UUID.randomUUID();
+            String stringId = uuid.toString();
+            webRTC.init(stringId);
+            webRTC.startSignaling();
+            if(listener != null) {
+                listener.onStarted();
+            }
+        }
     }
 
 
@@ -90,9 +101,15 @@ public class ApplicationService implements WebRTC.WebRTCListener {
         }
     }
 
+    @Override
+    public void onConnectedToSignaling() {
+        listener.onConnectedToSignaling();
+    }
+
     public interface ApplicationServiceListener{
         void onStarted();
         void onConnectionStateChanged(RTCPeerConnectionState state);
+        void onConnectedToSignaling();
     }
 
 }
