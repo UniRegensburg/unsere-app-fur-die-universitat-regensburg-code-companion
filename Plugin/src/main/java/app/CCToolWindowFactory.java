@@ -16,6 +16,9 @@ public class CCToolWindowFactory implements ToolWindowFactory {
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(ccToolWindow.getContent(), "", false);
         toolWindow.getContentManager().addContent(content);
+        if(ApplicationService.getInstance().isStarted){
+            ApplicationService.getInstance().killSession();
+        }
         ccToolWindow.init();
     }
 }

@@ -35,6 +35,7 @@ public class WebRTC {
     private String socketUri = "http://62.75.151.5:3000/";
 
     public void init(String id){
+        System.out.println("INIT WEBRTC");
         this.id = id;
         isConnecting = false;
         hasSendAnswer = false;
@@ -132,6 +133,7 @@ public class WebRTC {
     }
 
     public void startSignaling() {
+        System.out.println("STARTING SIGNALING");
         URI uri = URI.create(socketUri);
         socket = IO.socket(uri);
         socket.on(EVENT_CONNECT, args -> {
@@ -236,6 +238,7 @@ public class WebRTC {
             socket.disconnect();
             socket.close();
             peerConnection.close();
+            peerConnection = null;
         }
     }
 

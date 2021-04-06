@@ -27,6 +27,7 @@ public class CCToolWindow implements ApplicationService.ApplicationServiceListen
     }
 
     public void createQRCode(){
+        System.out.println("Creating QR Code");
         myToolWindowContent.removeAll();
 
         webRTC = ApplicationService.getInstance().getWebRTC();

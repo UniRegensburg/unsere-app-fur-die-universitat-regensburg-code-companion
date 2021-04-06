@@ -34,10 +34,12 @@ public class ApplicationService implements WebRTC.WebRTCListener {
     public void startSession() {
   
         if (state == ApplicationState.RECORDING) {
+            System.out.println("Already Started");
             return;
         }
 
         if (!listenersAreReady) {
+            System.out.println("Listeners not running");
             ListenerHelper.initListener();
             listenersAreReady = true;
         }
@@ -109,6 +111,23 @@ public class ApplicationService implements WebRTC.WebRTCListener {
         void onStarted();
         void onConnectionStateChanged(RTCPeerConnectionState state);
         void onConnectedToSignaling();
+    }
+
+    public void killSession(){
+        if(webRTC != null){
+            webRTC.closeConnection();
+        }
+        if(messageHandler != null){
+            messageHandler.deleteAlreadyExistingErrors();
+        }
+        messageHandler = null;
+        webRTC = null;
+        state = ApplicationState.IDLE;
+        taskHandler = new TaskHandler();
+        listener = null;
+        isStarted = false;
+        listenersAreReady = false;
+
     }
 
 }
