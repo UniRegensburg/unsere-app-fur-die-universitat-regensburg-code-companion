@@ -6,6 +6,7 @@ import app.services.application.ApplicationService;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.project.Project;
 
 import java.util.List;
 
@@ -33,6 +34,15 @@ public class BaseListener {
         }
         if(messageHandler != null){
             messageHandler.handleMessage(highlightInfoList, document);
+        }
+    }
+
+    public void handleLinesOfCode(int lineCount, Document document) throws Exception {
+        if (messageHandler == null) {
+            messageHandler = ApplicationService.getInstance().getMessageHandler();
+        }
+        if(messageHandler != null){
+            messageHandler.handleLinesOfCodeMessage(lineCount, document);
         }
     }
 

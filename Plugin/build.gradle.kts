@@ -24,7 +24,7 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = "2020.3.2"
+    version = "2020.3.3"
 }
 tasks.getByName("patchPluginXml") {
 }

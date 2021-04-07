@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.codecompanion.cache.StatsCache;
 import com.example.codecompanion.util.ConnectionStateManager;
 import com.example.codecompanion.util.QrScanner;
 import com.example.codecompanion.R;
@@ -18,6 +19,8 @@ import com.example.codecompanion.R;
 import org.webrtc.PeerConnection;
 
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class HomeFragment extends Fragment {
     private Button connect;

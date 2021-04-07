@@ -20,6 +20,7 @@ public class ListenerHelper {
     private static  void initMessageBusListener(MessageBus bus, Project currentProject) {
         bus.connect().subscribe(XBreakpointListener.TOPIC, new BreakpointListener());
         bus.connect().subscribe(DaemonCodeAnalyzer.DAEMON_EVENT_TOPIC, new CodeAnalyzerListener(currentProject));
+        bus.connect().subscribe(DaemonCodeAnalyzer.DAEMON_EVENT_TOPIC, new LinesOfCodeListener(currentProject));
         bus.connect().subscribe(ExecutionManager.EXECUTION_TOPIC, new RunListener());
         bus.connect().subscribe(VirtualFileManager.VFS_CHANGES, new VFSListener());
     }

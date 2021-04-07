@@ -7,6 +7,8 @@ import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.project.Project;
 import dev.onvoid.webrtc.RTCDataChannelState;
 import dev.onvoid.webrtc.RTCPeerConnectionState;
 
@@ -17,7 +19,8 @@ public class MessageHandler {
     private final ApplicationService manager;
     private WebRTC webRTC;
     private Map<HighlightInfo, ErrorMessage> alreadyPresentErrors = new HashMap<>();
-    private List<String> messages;
+    private List<String> errorMessages;
+    private List<String> linesOfCodeMessages;
     private final Gson gson = new Gson();
     private final String ADD_ERROR_TAG = "add";
     private final String REMOVE_ERROR_TAG = "remove";
@@ -33,10 +36,22 @@ public class MessageHandler {
         }
 
         if (webRTC.getConnectionState() == RTCPeerConnectionState.CONNECTED && webRTC.getDataChannelState() == RTCDataChannelState.OPEN) {
-            messages = new ArrayList<>();
+            errorMessages = new ArrayList<>();
             makeString(highlightInfoList, document);
             checkForRemovedErrors(highlightInfoList);
-            send(gson.toJson(messages));
+            send(gson.toJson(errorMessages));
+        }
+    }
+
+    public void handleLinesOfCodeMessage(int lineCount, Document document) throws Exception {
+        if (webRTC == null) {
+            webRTC = manager.getWebRTC();
+        }
+
+        if (webRTC.getConnectionState() == RTCPeerConnectionState.CONNECTED && webRTC.getDataChannelState() == RTCDataChannelState.OPEN) {
+            linesOfCodeMessages = new ArrayList<>();
+            makeLinesOfCodeMessage(lineCount, document);
+            send(gson.toJson(linesOfCodeMessages));
         }
     }
 
@@ -66,7 +81,7 @@ public class MessageHandler {
         message.put("id", "" + alreadyPresentErrors.get(alreadyPresentError).getId());
 
         String json = gson.toJson(message);
-        messages.add(json);
+        errorMessages.add(json);
     }
 
     /**
@@ -94,8 +109,20 @@ public class MessageHandler {
         message.put("id", "" + messageId);
 
         String json = gson.toJson(message);
-        messages.add(json);
+        errorMessages.add(json);
         return errorMessage;
+    }
+
+    private void makeLinesOfCodeMessage(int lineCount, Document document) {
+        Map<String, String> message = new HashMap<>();
+        String fileName = FileEditorManager.getInstance(App.getCurrentProject()).getSelectedEditor().getFile().getName();
+
+        message.put("stats", "linesOfCode");
+        message.put("documentName", fileName);
+        message.put("lineCount", String.valueOf(lineCount));
+
+        String json = gson.toJson(message);
+        linesOfCodeMessages.add(json);
     }
 
     private void makeString(List<HighlightInfo> highlightInfoList, Document document) {
@@ -152,5 +179,14 @@ public class MessageHandler {
 
     public void deleteAlreadyExistingErrors(){
         alreadyPresentErrors.clear();
+    }
+
+    public void sendProjectInformation() throws Exception {
+        Map<String, String> message = new HashMap<>();
+
+        message.put("projectName", App.getCurrentProject().getName());
+        message.put("projectPath", App.getCurrentProject().getPresentableUrl());
+        String json = gson.toJson(message);
+        send(json);
     }
 }

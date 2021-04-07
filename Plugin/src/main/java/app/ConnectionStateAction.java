@@ -12,6 +12,9 @@ import dev.onvoid.webrtc.RTCPeerConnectionState;
 import icons.PluginIcons;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class ConnectionStateAction extends AnAction {
 
     private final ApplicationService manager;
@@ -40,6 +43,11 @@ public class ConnectionStateAction extends AnAction {
                 if(!connected){
                     e.getPresentation().setIcon(PluginIcons.Connected);
                     e.getPresentation().setText("Connected to #id");
+                    try {
+                        manager.getMessageHandler().sendProjectInformation();
+                    } catch (Exception exception) {
+                        Logger.getAnonymousLogger().log(Level.SEVERE, exception.getMessage());
+                    }
                     connected = true;
                 }
 
