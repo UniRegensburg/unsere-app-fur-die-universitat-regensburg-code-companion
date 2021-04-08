@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.codecompanion.util.TinyDB;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class SplashFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        BottomNavigationView navBar = getActivity().findViewById(R.id.nav_view);
+        navBar.setVisibility(View.GONE);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.example.codecompanion.util.ConnectionStateManager;
 import com.example.codecompanion.util.QrScanner;
 import com.example.codecompanion.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.webrtc.PeerConnection;
 
@@ -31,10 +32,13 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        BottomNavigationView navBar = getActivity().findViewById(R.id.nav_view);
+        navBar.setVisibility(View.VISIBLE);
+
         qrScanner = new QrScanner();
         homeMessageField = root.findViewById(R.id.home_message_field);
         connectionStateManager = ConnectionStateManager.getInstance();
-        //connectionCode = root.findViewById(R.id.connection_code);
         connectionCodeText = root.findViewById(R.id.connection_code_text);
         connect = root.findViewById(R.id.connect_button);
         connect.setOnClickListener(new View.OnClickListener() {
@@ -103,8 +107,6 @@ public class HomeFragment extends Fragment {
                 connect.setText("CONNECTED");
                 connect.setBackgroundResource(R.drawable.button_grey);
                 connect.setAlpha(.5f);
-                //connectionCode.setText("200");
-                //connectionCode.setTextColor(getResources().getColor(R.color.primary_color1));
                 connectionCodeText.setText("ah there you are!");
             }
         });
@@ -118,8 +120,6 @@ public class HomeFragment extends Fragment {
                 connect.setText("CONNECT");
                 connect.setBackgroundResource(R.drawable.button_grey);
                 connect.setAlpha(1f);
-                //connectionCode.setText("404");
-                //connectionCode.setTextColor(getResources().getColor(R.color.primary_color3));
                 connectionCodeText.setText("oops, can't find you...");
             }
         });

@@ -15,6 +15,7 @@ import com.example.codecompanion.onboarding.screens.FirstScreen;
 import com.example.codecompanion.onboarding.screens.FourthScreen;
 import com.example.codecompanion.onboarding.screens.SecondScreen;
 import com.example.codecompanion.onboarding.screens.ThirdScreen;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,9 @@ public class ViewPagerFragment extends Fragment {
         fragmentList.add(new SecondScreen());
         fragmentList.add(new ThirdScreen());
         fragmentList.add(new FourthScreen());
+
+        BottomNavigationView navBar = getActivity().findViewById(R.id.nav_view);
+        navBar.setVisibility(View.GONE);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(requireActivity().getSupportFragmentManager(), getLifecycle(), fragmentList);
         ViewPager2 viewPager = view.findViewById(R.id.viewpager);
