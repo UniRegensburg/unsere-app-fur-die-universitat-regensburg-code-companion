@@ -81,10 +81,9 @@ public class LinesOfCodeMessageReceiverService extends Service {
 			ListeningExecutorService listeningExecutorService = MoreExecutors.listeningDecorator(executor);
 			ListenableFuture<?> submit = listeningExecutorService.submit(StatsCache::updateCurrentDocument);
 			submit.addListener(() -> startUpdateProcess(documentName, lineCount, true), executor);
-			return;
+		} else {
+			startUpdateProcess(documentName, lineCount, false);
 		}
-
-		startUpdateProcess(documentName, lineCount, false);
 	}
 
 	private void startUpdateProcess(String documentName, int lineCount, boolean needsToReloadCachedDocument) {
