@@ -1,5 +1,7 @@
 package com.example.codecompanion;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -7,11 +9,13 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.codecompanion.services.ErrorMessageReceiverService;
 import com.example.codecompanion.util.ConnectionStateManager;
+import com.example.codecompanion.util.DeadlineReceiver;
 import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.TaskManager;
 import com.example.codecompanion.services.WebRTC;
@@ -32,7 +36,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONException;
 import org.webrtc.PeerConnection;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Date;
+
+public class MainActivity extends AppCompatActivity implements TaskManager.DeadlineLineListener {
 
     private static final String TAG =  "Main Activity";
     private BottomNavigationView bottomNavigation;
@@ -61,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         Intent errorMessageIntent = (new Intent(this, ErrorMessageReceiverService.class));
         bindService(errorMessageIntent, errorMessageConnection, Context.BIND_AUTO_CREATE);
         messageManager = MessageManager.getInstance();
+        taskManager.setDeadlineListener(this);
         createNavigation();
     }
 
@@ -175,4 +182,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onDeadlineReceived(Date deadline) {
+        Intent notifyIntent = new Intent(this, DeadlineReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        long date = deadline.getTime() - DateUtils.HOUR_IN_MILLIS*21 - DateUtils.MINUTE_IN_MILLIS*28;
+        Date newDate = new Date();
+        newDate.setTime(date);
+        System.out.println(newDate);
+        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,  date, pendingIntent);
+    }
 }
