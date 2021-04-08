@@ -188,10 +188,7 @@ public class MainActivity extends AppCompatActivity implements TaskManager.Deadl
         Intent notifyIntent = new Intent(this, DeadlineReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        long date = deadline.getTime() - DateUtils.HOUR_IN_MILLIS*21 - DateUtils.MINUTE_IN_MILLIS*28;
-        Date newDate = new Date();
-        newDate.setTime(date);
-        System.out.println(newDate);
+        long date = deadline.getTime() - DateUtils.HOUR_IN_MILLIS*24;
         alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,  date, pendingIntent);
     }
 }
