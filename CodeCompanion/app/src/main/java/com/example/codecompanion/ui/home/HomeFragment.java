@@ -34,7 +34,7 @@ public class HomeFragment extends Fragment {
         qrScanner = new QrScanner();
         homeMessageField = root.findViewById(R.id.home_message_field);
         connectionStateManager = ConnectionStateManager.getInstance();
-        connectionCode = root.findViewById(R.id.connection_code);
+        //connectionCode = root.findViewById(R.id.connection_code);
         connectionCodeText = root.findViewById(R.id.connection_code_text);
         connect = root.findViewById(R.id.connect_button);
         connect.setOnClickListener(new View.OnClickListener() {
@@ -103,8 +103,8 @@ public class HomeFragment extends Fragment {
                 connect.setText("CONNECTED");
                 connect.setBackgroundResource(R.drawable.button_grey);
                 connect.setAlpha(.5f);
-                connectionCode.setText("200");
-                connectionCode.setTextColor(getResources().getColor(R.color.primary_color1));
+                //connectionCode.setText("200");
+                //connectionCode.setTextColor(getResources().getColor(R.color.primary_color1));
                 connectionCodeText.setText("ah there you are!");
             }
         });
@@ -118,8 +118,8 @@ public class HomeFragment extends Fragment {
                 connect.setText("CONNECT");
                 connect.setBackgroundResource(R.drawable.button_grey);
                 connect.setAlpha(1f);
-                connectionCode.setText("404");
-                connectionCode.setTextColor(getResources().getColor(R.color.primary_color3));
+                //connectionCode.setText("404");
+                //connectionCode.setTextColor(getResources().getColor(R.color.primary_color3));
                 connectionCodeText.setText("oops, can't find you...");
             }
         });
