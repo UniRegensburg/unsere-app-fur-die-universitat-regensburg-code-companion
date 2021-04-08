@@ -1,0 +1,45 @@
+name: Build Release
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  apk:
+    name: Build Release
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Build APK
+        working-directory: ./CodeCompanion
+        run: bash ./gradlew assemble --stacktrace
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: Android-App
+          path: CodeCompanion/app/build/outputs/apk/release/app-release-unsigned.apk
+      - name: Build PluginZIP
+        working-directory: ./Plugin
+        run: bash ./gradlew buildPlugin --stacktrace
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v2
+        with:
+          name: IntelliJ-Plugin
+          path: Plugin/build/distributions/CodeCompanion-1.0-SNAPSHOT.zip    
+      # Upload the built files as release
+      - name: Upload Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          automatic_release_tag: "latest"
+          title: "Current Release"
+          files: |
+            CodeCompanion/app/build/outputs/apk/release/app-release-unsigned.apk
+            Plugin/build/distributions/CodeCompanion-1.0-SNAPSHOT.zip
