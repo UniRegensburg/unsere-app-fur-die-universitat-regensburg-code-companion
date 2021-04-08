@@ -34,6 +34,13 @@ public abstract class StatsCache {
 		if (currentDocument != null) {
 			ExecutorService executor = Executors.newSingleThreadExecutor();
 			executor.execute(() -> db.documentInformationDAO().updateDocumentInformation(currentDocument));
+
+			// quickfix to wait for DB query.. alternatives??
+			try {
+				Thread.sleep(300);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

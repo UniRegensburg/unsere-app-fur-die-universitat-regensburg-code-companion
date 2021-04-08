@@ -45,8 +45,10 @@ public class ConnectionStateAction extends AnAction {
                     e.getPresentation().setText("Connected to #id");
                     try {
                         manager.getMessageHandler().sendProjectInformation();
+                        System.out.println("Sent project information!");
                     } catch (Exception exception) {
-                        Logger.getAnonymousLogger().log(Level.SEVERE, exception.getMessage());
+                        System.out.println("Could not send project information");
+                        exception.printStackTrace();
                     }
                     connected = true;
                 }

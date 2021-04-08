@@ -3,6 +3,7 @@ package com.example.codecompanion.util;
 import org.webrtc.PeerConnection;
 
 public class ConnectionStateManager {
+    // TODO create List of listeners
     private ConnectionStateListener listener;
     private static ConnectionStateManager instance;
     private PeerConnection.PeerConnectionState status;

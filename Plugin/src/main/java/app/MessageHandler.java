@@ -25,6 +25,7 @@ public class MessageHandler {
     private final String ADD_ERROR_TAG = "add";
     private final String REMOVE_ERROR_TAG = "remove";
     private long messageId = 0;
+    private String lastLinesOfCodeMessage = "";
 
     public MessageHandler() {
         manager = ServiceManager.getService(ApplicationService.class);
@@ -51,7 +52,11 @@ public class MessageHandler {
         if (webRTC.getConnectionState() == RTCPeerConnectionState.CONNECTED && webRTC.getDataChannelState() == RTCDataChannelState.OPEN) {
             linesOfCodeMessages = new ArrayList<>();
             makeLinesOfCodeMessage(lineCount, document);
-            send(gson.toJson(linesOfCodeMessages));
+
+            if (!linesOfCodeMessages.get(0).equals(lastLinesOfCodeMessage)) {
+                lastLinesOfCodeMessage = linesOfCodeMessages.get(0);
+                send(gson.toJson(linesOfCodeMessages));
+            }
         }
     }
 
@@ -177,10 +182,6 @@ public class MessageHandler {
 
     }
 
-    public void deleteAlreadyExistingErrors(){
-        alreadyPresentErrors.clear();
-    }
-
     public void sendProjectInformation() throws Exception {
         Map<String, String> message = new HashMap<>();
 
@@ -188,5 +189,10 @@ public class MessageHandler {
         message.put("projectPath", App.getCurrentProject().getPresentableUrl());
         String json = gson.toJson(message);
         send(json);
+    }
+
+    public void prepareForReconnect() {
+        lastLinesOfCodeMessage = "";
+        alreadyPresentErrors.clear();
     }
 }

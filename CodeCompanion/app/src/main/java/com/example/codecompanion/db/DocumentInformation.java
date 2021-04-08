@@ -28,6 +28,11 @@ public class DocumentInformation {
 		this.parentProjectId = parentProjectId;
 	}
 
+	public DocumentInformation(DocumentInformation documentInformation) {
+		this(documentInformation.getDocumentName(), documentInformation.getLinesOfCode(), documentInformation.parentProjectId);
+		this.id = documentInformation.id;
+	}
+
 	public long getId() {
 		return id;
 	}

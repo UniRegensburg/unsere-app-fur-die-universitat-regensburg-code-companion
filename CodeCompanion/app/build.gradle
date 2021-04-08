@@ -75,4 +75,7 @@ dependencies {
     // time helper library
     implementation 'joda-time:joda-time:2.10.10'
 
+    // Google Guava for better ExecutorService
+    implementation("com.google.guava:guava:30.1.1-jre")
+
 }

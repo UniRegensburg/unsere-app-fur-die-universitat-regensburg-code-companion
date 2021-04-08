@@ -15,6 +15,7 @@ import com.example.codecompanion.MainActivity;
 import com.example.codecompanion.R;
 import com.example.codecompanion.cache.StatsCache;
 import com.example.codecompanion.db.DocumentInformation;
+import com.example.codecompanion.services.WebRTC;
 import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.StatsChangedListener;
 
@@ -40,6 +41,7 @@ public class ProfileFragment extends Fragment implements StatsChangedListener {
     private PeriodFormatter formatter;
     private Timer timer;
     private boolean isTimerRunning;
+    private boolean isFirstUpdate = true;
     private int linesOfCodeExceptOpenDocument;
     private static final int DEFAULT_THREAD_POOL_SIZE = 8;
     private final ExecutorService executorService = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE);
@@ -59,9 +61,19 @@ public class ProfileFragment extends Fragment implements StatsChangedListener {
             setErrors();
             setWarnings();
             setTime();
+        } else {
+            sendRequestForCurrentProject();
         }
 
         return root;
+    }
+
+    private void sendRequestForCurrentProject() {
+        try {
+            WebRTC.sendData("REQUEST_PROJECT");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setTime() {
@@ -189,11 +201,15 @@ public class ProfileFragment extends Fragment implements StatsChangedListener {
 
     @Override
     public void linesOfCodeChanged() {
-        executorService.execute(() -> {
-            int totalLines = linesOfCodeExceptOpenDocument + StatsCache.currentDocument.getLinesOfCode();
-            String textToDisplay = String.valueOf(totalLines);
-            getActivity().runOnUiThread(() -> linesOfCodeTextView.setText(textToDisplay));
-        });
+        if (isFirstUpdate) {
+            isFirstUpdate = false;
+            documentChanged();
+            return;
+        }
+
+        int totalLines = linesOfCodeExceptOpenDocument + StatsCache.currentDocument.getLinesOfCode();
+        String textToDisplay = String.valueOf(totalLines);
+        getActivity().runOnUiThread(() -> linesOfCodeTextView.setText(textToDisplay));
     }
 
     @Override

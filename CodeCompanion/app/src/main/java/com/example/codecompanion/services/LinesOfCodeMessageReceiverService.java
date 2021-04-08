@@ -18,6 +18,9 @@ import com.example.codecompanion.models.CompilerMessage;
 import com.example.codecompanion.models.CompilerMessageCatalogue;
 import com.example.codecompanion.models.SeverityType;
 import com.example.codecompanion.util.MessageManager;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -44,6 +47,7 @@ public class LinesOfCodeMessageReceiverService extends Service {
 	private final IBinder binder = new LinesOfCodeMessageBinder();
 	private List<DocumentInformation> documentInformationList;
 	private AppDatabase db = null;
+	private DocumentInformation currentDocumentInformation;
 
 	public LinesOfCodeMessageReceiverService() {
 
@@ -60,9 +64,7 @@ public class LinesOfCodeMessageReceiverService extends Service {
 			db = MainActivity.db;
 		}
 
-		boolean needsToReloadCachedDocument = false;
-
-		DocumentInformation currentDocumentInformation = null;
+		currentDocumentInformation = null;
 		JSONArray jsonArray = new JSONArray(data);
 		JSONObject jsonObject = new JSONObject(jsonArray.getString(0));
 		int lineCount = jsonObject.getInt("lineCount");
@@ -75,17 +77,22 @@ public class LinesOfCodeMessageReceiverService extends Service {
 
 		// save the currently open document to the database if the user opens a new document
 		if (StatsCache.currentDocument != null && !StatsCache.currentDocument.getDocumentName().equals(documentName)) {
-			StatsCache.updateCurrentDocument();
-			needsToReloadCachedDocument = true;
-
-			// TODO sleep = super ugly. we somehow need to wait until StatsCache.updateCurrentDocument() completes.. but how?
-			try {
-				Thread.sleep(250);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			ExecutorService executor = Executors.newSingleThreadExecutor();
+			ListeningExecutorService listeningExecutorService = MoreExecutors.listeningDecorator(executor);
+			ListenableFuture<?> submit = listeningExecutorService.submit(StatsCache::updateCurrentDocument);
+			submit.addListener(() -> startUpdateProcess(documentName, lineCount, true), executor);
+			return;
 		}
 
+		startUpdateProcess(documentName, lineCount, false);
+	}
+
+	private void startUpdateProcess(String documentName, int lineCount, boolean needsToReloadCachedDocument) {
+		retrieveDocumentFromDb(documentName);
+		handleDocumentUpdate(documentName, lineCount, needsToReloadCachedDocument);
+	}
+
+	private void retrieveDocumentFromDb(String documentName) {
 		// search for the open document in the cached database, and retrieve it if found
 		for (DocumentInformation documentInformation : documentInformationList) {
 			if (documentInformation.getDocumentName().equals(documentName)) {
@@ -93,7 +100,9 @@ public class LinesOfCodeMessageReceiverService extends Service {
 				break;
 			}
 		}
+	}
 
+	private void handleDocumentUpdate(String documentName, int lineCount, boolean needsToReloadCachedDocument) {
 		// null if new document is not yet in database, not null if already exists
 		if (currentDocumentInformation == null) {
 			currentDocumentInformation = new DocumentInformation(documentName, lineCount, StatsCache.currentProject.getId());
@@ -102,13 +111,18 @@ public class LinesOfCodeMessageReceiverService extends Service {
 		} else {
 			currentDocumentInformation.setLinesOfCode(lineCount);
 			StatsCache.currentDocument = currentDocumentInformation;
+			StatsCache.lineCountChanged();
 		}
 
+		reloadDocumentIfNeeded(needsToReloadCachedDocument);
+	}
+
+	private void reloadDocumentIfNeeded(boolean needsToReloadCachedDocument) {
 		if (needsToReloadCachedDocument) {
 			StatsCache.currentDocumentChanged();
 		}
-		StatsCache.lineCountChanged();
 	}
+
 
 	/**
 	 * Inserts new {@link DocumentInformation} into the database and updates the Cached variables
