@@ -21,6 +21,7 @@ public abstract class StatsCache {
 	public static DocumentInformation currentDocument;
 	public static ProjectInformation currentProject;
 	public static String currentProjectTag;
+	public static String currentProjectName;
 	private static StatsChangedListener statsChangedListener;
 
 	public static DateTime projectOpenedDate;

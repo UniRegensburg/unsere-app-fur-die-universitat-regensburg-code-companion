@@ -15,12 +15,14 @@ import com.example.codecompanion.MainActivity;
 import com.example.codecompanion.R;
 import com.example.codecompanion.cache.StatsCache;
 import com.example.codecompanion.db.DocumentInformation;
+import com.example.codecompanion.db.ProjectInformation;
 import com.example.codecompanion.services.WebRTC;
 import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.StatsChangedListener;
 
 import org.joda.time.DateTime;
 import org.joda.time.Period;
+import org.joda.time.Seconds;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
@@ -51,6 +53,7 @@ public class ProfileFragment extends Fragment implements StatsChangedListener {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
         findTextViews(root);
 
+        createTimeFormatter();
         messageManager = MessageManager.getInstance();
         StatsCache.setStatsChangedListener(this);
 
@@ -63,9 +66,45 @@ public class ProfileFragment extends Fragment implements StatsChangedListener {
             setTime();
         } else {
             sendRequestForCurrentProject();
+            displayTotalStats();
         }
 
         return root;
+    }
+
+
+    private void displayTotalStats() {
+        Handler handler = new Handler(Looper.getMainLooper());
+        executorService.execute(() -> {
+            int totalErrors = 0;
+            int totalWarnings = 0;
+            int totalLinesOfCode = 0;
+            int totalSecondsSpent = 0;
+            List<ProjectInformation> allProjects = MainActivity.db.projectInformationDAO().findAll();
+
+            for (ProjectInformation project : allProjects) {
+                totalErrors += project.totalErrors;
+                totalWarnings += project.totalWarnings;
+                totalSecondsSpent += project.secondsSpentOnProject;
+            }
+
+            List<Integer> linesOfCodeList = MainActivity.db.documentInformationDAO().getAllLinesOfCode();
+            for (Integer integer : linesOfCodeList) {
+                totalLinesOfCode += integer;
+            }
+            showTotalStatsOnUi(totalErrors, totalWarnings, totalLinesOfCode, totalSecondsSpent, handler);
+        });
+    }
+
+    private void showTotalStatsOnUi(int totalErrors, int totalWarnings, int totalLinesOfCode, int totalSecondsSpent, Handler handler) {
+        Period period = Seconds.seconds(totalSecondsSpent).toPeriod();
+        String timeSpent = formatter.print(period.normalizedStandard());
+        handler.post(() -> {
+            totalErrorsCounter.setText(String.valueOf(totalErrors));
+            totalWarningsCounter.setText(String.valueOf(totalWarnings));
+            linesOfCodeTextView.setText(String.valueOf(totalLinesOfCode));
+            timeSpentView.setText(timeSpent);
+        });
     }
 
     private void sendRequestForCurrentProject() {
@@ -76,20 +115,22 @@ public class ProfileFragment extends Fragment implements StatsChangedListener {
         }
     }
 
+    private void createTimeFormatter() {
+        formatter = new PeriodFormatterBuilder()
+                .minimumPrintedDigits(2)
+                .printZeroAlways()
+                .appendHours()
+                .appendLiteral(":")
+                .appendMinutes()
+                .appendLiteral(":")
+                .appendSeconds()
+                .toFormatter();
+    }
+
     private void setTime() {
         Handler handler = new Handler(Looper.getMainLooper());
 
         executorService.execute(() -> {
-            formatter = new PeriodFormatterBuilder()
-                    .minimumPrintedDigits(2)
-                    .printZeroAlways()
-                    .appendHours()
-                    .appendLiteral(":")
-                    .appendMinutes()
-                    .appendLiteral(":")
-                    .appendSeconds()
-                    .toFormatter();
-
             DateTime now = DateTime.now();
             timePeriod = new Period(StatsCache.projectOpenedDate, now);
 

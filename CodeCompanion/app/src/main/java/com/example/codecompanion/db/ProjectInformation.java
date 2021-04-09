@@ -32,8 +32,9 @@ public class ProjectInformation {
 	@ColumnInfo(name = "seconds_spent_on_project")
 	public int secondsSpentOnProject;
 
-	public ProjectInformation(String projectTag) {
+	public ProjectInformation(String projectTag, String projectName) {
 		this.projectTag = projectTag;
+		this.projectName = projectName;
 	}
 
 	public long getId() {

@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             ProjectInformation dbProject = db.projectInformationDAO().findByTag(StatsCache.currentProjectTag);
-            StatsCache.currentProject = new ProjectInformation(StatsCache.currentProjectTag);
+            StatsCache.currentProject = new ProjectInformation(StatsCache.currentProjectTag, StatsCache.currentProjectName);
             StatsCache.projectOpenedDate = DateTime.now();
 
             if (dbProject == null) {
@@ -246,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateCurrentProjectTag(String message) throws JSONException {
         JSONObject jsonObject = new JSONObject(message);
         StatsCache.currentProjectTag = jsonObject.getString("projectName") + "-" + jsonObject.getString("projectPath");
+        StatsCache.currentProjectName = jsonObject.getString("projectName");
     }
 
     @Override

@@ -39,6 +39,13 @@ public interface DocumentInformationDAO {
 	List<Integer> getLinesOfCodeByProjectId(long projectId);
 
 	/**
+	 * Gets the lines of code from all {@link DocumentInformation} objects
+	 * @return A {@link List} of {@link Integer}s containing the lines of code of all {@link DocumentInformation}
+	 */
+	@Query("SELECT lines_of_code FROM DocumentInformation")
+	List<Integer> getAllLinesOfCode();
+
+	/**
 	 * Gets all lines of code from a given Project, except those of a specified document
 	 * This is used to observe changes in the currently open document and then add all other lines on top of it
 	 * @param projectId the id of the {@link ProjectInformation}
