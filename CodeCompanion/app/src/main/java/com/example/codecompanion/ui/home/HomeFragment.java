@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,7 +24,7 @@ import java.util.Random;
 public class HomeFragment extends Fragment {
     private Button connect;
     private ConnectionStateManager connectionStateManager;
-    private TextView connectionCode;
+    private ImageView connectionStatusView;
     private TextView connectionCodeText;
     private TextView homeMessageField;
 
@@ -40,6 +41,7 @@ public class HomeFragment extends Fragment {
         homeMessageField = root.findViewById(R.id.home_message_field);
         connectionStateManager = ConnectionStateManager.getInstance();
         connectionCodeText = root.findViewById(R.id.connection_code_text);
+        connectionStatusView = root.findViewById(R.id.connection_status);
         connect = root.findViewById(R.id.connect_button);
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +110,10 @@ public class HomeFragment extends Fragment {
                 connect.setBackgroundResource(R.drawable.button_grey);
                 connect.setAlpha(.5f);
                 connectionCodeText.setText("ah there you are!");
+                connectionStatusView.setBackgroundTintList(getContext().getResources().getColorStateList(R.color.primary_color1));
+                connectionStatusView.setBackgroundResource(R.drawable.ic_baseline_task_alt_24);
+
+
             }
         });
     }
@@ -121,6 +127,10 @@ public class HomeFragment extends Fragment {
                 connect.setBackgroundResource(R.drawable.button_grey);
                 connect.setAlpha(1f);
                 connectionCodeText.setText("oops, can't find you...");
+                connectionStatusView.setBackgroundTintList(getContext().getResources().getColorStateList(R.color.primary_color3));
+                connectionStatusView.setBackgroundResource(R.drawable.ic_baseline_cancel_24);
+
+
             }
         });
     }
