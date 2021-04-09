@@ -16,6 +16,8 @@ public class DeadlineReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        String deadlineString = intent.getStringExtra("deadline");
+        int code = intent.getIntExtra("code",0);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
             int importance = NotificationManager.IMPORTANCE_HIGH;
@@ -23,6 +25,8 @@ public class DeadlineReceiver extends BroadcastReceiver {
             notificationManager.createNotificationChannel(notificationChannel);
         }
         Intent newIntent = new Intent(context, DeadlineIntent.class);
+        newIntent.putExtra("deadline", deadlineString);
+        newIntent.putExtra("code",code);
         context.startService(newIntent);
     }
 

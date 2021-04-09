@@ -19,7 +19,7 @@ public class TaskManager {
     }
 
     public interface DeadlineLineListener{
-        public void onDeadlineReceived(Date deadline);
+        public void onDeadlineReceived(Date deadline, String title);
     }
 
     private static TaskManager instance;
@@ -60,7 +60,7 @@ public class TaskManager {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            deadlineListener.onDeadlineReceived(date);
+            deadlineListener.onDeadlineReceived(date, informationMap.get("name"));
         }
     }
 
