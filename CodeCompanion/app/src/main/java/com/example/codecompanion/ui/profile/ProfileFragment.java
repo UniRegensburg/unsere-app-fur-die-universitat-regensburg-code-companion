@@ -174,10 +174,7 @@ public class ProfileFragment extends Fragment implements StatsChangedListener {
     @Override
     public void onDestroy() {
         if (isTimerRunning) {
-            timer.cancel();
-            timer.purge();
-            timer = null;
-            isTimerRunning = false;
+            cancelTimer();
         }
 
         super.onDestroy();
@@ -224,5 +221,28 @@ public class ProfileFragment extends Fragment implements StatsChangedListener {
             }
             linesOfCodeChanged();
         });
+    }
+
+    @Override
+    public void connectionClosed() {
+        if (isTimerRunning) {
+            cancelTimer();
+        }
+
+        getActivity().runOnUiThread(() -> {
+            totalErrorsCounter.setText(R.string.placeholder_stat);
+            totalWarningsCounter.setText(R.string.placeholder_stat);
+            linesOfCodeTextView.setText(R.string.placeholder_stat);
+            timeSpentView.setText(R.string.placeholder_stat);
+        });
+    }
+
+    private void cancelTimer() {
+        if (isTimerRunning) {
+            timer.cancel();
+            timer.purge();
+            timer = null;
+            isTimerRunning = false;
+        }
     }
 }

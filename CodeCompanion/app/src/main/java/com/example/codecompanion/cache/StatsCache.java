@@ -94,4 +94,8 @@ public abstract class StatsCache {
 			statsChangedListener.linesOfCodeChanged();
 		}
 	}
+
+	public static void handleConnectionClosed() {
+		statsChangedListener.connectionClosed();
+	}
 }

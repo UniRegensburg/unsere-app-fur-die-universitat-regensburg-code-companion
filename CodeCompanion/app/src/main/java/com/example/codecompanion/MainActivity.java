@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private ErrorMessageReceiverService errorMessageReceiverService;
     private LinesOfCodeMessageReceiverService linesOfCodeMessageReceiverService;
     private String id;
+    private ConnectionStateManager.ConnectionStateListener projectListener = createProjectListener();
 
     public static final String DATABASE_TAG = "database";
     public static final String SHARED_PREFERENCES_STATS_TAG = "SHARED_PREFERENCES_STATS_TAG";
@@ -277,7 +278,45 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        connectionStateManager.removeListener(projectListener);
         super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        connectionStateManager.addListener(projectListener);
+        super.onResume();
+    }
+
+    private ConnectionStateManager.ConnectionStateListener createProjectListener() {
+        return new ConnectionStateManager.ConnectionStateListener() {
+            @Override
+            public void onConnect() {
+                // no implementation
+            }
+
+            @Override
+            public void onDisconnect() {
+                // null check needed since onDisconnect can be called twice, by DISCONNECTED and FAILED
+                if (StatsCache.currentProject == null) {
+                    return;
+                }
+
+                // update time spent on project when the disconnect happens
+                DateTime now = DateTime.now();
+                Seconds seconds = Seconds.secondsBetween(StatsCache.projectOpenedDate, now);
+                StatsCache.currentProject.secondsSpentOnProject += seconds.getSeconds();
+
+                // update project and document in the database
+                StatsCache.updateCurrentDocument();
+                StatsCache.updateCurrentProject();
+                StatsCache.currentProject = null;
+                StatsCache.currentDocument = null;
+
+                // react to the disconnection event in other views/fragments
+                StatsCache.handleConnectionClosed();
+            }
+        };
     }
 
 }

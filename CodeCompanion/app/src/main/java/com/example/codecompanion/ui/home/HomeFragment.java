@@ -1,6 +1,5 @@
 package com.example.codecompanion.ui.home;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.codecompanion.cache.StatsCache;
 import com.example.codecompanion.util.ConnectionStateManager;
 import com.example.codecompanion.util.QrScanner;
 import com.example.codecompanion.R;
@@ -19,8 +17,6 @@ import com.example.codecompanion.R;
 import org.webrtc.PeerConnection;
 
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class HomeFragment extends Fragment {
     private Button connect;
@@ -28,6 +24,7 @@ public class HomeFragment extends Fragment {
     private TextView connectionCode;
     private TextView connectionCodeText;
     private TextView homeMessageField;
+    private ConnectionStateManager.ConnectionStateListener connectionStateListener = createConnectionStateListener();
 
     private QrScanner qrScanner;
 
@@ -79,17 +76,7 @@ public class HomeFragment extends Fragment {
 
     public void onResume() {
         super.onResume();
-        connectionStateManager.setListener(new ConnectionStateManager.ConnectionStateListener() {
-            @Override
-            public void onConnect() {
-                setConnected();
-            }
-
-            @Override
-            public void onDisconnect() {
-                setDisconnected();
-            }
-        });
+        connectionStateManager.addListener(connectionStateListener);
         if(connectionStateManager.getConnectionState() == PeerConnection.PeerConnectionState.CONNECTED ||
         connectionStateManager.getConnectionState() == PeerConnection.PeerConnectionState.CONNECTING) {
             setConnected();
@@ -130,6 +117,20 @@ public class HomeFragment extends Fragment {
 
     public void onPause() {
         super.onPause();
-        connectionStateManager.removeListener();
+        connectionStateManager.removeListener(connectionStateListener);
+    }
+
+    private ConnectionStateManager.ConnectionStateListener createConnectionStateListener() {
+        return new ConnectionStateManager.ConnectionStateListener() {
+            @Override
+            public void onConnect() {
+                setConnected();
+            }
+
+            @Override
+            public void onDisconnect() {
+                setDisconnected();
+            }
+        };
     }
 }

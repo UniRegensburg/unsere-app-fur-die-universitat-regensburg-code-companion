@@ -12,4 +12,6 @@ public interface StatsChangedListener {
 	void linesOfCodeChanged();
 
 	void documentChanged();
+
+	void connectionClosed();
 }
