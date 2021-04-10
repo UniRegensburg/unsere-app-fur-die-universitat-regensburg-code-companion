@@ -6,10 +6,12 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.codecompanion.MainActivity;
 import com.example.codecompanion.R;
@@ -58,8 +60,6 @@ public class ProfileFragment extends Fragment implements StatsChangedListener {
         StatsCache.setStatsChangedListener(this);
 
         if (StatsCache.currentProject != null) {
-//            StatsCache.updateCurrentDocument();
-//            StatsCache.updateCurrentProject();
             setCurrentLinesOfCode();
             setErrors();
             setWarnings();
@@ -69,6 +69,8 @@ public class ProfileFragment extends Fragment implements StatsChangedListener {
             displayTotalStats();
         }
 
+        ImageButton helpButton = root.findViewById(R.id.help_button);
+        helpButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.viewPagerFragment));
         return root;
     }
 

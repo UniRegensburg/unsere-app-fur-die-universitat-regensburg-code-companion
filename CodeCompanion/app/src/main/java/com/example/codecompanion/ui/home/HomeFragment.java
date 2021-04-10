@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.example.codecompanion.util.ConnectionStateManager;
 import com.example.codecompanion.util.QrScanner;
 import com.example.codecompanion.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.webrtc.PeerConnection;
 
@@ -21,7 +23,7 @@ import java.util.Random;
 public class HomeFragment extends Fragment {
     private Button connect;
     private ConnectionStateManager connectionStateManager;
-    private TextView connectionCode;
+    private ImageView connectionStatusView;
     private TextView connectionCodeText;
     private TextView homeMessageField;
     private ConnectionStateManager.ConnectionStateListener connectionStateListener = createConnectionStateListener();
@@ -31,11 +33,15 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        BottomNavigationView navBar = getActivity().findViewById(R.id.nav_view);
+        navBar.setVisibility(View.VISIBLE);
+
         qrScanner = new QrScanner();
         homeMessageField = root.findViewById(R.id.home_message_field);
         connectionStateManager = ConnectionStateManager.getInstance();
-        connectionCode = root.findViewById(R.id.connection_code);
         connectionCodeText = root.findViewById(R.id.connection_code_text);
+        connectionStatusView = root.findViewById(R.id.connection_status);
         connect = root.findViewById(R.id.connect_button);
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,9 +99,11 @@ public class HomeFragment extends Fragment {
                 connect.setText("CONNECTED");
                 connect.setBackgroundResource(R.drawable.button_grey);
                 connect.setAlpha(.5f);
-                connectionCode.setText("200");
-                connectionCode.setTextColor(getResources().getColor(R.color.primary_color1));
                 connectionCodeText.setText("ah there you are!");
+                connectionStatusView.setBackgroundTintList(getContext().getResources().getColorStateList(R.color.primary_color1));
+                connectionStatusView.setBackgroundResource(R.drawable.ic_baseline_task_alt_24);
+
+
             }
         });
     }
@@ -108,9 +116,11 @@ public class HomeFragment extends Fragment {
                 connect.setText("CONNECT");
                 connect.setBackgroundResource(R.drawable.button_grey);
                 connect.setAlpha(1f);
-                connectionCode.setText("404");
-                connectionCode.setTextColor(getResources().getColor(R.color.primary_color3));
                 connectionCodeText.setText("oops, can't find you...");
+                connectionStatusView.setBackgroundTintList(getContext().getResources().getColorStateList(R.color.primary_color3));
+                connectionStatusView.setBackgroundResource(R.drawable.ic_baseline_cancel_24);
+
+
             }
         });
     }
