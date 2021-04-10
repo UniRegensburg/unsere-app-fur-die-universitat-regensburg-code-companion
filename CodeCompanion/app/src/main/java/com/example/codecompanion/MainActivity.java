@@ -328,8 +328,7 @@ public class MainActivity extends AppCompatActivity implements TaskManager.Deadl
             }
         };
     }
-
-}
+    
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onDeadlineReceived(Date deadline, String titleTask) {
