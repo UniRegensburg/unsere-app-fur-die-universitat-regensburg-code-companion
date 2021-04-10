@@ -1,5 +1,8 @@
 package com.example.codecompanion;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -7,14 +10,17 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.codecompanion.services.ErrorMessageReceiverService;
 import com.example.codecompanion.util.ConnectionStateManager;
+import com.example.codecompanion.util.DeadlineReceiver;
 import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.TaskManager;
 import com.example.codecompanion.services.WebRTC;
+import com.example.codecompanion.util.TinyDB;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -32,7 +38,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONException;
 import org.webrtc.PeerConnection;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Date;
+
+public class MainActivity extends AppCompatActivity implements TaskManager.DeadlineLineListener {
 
     private static final String TAG =  "Main Activity";
     private BottomNavigationView bottomNavigation;
@@ -43,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private ConnectionStateManager connectionStateManager;
     private ErrorMessageReceiverService errorMessageReceiverService;
     private String id;
+    private TinyDB tinyDB;
     public static boolean isExpandedMessageOpen = false;
 
     private boolean errorServiceBound = false;
@@ -51,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        tinyDB = new TinyDB(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -61,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         Intent errorMessageIntent = (new Intent(this, ErrorMessageReceiverService.class));
         bindService(errorMessageIntent, errorMessageConnection, Context.BIND_AUTO_CREATE);
         messageManager = MessageManager.getInstance();
+        taskManager.setDeadlineListener(this);
         createNavigation();
     }
 
@@ -175,4 +186,64 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onDeadlineReceived(Date deadline, String titleTask) {
+
+        String title = tinyDB.getString("title");
+        boolean alarm1 = tinyDB.getBoolean("alarm1");
+        boolean alarm2 = tinyDB.getBoolean("alarm2");
+        boolean alarm3 = tinyDB.getBoolean("alarm3");
+
+        if(!titleTask.equals(title)){
+            System.out.println("Title not the same");
+            tinyDB.putString("title",titleTask);
+            for(int i = 0; i < 3;i++) {
+                setNotification(deadline,i);
+            }
+            tinyDB.putBoolean("alarm1",true);
+            tinyDB.putBoolean("alarm2",true);
+            tinyDB.putBoolean("alarm3",true);
+        }else{
+            System.out.println("Title the same");
+            if(!alarm1){
+                setNotification(deadline,1);
+                tinyDB.putBoolean("alarm1",true);
+            }
+            if(!alarm2){
+                setNotification(deadline,2);
+                tinyDB.putBoolean("alarm2",true);
+            }
+            if(!alarm3){
+                setNotification(deadline,3);
+                tinyDB.putBoolean("alarm3",true);
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void setNotification(Date deadline,int code){
+        Intent notifyIntent = new Intent(this, DeadlineReceiver.class);
+        long date;
+        String deadlineString;
+        switch (code) {
+            case 0:
+                date = deadline.getTime() - DateUtils.DAY_IN_MILLIS * 1;
+                deadlineString = "1 day";
+                break;
+            case 1:
+                deadlineString = "3 days";
+                date = deadline.getTime() - DateUtils.DAY_IN_MILLIS * 3;
+                break;
+            default:
+                deadlineString = "1 week";
+                date = deadline.getTime() - DateUtils.DAY_IN_MILLIS * 7;
+                break;
+        }
+        notifyIntent.putExtra("deadline", deadlineString);
+        notifyIntent.putExtra("code", code);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, code, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, date, pendingIntent);
+    }
 }
