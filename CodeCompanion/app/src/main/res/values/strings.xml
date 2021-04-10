@@ -60,5 +60,7 @@
     <string name="second_tutorial_text"><![CDATA[In IntelliJ you have to download and install the Code Companion Plugin under Settings > Plugins > Search for \'Code Companion\'.\nAfter installing IntelliJ has to be restarted.]]></string>
     <string name="third_tutorial_text">Now you can open the \'Code Companion\' tool window on the right side of your IntelliJ window. Scan the QR-Code shown in IntelliJ with your app. Once connected, the icon on the home page of your app shows a green checkmark.</string>
     <string name="fourth_tutorial_message">Errors, Warnings and your To-Do List are now transferred live to your app. Tap on them to get more information about the meaning of the message.</string>
+    <string name="phone"><u>Phone</u></string>
+    <string name="desktop"><u>Desktop</u></string>
 
 </resources>

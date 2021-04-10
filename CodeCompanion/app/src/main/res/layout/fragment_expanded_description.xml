@@ -52,6 +52,56 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/exp_message_icon" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/open_link_textview"
+            android:textColor="@color/white"
+            android:fontFamily="serif-monospace"
+            android:paddingTop="16dp"
+            android:paddingLeft="24dp"
+            android:text="Look up error on device: "
+            app:layout_constraintTop_toBottomOf="@+id/expanded_message"
+            app:layout_constraintLeft_toLeftOf="@+id/expanded_message"
+
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dekstop_link_textview"
+            android:clickable="true"
+            android:focusable="true"
+            android:textColor="@color/link_color"
+            android:fontFamily="serif-monospace"
+            android:textSize="20sp"
+            android:paddingTop="16dp"
+            android:paddingLeft="24dp"
+            android:text="@string/desktop"
+            app:layout_constraintTop_toBottomOf="@+id/open_link_textview"
+            app:layout_constraintLeft_toLeftOf="@+id/expanded_message"
+
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/phone_link_textview"
+            android:clickable="true"
+            android:focusable="true"
+            android:textColor="@color/link_color"
+            android:fontFamily="serif-monospace"
+            android:textSize="20sp"
+            android:paddingTop="16dp"
+            android:paddingLeft="24dp"
+            android:text="@string/phone"
+            app:layout_constraintTop_toBottomOf="@+id/open_link_textview"
+            app:layout_constraintLeft_toRightOf="@+id/dekstop_link_textview"
+
+            />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
