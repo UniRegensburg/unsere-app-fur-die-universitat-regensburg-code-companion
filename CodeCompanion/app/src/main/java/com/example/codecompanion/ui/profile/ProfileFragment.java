@@ -17,12 +17,7 @@ public class ProfileFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
         ImageButton helpButton = root.findViewById(R.id.help_button);
-        helpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.viewPagerFragment);
-            }
-        });
+        helpButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.viewPagerFragment));
         return root;
     }
 }
