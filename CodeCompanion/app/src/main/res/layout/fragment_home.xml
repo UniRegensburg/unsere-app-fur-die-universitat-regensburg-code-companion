@@ -70,6 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         android:fontFamily="serif-monospace"
         android:text="oops, can't find you..."
@@ -77,21 +78,32 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connection_code" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView7" />
 
-    <TextView
-        android:id="@+id/connection_code"
+    <ImageView
+        android:id="@+id/imageView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="serif-monospace"
-        android:text="404"
-        android:textColor="#F4D03F"
-        android:textSize="100sp"
-        android:textStyle="bold"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="256dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="256dp"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:src="@drawable/ic_intellij_idea_icon"
         app:layout_constraintBottom_toTopOf="@+id/connect_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/constraintLayout3" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+
+    <ImageView
+        android:id="@+id/connection_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_baseline_cancel_24"
+        android:scaleX="2"
+        android:scaleY="2"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+        app:layout_constraintStart_toEndOf="@+id/imageView7" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

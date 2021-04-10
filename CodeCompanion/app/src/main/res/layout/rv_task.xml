@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    android:padding="8dp"
-    android:background="@drawable/button_grey">
+    android:background="@drawable/button_grey"
+    android:padding="8dp">
 
 
     <TextView
@@ -30,8 +30,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:background="@drawable/ic_baseline_info_white"
-        android:backgroundTint="@color/primary_color4"
+        android:background="@drawable/ic_baseline_task_alt_24"
+        android:backgroundTint="@color/white"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/task_rv_template"
         app:layout_constraintHorizontal_bias="0.5"

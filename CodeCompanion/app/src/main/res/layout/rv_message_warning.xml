@@ -34,6 +34,8 @@
         android:layout_marginStart="16dp"
         android:background="@drawable/ic_baseline_warning_amber_24"
         android:backgroundTint="@color/primary_color2"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/warning_rv_template"
         app:layout_constraintHorizontal_bias="0.5"
