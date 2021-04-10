@@ -35,7 +35,19 @@
 
         <service android:name=".services.ErrorMessageReceiverService" />
         <service android:name=".services.WebRTC" />
+
         <service android:name=".services.LinesOfCodeMessageReceiverService" />
+
+        <service
+            android:name=".util.DeadlineIntent"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".util.DeadlineReceiver"
+            android:enabled="true"
+            android:exported="false" >
+        </receiver>
 
         <meta-data
             android:name="preloaded_fonts"

@@ -1,5 +1,8 @@
 package com.example.codecompanion;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +11,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -17,9 +21,11 @@ import com.example.codecompanion.db.ProjectInformation;
 import com.example.codecompanion.services.ErrorMessageReceiverService;
 import com.example.codecompanion.services.LinesOfCodeMessageReceiverService;
 import com.example.codecompanion.util.ConnectionStateManager;
+import com.example.codecompanion.util.DeadlineReceiver;
 import com.example.codecompanion.util.MessageManager;
 import com.example.codecompanion.util.TaskManager;
 import com.example.codecompanion.services.WebRTC;
+import com.example.codecompanion.util.TinyDB;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
@@ -44,7 +50,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.webrtc.PeerConnection;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,7 +57,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TaskManager.DeadlineLineListener {
 
     private static final String TAG =  "Main Activity";
     private static final String TASK_MESSAGE_TAG =  "task";
@@ -72,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String DATABASE_TAG = "database";
     public static final String SHARED_PREFERENCES_STATS_TAG = "SHARED_PREFERENCES_STATS_TAG";
+
+    private TinyDB tinyDB;
     public static boolean isExpandedMessageOpen = false;
     public static AppDatabase db;
 
@@ -82,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        tinyDB = new TinyDB(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -92,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         createErrorMessageService();
         createLinesOfCodeService();
         messageManager = MessageManager.getInstance();
+        taskManager.setDeadlineListener(this);
         createNavigation();
         db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database").build();
     }
@@ -320,4 +329,65 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
+}
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onDeadlineReceived(Date deadline, String titleTask) {
+
+        String title = tinyDB.getString("title");
+        boolean alarm1 = tinyDB.getBoolean("alarm1");
+        boolean alarm2 = tinyDB.getBoolean("alarm2");
+        boolean alarm3 = tinyDB.getBoolean("alarm3");
+
+        if(!titleTask.equals(title)){
+            System.out.println("Title not the same");
+            tinyDB.putString("title",titleTask);
+            for(int i = 0; i < 3;i++) {
+                setNotification(deadline,i);
+            }
+            tinyDB.putBoolean("alarm1",true);
+            tinyDB.putBoolean("alarm2",true);
+            tinyDB.putBoolean("alarm3",true);
+        }else{
+            System.out.println("Title the same");
+            if(!alarm1){
+                setNotification(deadline,1);
+                tinyDB.putBoolean("alarm1",true);
+            }
+            if(!alarm2){
+                setNotification(deadline,2);
+                tinyDB.putBoolean("alarm2",true);
+            }
+            if(!alarm3){
+                setNotification(deadline,3);
+                tinyDB.putBoolean("alarm3",true);
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void setNotification(Date deadline,int code){
+        Intent notifyIntent = new Intent(this, DeadlineReceiver.class);
+        long date;
+        String deadlineString;
+        switch (code) {
+            case 0:
+                date = deadline.getTime() - DateUtils.DAY_IN_MILLIS * 1;
+                deadlineString = "1 day";
+                break;
+            case 1:
+                deadlineString = "3 days";
+                date = deadline.getTime() - DateUtils.DAY_IN_MILLIS * 3;
+                break;
+            default:
+                deadlineString = "1 week";
+                date = deadline.getTime() - DateUtils.DAY_IN_MILLIS * 7;
+                break;
+        }
+        notifyIntent.putExtra("deadline", deadlineString);
+        notifyIntent.putExtra("code", code);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, code, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, date, pendingIntent);
+    }
 }
