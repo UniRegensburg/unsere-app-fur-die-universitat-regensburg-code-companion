@@ -1,7 +1,9 @@
 package app;
 
+import app.data.Const;
 import app.services.application.ApplicationService;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.components.ServiceManager;
@@ -11,8 +13,16 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import dev.onvoid.webrtc.RTCDataChannelState;
 import dev.onvoid.webrtc.RTCPeerConnectionState;
+import netscape.javascript.JSObject;
+import org.junit.Assert;
 
+import java.awt.*;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
+import java.util.List;
 
 public class MessageHandler {
 
@@ -177,6 +187,20 @@ public class MessageHandler {
             send(gson.toJson(messagesToSend));
         } catch (Exception e) {
             System.out.println("Refresh data failed!");
+            e.printStackTrace();
+        }
+
+    }
+
+    public void openGoogleQuery(String message) {
+        Type type = new TypeToken<Map<String, String>>() {}.getType();
+        Map<String, String> map = gson.fromJson(message, type);
+        Assert.assertEquals(1, map.size());
+
+        try {
+            URI url = new URI(map.get(Const.Events.GOOGLE_QUERY_MESSAGE));
+            Desktop.getDesktop().browse(url);
+        } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
 
