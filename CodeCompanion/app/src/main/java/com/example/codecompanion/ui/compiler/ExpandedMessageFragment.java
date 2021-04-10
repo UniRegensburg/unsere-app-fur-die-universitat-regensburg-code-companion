@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 public class ExpandedMessageFragment extends Fragment {
 
     private final String GOOGLE_QUERY_STRING = "https://www.google.com/search?q=";
-    private final int BUTTON_TIMEOUT_IN_MILLISECONDS = 250;
+    private final int BUTTON_TIMEOUT_IN_MILLISECONDS = 250; // used to prevent accidental doubletaps
 
     private TextView errorDescription;
     private final String explanation;
@@ -50,8 +50,8 @@ public class ExpandedMessageFragment extends Fragment {
         this.explanation = shortExplanation;
         this.textViewId = textViewId;
         this.error = error;
-        phoneButtonClickedTime = DateTime.now().minusSeconds(10); // initial value: 2020-01-01T00:00:00Z
-        desktopButtonClickedTime = DateTime.now().minusSeconds(10); // initial value: 2020-01-01T00:00:00Z
+        phoneButtonClickedTime = DateTime.now().minusSeconds(10);
+        desktopButtonClickedTime = DateTime.now().minusSeconds(10);
         MainActivity.isExpandedMessageOpen = true;
     }
 
