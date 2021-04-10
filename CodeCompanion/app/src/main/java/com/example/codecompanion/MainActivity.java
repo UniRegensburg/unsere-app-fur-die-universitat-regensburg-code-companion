@@ -76,12 +76,12 @@ public class MainActivity extends AppCompatActivity implements TaskManager.Deadl
     private ConnectionStateManager.ConnectionStateListener projectListener = createProjectListener();
 
     public static final String DATABASE_TAG = "database";
-    public static final String SHARED_PREFERENCES_STATS_TAG = "SHARED_PREFERENCES_STATS_TAG";
 
     private TinyDB tinyDB;
     public static boolean isExpandedMessageOpen = false;
     public static AppDatabase db;
 
+    // service binder flags - currently unused
     private boolean errorServiceBound = false;
     private boolean linesOfCodeServiceBound = false;
     private boolean webRTCServiceBound = false;
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements TaskManager.Deadl
         messageManager = MessageManager.getInstance();
         taskManager.setDeadlineListener(this);
         createNavigation();
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database").build();
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, DATABASE_TAG).build();
     }
 
 
@@ -328,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements TaskManager.Deadl
             }
         };
     }
-    
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onDeadlineReceived(Date deadline, String titleTask) {
