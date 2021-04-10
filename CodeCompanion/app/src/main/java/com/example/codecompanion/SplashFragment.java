@@ -19,14 +19,11 @@ public class SplashFragment extends Fragment {
                              Bundle savedInstanceState) {
         BottomNavigationView navBar = getActivity().findViewById(R.id.nav_view);
         navBar.setVisibility(View.GONE);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(onBoardingFinished()) {
-                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_splashFragment_to_navigation_connect);
-                } else {
-                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_splashFragment_to_viewPagerFragment);
-                }
+        new Handler().postDelayed(() -> {
+            if(onBoardingFinished()) {
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_splashFragment_to_navigation_connect);
+            } else {
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_splashFragment_to_viewPagerFragment);
             }
         }, 3000);
 
