@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements TaskManager.Deadl
                 deadlineString = "1 day";
                 break;
             case 1:
-                deadlineString = "3 day";
+                deadlineString = "3 days";
                 date = deadline.getTime() - DateUtils.DAY_IN_MILLIS * 3;
                 break;
             default:
