@@ -101,6 +101,10 @@ public class ApplicationService implements WebRTC.WebRTCListener {
         if (message.equals(Const.Events.REFRESH_DATA_MESSAGE)) {
             messageHandler.handleRefreshData();
         }
+
+        if (message.contains(Const.Events.GOOGLE_QUERY_MESSAGE)) {
+            messageHandler.openGoogleQuery(message);
+        }
     }
 
     @Override
