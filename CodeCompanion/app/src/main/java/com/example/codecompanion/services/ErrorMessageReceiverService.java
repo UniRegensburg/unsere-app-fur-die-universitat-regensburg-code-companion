@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.codecompanion.cache.StatsCache;
 import com.example.codecompanion.models.CompilerMessage;
 import com.example.codecompanion.models.CompilerMessageCatalogue;
 import com.example.codecompanion.models.SeverityType;
@@ -28,15 +29,10 @@ import java.util.Objects;
 public class ErrorMessageReceiverService extends Service {
 
 	private final IBinder binder = new ErrorMessageBinder();
-
-	private final List<Map<String, String>> errors;
-	private final List<Map<String, String>> warnings;
 	private final List<CompilerMessage> compilerMessages;
 	private MessageManager.MessageManagerListener listener;
 
 	public ErrorMessageReceiverService() {
-		errors = new ArrayList<>();
-		warnings = new ArrayList<>();
 		compilerMessages = new ArrayList<>();
 	}
 
@@ -53,7 +49,7 @@ public class ErrorMessageReceiverService extends Service {
 		List<String> messages = new Gson().fromJson(jsonArray.toString(), ArrayList.class);
 		for (String message : messages) {
 			Log.d("message", message);
-			unpackedMessageList.add(unpackString(message));
+			unpackedMessageList.add(MessageManager.unpackString(message));
 		}
 
 		for (Map<String, String> map : unpackedMessageList) {
@@ -63,14 +59,6 @@ public class ErrorMessageReceiverService extends Service {
 				removeMessage(map);
 			}
 		}
-	}
-
-	public List<Map<String, String>> getErrors() {
-		return errors;
-	}
-
-	public List<Map<String, String>> getWarnings() {
-		return warnings;
 	}
 
 	public class ErrorMessageBinder extends Binder {
@@ -87,11 +75,13 @@ public class ErrorMessageReceiverService extends Service {
 					CompilerMessageCatalogue.getShortExplanationByDescription(description),
 					CompilerMessageCatalogue.getLongExplanationByDescription(description),
 					Integer.parseInt(Objects.requireNonNull(message.get("id")))));
+			StatsCache.addWarningToProject();
 		} else if ("ERROR".equals(tag)) {
 			compilerMessages.add(new CompilerMessage(SeverityType.ERROR, description,
 					CompilerMessageCatalogue.getShortExplanationByDescription(description),
 					CompilerMessageCatalogue.getLongExplanationByDescription(description),
 					Integer.parseInt(Objects.requireNonNull(message.get("id")))));
+			StatsCache.addErrorToProject();
 		}
 		notifyDataChanged();
 	}
@@ -107,13 +97,6 @@ public class ErrorMessageReceiverService extends Service {
 				return;
 			}
 		}
-	}
-
-	private HashMap<String,String> unpackString(String message) throws JSONException {
-		JSONObject jsonObject = new JSONObject(message);
-		HashMap<String, String> messageMap = new Gson().fromJson(jsonObject.toString(), HashMap.class);
-		Log.d("Test",messageMap.toString());
-		return messageMap;
 	}
 
 	private void notifyDataChanged() {

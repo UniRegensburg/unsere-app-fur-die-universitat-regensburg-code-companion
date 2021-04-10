@@ -15,6 +15,7 @@
     <string name="connection">Connection</string>
     <string name="menu_information">Information</string>
     <string name="menu_profile">Profile</string>
+    <string name="placeholder_stat">-</string>
 
     <string-array name="fun_messages_connect">
         <item>ready to code\?</item>

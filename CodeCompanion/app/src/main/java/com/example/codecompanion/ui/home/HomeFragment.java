@@ -1,6 +1,5 @@
 package com.example.codecompanion.ui.home;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +26,7 @@ public class HomeFragment extends Fragment {
     private ImageView connectionStatusView;
     private TextView connectionCodeText;
     private TextView homeMessageField;
+    private ConnectionStateManager.ConnectionStateListener connectionStateListener = createConnectionStateListener();
 
     private QrScanner qrScanner;
 
@@ -82,17 +82,7 @@ public class HomeFragment extends Fragment {
 
     public void onResume() {
         super.onResume();
-        connectionStateManager.setListener(new ConnectionStateManager.ConnectionStateListener() {
-            @Override
-            public void onConnect() {
-                setConnected();
-            }
-
-            @Override
-            public void onDisconnect() {
-                setDisconnected();
-            }
-        });
+        connectionStateManager.addListener(connectionStateListener);
         if(connectionStateManager.getConnectionState() == PeerConnection.PeerConnectionState.CONNECTED ||
         connectionStateManager.getConnectionState() == PeerConnection.PeerConnectionState.CONNECTING) {
             setConnected();
@@ -137,6 +127,20 @@ public class HomeFragment extends Fragment {
 
     public void onPause() {
         super.onPause();
-        connectionStateManager.removeListener();
+        connectionStateManager.removeListener(connectionStateListener);
+    }
+
+    private ConnectionStateManager.ConnectionStateListener createConnectionStateListener() {
+        return new ConnectionStateManager.ConnectionStateListener() {
+            @Override
+            public void onConnect() {
+                setConnected();
+            }
+
+            @Override
+            public void onDisconnect() {
+                setDisconnected();
+            }
+        };
     }
 }

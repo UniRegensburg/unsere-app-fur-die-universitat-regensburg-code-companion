@@ -84,7 +84,7 @@ public class ApplicationService implements WebRTC.WebRTCListener {
         }
 
         if(state == RTCPeerConnectionState.DISCONNECTED) {
-            messageHandler.deleteAlreadyExistingErrors();
+            messageHandler.prepareForReconnect();
             UUID uuid = UUID.randomUUID();
             String stringId = uuid.toString();
             webRTC.init(stringId);
@@ -105,6 +105,14 @@ public class ApplicationService implements WebRTC.WebRTCListener {
         if (message.contains(Const.Events.GOOGLE_QUERY_MESSAGE)) {
             messageHandler.openGoogleQuery(message);
         }
+
+        if (message.equals(Const.Events.REQUEST_PROJECT_MESSAGE)) {
+            try {
+                messageHandler.sendProjectInformation();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -123,7 +131,7 @@ public class ApplicationService implements WebRTC.WebRTCListener {
             webRTC.closeConnection();
         }
         if(messageHandler != null){
-            messageHandler.deleteAlreadyExistingErrors();
+            messageHandler.prepareForReconnect();
         }
         messageHandler = null;
         webRTC = null;

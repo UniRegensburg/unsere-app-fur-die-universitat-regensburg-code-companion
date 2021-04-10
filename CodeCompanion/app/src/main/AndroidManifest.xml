@@ -35,6 +35,9 @@
 
         <service android:name=".services.ErrorMessageReceiverService" />
         <service android:name=".services.WebRTC" />
+
+        <service android:name=".services.LinesOfCodeMessageReceiverService" />
+
         <service
             android:name=".util.DeadlineIntent"
             android:exported="false" >
