@@ -11,7 +11,7 @@
       "description": "Create a hello world programm, which prints your name on the command line"
     },
     {
-      "description": "Use if-loop to check whether given name is a valid name or not. Check for numbers and other invalid signs"
+      "description": "Use an if-statement to check whether given name is a valid name or not. Check for numbers and other invalid signs"
     },
     {
       "description": "With a for-loop you can iterate every element in an array. Iterate the given array 'names' and print out every name to the commandline"
