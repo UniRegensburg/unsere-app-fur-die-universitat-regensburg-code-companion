@@ -28,7 +28,7 @@ public class MessageHandler {
 
     private final ApplicationService manager;
     private WebRTC webRTC;
-    private Map<HighlightInfo, ErrorMessage> alreadyPresentErrors = new HashMap<>();
+    private static Map<HighlightInfo, ErrorMessage> alreadyPresentErrors = new HashMap<>();
     private List<String> errorMessages;
     private List<String> linesOfCodeMessages;
     private final Gson gson = new Gson();
