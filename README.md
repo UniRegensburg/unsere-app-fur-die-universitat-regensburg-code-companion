@@ -21,16 +21,28 @@ To use the Project, the Android App and the Connection Plugin need to be install
 
 
 ### Connection
-![](Screenshots/ConnectionView.png)  
-![](Screenshots/Plugin.png)  
 
-When installed, the Plugin shows a QR-Code containing connection information. This code has to be scanned inside the Android App to start the connection process.
-When the connection has been established correctly, the CodeCompanion Logo and App Status indicator change to green. (/better sentence)
+<table>
+  <tr>
+    <td><div style="height:500px; width:400px; overflow:hidden"><img src="Screenshots/Plugin.png"></div></td>
+    <td>When installed, the Plugin shows a QR-Code containing connection information. This code has to be scanned inside the Android App to start the connection process.
+When the connection has been established correctly, the CodeCompanion Logo and App Status indicator change to green. (/better sentence)</td>
+  </tr>
+    <tr>
+    <td><div style="height:500px; width:400px; overflow:hidden"><img src="Screenshots/ConnectionView.png"></div></td>
+    <td></td>
+  </tr>
+  
+</table><br>
 
 ### Tasks
+<table>
+  <tr>
+    <td><div style="height:500px; width:400px; overflow:hidden"><img src="Screenshots/TaskView.png"></div></td>
+    <td>The task view shows the individual tasks of the coding assignment. The tasks can be individually sorted and checked.</td>
+  </tr>
+</table><br>
 
-![](Screenshots/TaskView.png)  
-The task view shows the individual tasks of the coding assignment. The tasks can be individually sorted and checked.
 
 
 #### Provide Task information
@@ -63,14 +75,23 @@ Example:
 ```
 
 ### Errors
-![](Screenshots/ErrorView.png)  ![](Screenshots/ErrorDetailView.png)  
-The error view contains all compiler errors and warnings of the file currently being worked on, and is updated in real time. When clicked, a more detailed explaination on the error is shown, also offering the possibility of looking the problem up on google using the phone or desktop.
+
+<table>
+  <tr>
+    <td><div style="height:500px; width:400px; overflow:hidden"><img src="Screenshots/ErrorView.png"></div></td>
+    <td>The error view contains all compiler errors and warnings of the file currently being worked on, and is updated in real time. When clicked, a more detailed explaination on the error is shown, also offering the possibility of looking the problem up on google using the phone or desktop.</td>
+  </tr>
+</table><br>
 
 
 ### Statistics
+<table>
+  <tr>
+    <td><div style="height:500px; width:400px; overflow:hidden"><img src="Screenshots/StatisticsView.png"></div></td>
+    <td>The statistics view shows the time spent coding, produced lines of code and produced errors and warning. If the App is connected, the values are project specific. If the app is disconnected, it shows overall statistics of all projects together.</td>
+  </tr>
+</table><br>
 
-![](Screenshots/StatisticsView.png)  
-The statistics view shows the time spent coding, produced lines of code and produced errors and warning. If the App is connected, the values are project specific. If the app is disconnected, it shows overall statistics of all projects together.
 
 ## Team
 Code Companion is developed by Fabian (@PLACEBOBRO), Lukas (@RealWhimsy), Mathias (@goetzmat) and Maximilian (@MaximilianSeewald) during the "Advanced Software Engineering" Course of Uni Regensburg.
