@@ -79,7 +79,11 @@ Example:
 <table>
   <tr>
     <td><div style="width:400px; overflow:hidden"><img src="Screenshots/ErrorView.png"></div></td>
-    <td>The error view contains all compiler errors and warnings of the file currently being worked on, and is updated in real time. When clicked, a more detailed explaination on the error is shown, also offering the possibility of looking the problem up on google using the phone or desktop.</td>
+    <td>The error view contains all compiler errors and warnings of the file currently being worked on, and is updated in real time.</td>
+  </tr>
+    <tr>
+    <td><div style="width:400px; overflow:hidden"><img src="Screenshots/ErrorDetailView.png"></div></td>
+    <td>When clicked, a more detailed explaination on the error is shown, also offering the possibility of looking the problem up on google using the phone or desktop.</td>
   </tr>
 </table><br>
 
@@ -88,7 +92,7 @@ Example:
 <table>
   <tr>
     <td><div style="width:400px; overflow:hidden"><img src="Screenshots/StatisticsView.png"></div></td>
-    <td>The statistics view shows the time spent coding, produced lines of code and produced errors and warning. If the App is connected, the values are project specific. If the app is disconnected, it shows overall statistics of all projects together.</td>
+    <td>The statistics view shows the time spent coding, produced lines of code and produced errors and warnings. If the App is connected, the values are project specific. If the app is disconnected, it shows overall statistics of all projects combined.</td>
   </tr>
 </table><br>
 
