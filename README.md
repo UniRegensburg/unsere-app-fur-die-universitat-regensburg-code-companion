@@ -49,6 +49,8 @@ To use the Project, the Android App and the Connection Plugin need to be install
 The "task.json" file is located inside the root of the project folder, and holds the project name, tasks and project due date.  
 The given tasks show up in the task view of the app, and update in real-time.
 The due date value is used to send a notification 1 week, 3 days and 1 day before the deadline reminding the user to finish the task.
+The file needs at least informations on name and due-date and one or more tasks to work.
+If the task.json is not present, the screen in the App will stay empty.
 
 Example:
  
