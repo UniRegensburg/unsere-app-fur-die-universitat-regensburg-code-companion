@@ -43,8 +43,8 @@ public class CompilerMessageCatalogue {
 		}
 
 		// warning Class x is never used
-		if (description.matches("(Method|Class|Constructor|Private field) (.*) is never used")) {
-			Pattern p = Pattern.compile("(Method|Class|Constructor|Private field) (.*) is never used");
+		if (description.matches("(Private method|Method|Class|Constructor|Private field) (.*) is never used")) {
+			Pattern p = Pattern.compile("(Private method|Method|Class|Constructor|Private field) (.*) is never used");
 			Matcher m = p.matcher(description);
 			if (m.find()) {
 				String param = m.group(1);
@@ -83,6 +83,17 @@ public class CompilerMessageCatalogue {
 			return "Your statement is not doing anything. Check if you need your statement.";
 		}
 
+		//Connot complete without throwing an exception
+		if(description.matches("(.*) statement cannot complete without throwing an exception")){
+			Pattern p = Pattern.compile("(.*) statement cannot complete without throwing an exception");
+			Matcher m = p.matcher(description);
+			if (m.find()) {
+				String symbol = m.group(1);
+				return "Your " + symbol + " statement can not complete without throwing an exception. Check if it is implemented correctly.";
+			}
+			return "Your statement can not complete without throwing an exception. Check if it is implemented correctly.";
+		}
+
 		if(description.matches("Variable (.*) might not have been initialized")){
 			Pattern p = Pattern.compile("Variable (.*) might not have been initialized");
 			Matcher m = p.matcher(description);
@@ -118,6 +129,11 @@ public class CompilerMessageCatalogue {
 		//unused import statement
 		if(description.matches("Unused import statement")){
 			return "The code you imported is never used. Please double check if and where you want to use it.";
+		}
+
+		//unreachable statement
+		if(description.matches("Unreachable statement")){
+			return "There are parts in your code that will never be reached. Please check for infinite loops or wrong return statements.";
 		}
 		
 		// default
