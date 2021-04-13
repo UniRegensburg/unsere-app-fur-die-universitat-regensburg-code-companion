@@ -18,7 +18,7 @@ public class CompilerMessageCatalogue {
 	public static String getShortExplanationByDescription(String description) {
 		// error Missing return statement
 		if (description.contains("Missing return statement")) {
-			return "You are not returning any value in a non-void method";
+			return "You are not returning any value in a non-void method. Make sure you include return statements on every possible code branch, or change your method return type to 'void'";
 		}
 
 		/*
@@ -66,11 +66,11 @@ public class CompilerMessageCatalogue {
 		}
 
 		if(description.matches("Cannot return a value from a method with void result type")){
-			return "You are trying to return something from a void method. Change the method type to none void if you need to return something.";
+			return "You are trying to return something from a void method. Change the method type to a class matching the return value if you need to return something.";
 		}
 
 		if(description.matches("Condition is always true")){
-			return "The condition is always true.There is no need for checking something if its always true.";
+			return "The condition is always true. There is no need for checking something if it's always true.";
 		}
 
 		if(description.matches("(.*) statement has empty body")){
@@ -78,9 +78,9 @@ public class CompilerMessageCatalogue {
 			Matcher m = p.matcher(description);
 			if (m.find()) {
 				String symbol = m.group(1);
-				return "Your " + symbol + " statement is not doing anything.Check if you need your " + symbol + " statement.";
+				return "Your " + symbol + " statement is not doing anything. Check if you need your " + symbol + " statement and add contents within its curly braces.";
 			}
-			return "Your statement is not doing anything.Check if you need your statement.";
+			return "Your statement is not doing anything. Check if you need your statement.";
 		}
 
 		if(description.matches("Variable (.*) might not have been initialized")){
@@ -88,20 +88,20 @@ public class CompilerMessageCatalogue {
 			Matcher m = p.matcher(description);
 			if (m.find()) {
 				String symbol = m.group(1);
-				return "Your variable" + symbol + " is never initialized.You should check " + symbol + ".The variable is missing a set value.";
+				return "Your variable" + symbol + " is never initialized. You should check " + symbol + ". The variable is missing a set value.";
 			}
 			return "Your variable is never initialized.The variable is missing a set value.";
 
 		}
 
-		if(description.matches("Variable (.*) is never assigend")){
-			Pattern p = Pattern.compile("Variable (.*) is never assigend");
+		if(description.matches("Variable (.*) is never assigned")){
+			Pattern p = Pattern.compile("Variable (.*) is never assigned");
 			Matcher m = p.matcher(description);
 			if (m.find()) {
 				String symbol = m.group(1);
-				return "Your variable" + symbol + " is missing a set value.";
+				return "Your variable" + symbol + " is missing a set value. You need to initialize the variable before using it.";
 			}
-			return "Your variable is missing a set value.";
+			return "Your variable is missing a set value. You need to initialize the variable before using it.";
 
 		}
 
@@ -119,9 +119,7 @@ public class CompilerMessageCatalogue {
 		if(description.matches("Unused import statement")){
 			return "The code you imported is never used. Please double check if and where you want to use it.";
 		}
-
-
-
+		
 		// default
 		return "Seems like there is no detailed description for your error. Maybe you can check the web.";
 	}
