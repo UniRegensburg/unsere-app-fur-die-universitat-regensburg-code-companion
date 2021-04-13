@@ -109,11 +109,6 @@ public class TasksFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 boolean isChecked = data.get(position).isChecked();
-                if(isChecked) {
-                    view.setAlpha((float) 1.0);
-                } else {
-                    view.setAlpha((float) 0.5);
-                }
                 data.get(position).setChecked(!isChecked);
                 adapter.notifyDataSetChanged();
             }
