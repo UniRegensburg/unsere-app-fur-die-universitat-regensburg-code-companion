@@ -281,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements TaskManager.Deadl
 
                 // add the already saved seconds from the database to the seconds from this session, then update the entity
                 StatsCache.currentProject.secondsSpentOnProject = seconds.getSeconds() + alreadySpentSeconds;
-                db.projectInformationDAO().updateProject(StatsCache.currentProject);
+                StatsCache.updateCurrentProject();
 
                 // reset the current session timer
                 StatsCache.projectOpenedDate = DateTime.now();

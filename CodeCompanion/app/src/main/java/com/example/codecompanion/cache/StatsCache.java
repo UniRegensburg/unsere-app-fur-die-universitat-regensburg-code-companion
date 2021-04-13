@@ -22,6 +22,8 @@ public abstract class StatsCache {
 	public static ProjectInformation currentProject;
 	public static String currentProjectTag;
 	public static String currentProjectName;
+	public static int warningsSinceLastUpdate = 0;
+	public static int errorsSinceLastUpdate = 0;
 	private static StatsChangedListener statsChangedListener;
 
 	public static DateTime projectOpenedDate;
@@ -51,6 +53,8 @@ public abstract class StatsCache {
 	public static void updateCurrentProject() {
 		if (currentProject != null) {
 			db.projectInformationDAO().updateProject(currentProject);
+			errorsSinceLastUpdate = 0;
+			warningsSinceLastUpdate = 0;
 		}
 	}
 
@@ -60,6 +64,7 @@ public abstract class StatsCache {
 	public static void addErrorToProject() {
 		if (currentProject != null) {
 			currentProject.totalErrors++;
+			errorsSinceLastUpdate++;
 		}
 
 		if (statsChangedListener != null) {
@@ -73,6 +78,7 @@ public abstract class StatsCache {
 	public static void addWarningToProject() {
 		if (currentProject != null) {
 			currentProject.totalWarnings++;
+			warningsSinceLastUpdate++;
 		}
 
 		if (statsChangedListener != null) {
