@@ -40,7 +40,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@id/warning_rv_template" />
+        app:layout_constraintTop_toBottomOf="@id/warning_rv_template" />
 
     <ImageView
         android:id="@+id/imageView2"
