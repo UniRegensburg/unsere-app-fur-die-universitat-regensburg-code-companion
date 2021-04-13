@@ -1,14 +1,38 @@
-class main {
+import java.util.ArrayList;
+import java.util.Locale;
 
-    public void test(String test){
-        String test2;
-        System.out.println("test");
-        if(true){
+public class Main {
 
+    private static final String[] names = new String[] {"Lukas", "Maxi", "Mathias", "Fabian", "X Æ A-12"};
+    private static final String allValidChars = "abcdefghijklmnopqrstuvwxyzäöü";
+
+    public static void main(String... args) {
+        System.out.println("Hello World!");
+
+        for (String name : names) {
+            if (isValidName(name)) {
+
+            }
         }
-        System.out.println(test2);
-        System.out.println(;
-        System.out.println()
-        return test;
+
+
     }
-}
+
+    private static boolean isValidName(String name) {
+        return false;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
