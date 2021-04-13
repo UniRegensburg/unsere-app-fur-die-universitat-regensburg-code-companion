@@ -70,14 +70,15 @@ public class ErrorMessageReceiverService extends Service {
 	private void addMessage(Map<String, String> message){
 		String tag = message.get("tag");
 		String description = message.get("description");
+		String line = message.get("line");
 		if ("WARNING".equals(tag)) {
-			compilerMessages.add(new CompilerMessage(SeverityType.WARNING, description,
+			compilerMessages.add(new CompilerMessage(SeverityType.WARNING, description, line,
 					CompilerMessageCatalogue.getShortExplanationByDescription(description),
 					CompilerMessageCatalogue.getLongExplanationByDescription(description),
 					Integer.parseInt(Objects.requireNonNull(message.get("id")))));
 			StatsCache.addWarningToProject();
 		} else if ("ERROR".equals(tag)) {
-			compilerMessages.add(new CompilerMessage(SeverityType.ERROR, description,
+			compilerMessages.add(new CompilerMessage(SeverityType.ERROR, description, line,
 					CompilerMessageCatalogue.getShortExplanationByDescription(description),
 					CompilerMessageCatalogue.getLongExplanationByDescription(description),
 					Integer.parseInt(Objects.requireNonNull(message.get("id")))));

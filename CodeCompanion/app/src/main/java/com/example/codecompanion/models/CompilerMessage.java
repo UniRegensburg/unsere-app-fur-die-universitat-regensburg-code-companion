@@ -8,11 +8,13 @@ public class CompilerMessage {
 	private String description;
 	private String shortExplanation;
 	private String longExplanation;
+	private String line;
 	private final int id;
 
-	public CompilerMessage(SeverityType severityType, String description, String shortExplanation, String longExplanation, int id) {
+	public CompilerMessage(SeverityType severityType, String description, String line, String shortExplanation, String longExplanation, int id) {
 		this.severityType = severityType;
 		this.description = description;
+		this.line = line;
 		this.shortExplanation = shortExplanation;
 		this.longExplanation = longExplanation;
 		this.id = id;
@@ -30,6 +32,10 @@ public class CompilerMessage {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public String getLine() {
+		return line;
 	}
 
 	public String getShortExplanation() {

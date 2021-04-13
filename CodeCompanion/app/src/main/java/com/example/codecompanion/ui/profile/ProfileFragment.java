@@ -60,7 +60,7 @@ public class ProfileFragment extends Fragment implements StatsChangedListener {
         StatsCache.setStatsChangedListener(this);
 
         if (StatsCache.currentProject != null) {
-            setCurrentLinesOfCode();
+            linesOfCodeChanged();
             setErrors();
             setWarnings();
             setTime();
@@ -177,6 +177,7 @@ public class ProfileFragment extends Fragment implements StatsChangedListener {
 
         executorService.execute(() -> {
             int warnings = MainActivity.db.projectInformationDAO().findTotalWarningsByProjectId(StatsCache.currentProject.getId());
+            warnings += StatsCache.currentProject.totalWarnings;
             String textToDisplay = String.valueOf(warnings);
             handler.post(() -> totalWarningsCounter.setText(textToDisplay));
         });
@@ -187,6 +188,7 @@ public class ProfileFragment extends Fragment implements StatsChangedListener {
 
         executorService.execute(() -> {
             int errors = MainActivity.db.projectInformationDAO().findTotalErrorsByProjectId(StatsCache.currentProject.getId());
+            errors += StatsCache.currentProject.totalErrors;
             String textToDisplay = String.valueOf(errors);
             handler.post(() -> totalErrorsCounter.setText(textToDisplay));
         });
@@ -220,6 +222,7 @@ public class ProfileFragment extends Fragment implements StatsChangedListener {
             cancelTimer();
         }
 
+        StatsCache.updateCurrentProject();
         super.onDestroy();
     }
 
