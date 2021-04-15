@@ -27,6 +27,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Fragment displayed upon tapping the 'compiler view' button in the bottom navigation bar
+ */
 public class CompilerFragment extends Fragment {
 
     private MessageManager messageManager;

@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * This class keeps the error and warning messages
+ * This class handles receiving error/warning messages and keeps them in a list of {@link CompilerMessage}s
  */
 public class ErrorMessageReceiverService extends Service {
 

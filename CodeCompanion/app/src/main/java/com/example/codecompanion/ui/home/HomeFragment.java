@@ -20,6 +20,11 @@ import org.webrtc.PeerConnection;
 
 import java.util.Random;
 
+/**
+ * Home fragment which is displayed on startup, and upon pressing the home button in
+ * the bottom navigation bar
+ * Shows current connection status and allows starting the connection process
+ */
 public class HomeFragment extends Fragment {
     private Button connect;
     private ConnectionStateManager connectionStateManager;
@@ -43,12 +48,7 @@ public class HomeFragment extends Fragment {
         connectionCodeText = root.findViewById(R.id.connection_code_text);
         connectionStatusView = root.findViewById(R.id.connection_status);
         connect = root.findViewById(R.id.connect_button);
-        connect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                qrScanner.start(getActivity());
-            }
-        });
+        connect.setOnClickListener(v -> qrScanner.start(getActivity()));
         String[] funMessages = root.getResources().getStringArray(R.array.fun_messages_connect);
         String randomMessage = funMessages[new Random().nextInt(funMessages.length)];
         startTyping(randomMessage);

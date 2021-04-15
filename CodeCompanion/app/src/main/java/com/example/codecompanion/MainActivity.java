@@ -57,6 +57,14 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Main Activity of our app.
+ * Starts and holds references to all services
+ * Initializes the WebRTC connection and distributes received message to the respective Classes
+ * See: {@link TaskManager}, {@link ErrorMessageReceiverService}, {@link LinesOfCodeMessageReceiverService}
+ *
+ * Saves current {@link ProjectInformation} on pause
+ */
 public class MainActivity extends AppCompatActivity implements TaskManager.DeadlineLineListener {
 
     private static final String TAG =  "Main Activity";
