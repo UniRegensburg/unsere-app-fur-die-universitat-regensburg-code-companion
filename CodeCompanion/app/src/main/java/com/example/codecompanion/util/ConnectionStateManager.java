@@ -5,6 +5,9 @@ import org.webrtc.PeerConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ConnectionStateManager which checks the state of the connection
+ */
 public class ConnectionStateManager {
     // TODO create List of listeners
     private final List<ConnectionStateListener> listeners = new ArrayList<>();

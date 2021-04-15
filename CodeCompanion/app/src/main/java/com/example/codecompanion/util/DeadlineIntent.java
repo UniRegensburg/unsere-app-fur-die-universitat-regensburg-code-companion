@@ -11,6 +11,9 @@ import androidx.core.app.NotificationManagerCompat;
 import com.example.codecompanion.MainActivity;
 import com.example.codecompanion.R;
 
+/**
+ * Intent for deadline notifications
+ */
 public class DeadlineIntent extends IntentService {
 
     private static final String NOTIFICATION_CHANNEL_ID = "10001";

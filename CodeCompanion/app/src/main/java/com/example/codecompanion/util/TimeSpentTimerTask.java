@@ -5,6 +5,9 @@ import org.joda.time.format.PeriodFormatter;
 
 import java.util.TimerTask;
 
+/**
+ * Timer for time spent coding (statistics in profile view)
+ */
 public class TimeSpentTimerTask extends TimerTask {
 
 	private Period timePeriod;

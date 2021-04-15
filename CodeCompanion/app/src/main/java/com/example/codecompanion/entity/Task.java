@@ -1,5 +1,9 @@
 package com.example.codecompanion.entity;
 
+/**
+ * This class creates a task object with description and a boolean if the task is checked
+ */
+
 public class Task {
 
     private String description;

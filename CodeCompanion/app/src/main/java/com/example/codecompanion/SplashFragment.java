@@ -13,6 +13,10 @@ import android.view.ViewGroup;
 import com.example.codecompanion.util.TinyDB;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/**
+ * Splashfragment which shows logo when user opens the app. Also checks if the onBoardingView was already
+ * shown
+ */
 public class SplashFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

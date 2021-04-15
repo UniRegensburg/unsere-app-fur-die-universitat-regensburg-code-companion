@@ -8,6 +8,9 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * This class is a listener used to check if an item is clicked in a recyclerview (like taskview or compilerview)
+ */
 public class ListTouchListener implements RecyclerView.OnItemTouchListener {
 
     private GestureDetector gestureDetector;

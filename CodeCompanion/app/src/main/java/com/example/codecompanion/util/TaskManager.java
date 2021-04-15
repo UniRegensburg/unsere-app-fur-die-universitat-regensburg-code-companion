@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+/**
+ * Implements functionality for tasks objects
+ */
 public class TaskManager {
 
     public interface TaskManagerListener{

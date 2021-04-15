@@ -42,6 +42,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
+/**
+ * This service cares about the lines of code
+ */
 public class LinesOfCodeMessageReceiverService extends Service {
 
 	private final IBinder binder = new LinesOfCodeMessageBinder();

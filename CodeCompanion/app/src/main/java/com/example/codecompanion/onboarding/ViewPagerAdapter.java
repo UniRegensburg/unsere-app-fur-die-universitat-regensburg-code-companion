@@ -9,6 +9,10 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.ArrayList;
 
+/**
+ * This class creates a ViewPagerAdapter which is used for the onBoardingView and holds all fragments
+ * for that
+ */
 public class ViewPagerAdapter extends FragmentStateAdapter {
     private ArrayList<Fragment> fragmentList;
 

@@ -7,6 +7,9 @@ import android.content.Context;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
+/**
+ * Functionality for the QRCode scanner
+ */
 public class QrScanner {
 
     public void start(Activity current){

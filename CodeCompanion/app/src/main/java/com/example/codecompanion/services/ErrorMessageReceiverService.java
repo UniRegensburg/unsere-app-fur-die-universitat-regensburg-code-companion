@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This class keeps the error and warning messages
+ */
 public class ErrorMessageReceiverService extends Service {
 
 	private final IBinder binder = new ErrorMessageBinder();

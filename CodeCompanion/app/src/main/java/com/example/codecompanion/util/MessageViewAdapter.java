@@ -14,7 +14,7 @@ import java.util.List;
 
 
 /**
- * @author PLACEBOBRO
+ * Adapter for all messages
  */
 public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

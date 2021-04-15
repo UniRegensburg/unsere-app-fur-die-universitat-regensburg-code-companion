@@ -33,6 +33,9 @@ import static io.socket.client.Socket.EVENT_CONNECT;
 import static io.socket.client.Socket.EVENT_DISCONNECT;
 import static org.webrtc.SessionDescription.Type.ANSWER;
 
+/**
+ * Complete WebRTC class which handles all WebRTC logic
+ */
 public class WebRTC extends Service {
 
     private static final String TAG = "WebRTC";

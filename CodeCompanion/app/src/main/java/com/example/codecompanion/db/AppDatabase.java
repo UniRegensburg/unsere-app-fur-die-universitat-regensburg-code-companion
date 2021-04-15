@@ -7,6 +7,10 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+/**
+ * Creates database for user statistics and project informations
+ */
+
 @Database(entities = {DocumentInformation.class, ProjectInformation.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 	private static AppDatabase instance;
