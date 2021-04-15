@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.codecompanion.R;
 import com.example.codecompanion.ui.compiler.ExpandedMessageFragment;
 
+/**
+ * ViewHolder for error and warning messages
+ */
 public abstract class AbstractCompilerMessageViewHolder extends RecyclerView.ViewHolder {
 	private final TextView errorMessageTextView;
 	private final TextView lineNumberTextView;

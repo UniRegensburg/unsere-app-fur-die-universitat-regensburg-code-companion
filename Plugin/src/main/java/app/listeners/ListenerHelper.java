@@ -9,7 +9,9 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.messages.MessageBus;
 import com.intellij.xdebugger.breakpoints.XBreakpointListener;
 
-
+/**
+ * Connects to all IDE listeners
+ */
 public class ListenerHelper {
 
     public static void initListener() {

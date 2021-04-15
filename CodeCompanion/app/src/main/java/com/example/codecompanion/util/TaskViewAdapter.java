@@ -19,6 +19,9 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+/**
+ * ViewAdapter for tasks
+ */
 public class TaskViewAdapter extends RecyclerView.Adapter<TaskViewAdapter.ViewHolder>{
 
     private List<Task> localDataSet;

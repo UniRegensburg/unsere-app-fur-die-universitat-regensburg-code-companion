@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Used to get explanations of error messages
+ * Used to get explanations of error messages (for extended message view)
  */
 public class CompilerMessageCatalogue {
 

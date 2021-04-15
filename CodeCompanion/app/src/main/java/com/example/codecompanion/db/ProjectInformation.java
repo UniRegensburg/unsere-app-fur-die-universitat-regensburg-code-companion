@@ -9,6 +9,11 @@ import com.example.codecompanion.MainActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class holds informations about the project like name, path, lines of code, errors, warnings, etc.
+ */
+
+
 @Entity(tableName = "ProjectInformation")
 public class ProjectInformation {
 	@PrimaryKey(autoGenerate = true)

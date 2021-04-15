@@ -2,6 +2,10 @@ package com.example.codecompanion.models;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * This class creates a CompilerMessage object which represents errors and warnings. Based on the severityType
+ * different view templates are used (for error and warning)
+ */
 public class CompilerMessage {
 
 	private SeverityType severityType;

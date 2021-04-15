@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * MessageManager cares about all messages received
+ */
 public class MessageManager {
 
     public interface MessageManagerListener{

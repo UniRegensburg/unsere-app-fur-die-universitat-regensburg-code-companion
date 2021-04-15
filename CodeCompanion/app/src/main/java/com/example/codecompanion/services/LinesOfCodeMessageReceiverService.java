@@ -42,6 +42,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
+/**
+ * This service handles receiving lines of code messages
+ * Inserts {@link DocumentInformation} into the database upon receiving information about a new document
+ * Updates cached {@link DocumentInformation} upon receiving a message which contains a different document
+ */
 public class LinesOfCodeMessageReceiverService extends Service {
 
 	private final IBinder binder = new LinesOfCodeMessageBinder();
@@ -49,6 +54,7 @@ public class LinesOfCodeMessageReceiverService extends Service {
 	private AppDatabase db = null;
 	private DocumentInformation currentDocumentInformation;
 
+	// default constructor, currently unused
 	public LinesOfCodeMessageReceiverService() {
 
 	}

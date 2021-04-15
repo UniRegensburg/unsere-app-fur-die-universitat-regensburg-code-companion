@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This class handles receiving error/warning messages and keeps them in a list of {@link CompilerMessage}s
+ */
 public class ErrorMessageReceiverService extends Service {
 
 	private final IBinder binder = new ErrorMessageBinder();

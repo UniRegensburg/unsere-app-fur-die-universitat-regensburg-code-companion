@@ -10,7 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * @author Fabian Schiller
+ * Creates QR-Code
  */
 public class QRCodeGenerator {
 

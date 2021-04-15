@@ -6,6 +6,10 @@ import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
 import org.webrtc.RtpReceiver;
 
+/**
+ * CLass used for WebRTC PeerToPeer connection
+ */
+
 public class CustomPeerConnectionObserver implements PeerConnection.Observer {
 
 

@@ -33,6 +33,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Fragment which is shown upon tapping the "tasks" button on the bottom navigation bar
+ * Reads task info from tasks.json and displays them
+ * Tasks can be rearranged and checked
+ */
 public class TasksFragment extends Fragment {
 
     private RecyclerView tasksView;
@@ -105,13 +110,10 @@ public class TasksFragment extends Fragment {
         touchHelper.attachToRecyclerView(tasksView);
         tasksView.setAdapter(adapter);
 
-        tasksView.addOnItemTouchListener(new ListTouchListener(getContext(), tasksView, new RecyclerViewClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                boolean isChecked = data.get(position).isChecked();
-                data.get(position).setChecked(!isChecked);
-                adapter.notifyDataSetChanged();
-            }
+        tasksView.addOnItemTouchListener(new ListTouchListener(getContext(), tasksView, (view, position) -> {
+            boolean isChecked = data.get(position).isChecked();
+            data.get(position).setChecked(!isChecked);
+            adapter.notifyDataSetChanged();
         }));
 
         funMessages = root.getResources().getStringArray(R.array.fun_messages_tasks);
@@ -122,39 +124,30 @@ public class TasksFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        taskManager.setListener(new TaskManager.TaskManagerListener() {
-            @Override
-            public void onTaskReceived() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ArrayList<Task> dataNew = new ArrayList<>();
-                        if (data.isEmpty()) {
-                            data = taskManager.getTasks();
-                        }else{
-                            dataNew = taskManager.getTasks();
-                            ArrayList<String> compList = new ArrayList<>();
-                            ArrayList<String> compListNew = new ArrayList<>();
-                            for(int i = 0;i < data.size();i++){
-                                compList.add(data.get(i).getDescription());
-                            }
-                            for(int j = 0;j < dataNew.size();j++){
-                              compListNew.add(dataNew.get(j).getDescription());
-
-                            }
-                            if(!compList.containsAll(compListNew)){
-                                Log.d("ON TASK","Not the same");
-                                data.clear();
-                                data.addAll(taskManager.getTasks());
-                            }
-                        }
-                        adapter.notifyDataSetChanged();
-                        taskMessageField.setText(funMessages[new Random().nextInt(funMessages.length)]);
-                    }
-                });
+        taskManager.setListener(() -> getActivity().runOnUiThread(() -> {
+            ArrayList<Task> dataNew = new ArrayList<>();
+            if (data.isEmpty()) {
+                data = taskManager.getTasks();
+            } else {
+                dataNew = taskManager.getTasks();
+                ArrayList<String> compList = new ArrayList<>();
+                ArrayList<String> compListNew = new ArrayList<>();
+                for (int i = 0; i < data.size(); i++) {
+                    compList.add(data.get(i).getDescription());
+                }
+                for (int j = 0; j < dataNew.size(); j++) {
+                    compListNew.add(dataNew.get(j).getDescription());
+                }
+                if (!compList.containsAll(compListNew)) {
+                    Log.d("ON TASK", "Not the same");
+                    data.clear();
+                    data.addAll(taskManager.getTasks());
+                }
             }
-        });
-        if(data.size() > 0) {
+            adapter.notifyDataSetChanged();
+            taskMessageField.setText(funMessages[new Random().nextInt(funMessages.length)]);
+        }));
+        if (data.size() > 0) {
             taskMessageField.setText(funMessages[new Random().nextInt(funMessages.length)]);
         } else {
             taskMessageField.setText(funMessagesEmpty[new Random().nextInt(funMessagesEmpty.length)]);

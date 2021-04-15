@@ -19,6 +19,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
+/**
+ * Creates a fragment which creates in the onCreateView all fragments used in the onBoardingView and
+ * attaches the ViewPageAdapter
+ */
 public class ViewPagerFragment extends Fragment {
 
     @Override

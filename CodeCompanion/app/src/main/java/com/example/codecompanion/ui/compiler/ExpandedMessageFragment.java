@@ -31,6 +31,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * Fragment displayed when tapping on a message in {@link CompilerFragment}
+ * Sets displayed text and Google Query according to the message
+ */
 public class ExpandedMessageFragment extends Fragment {
 
     private final String GOOGLE_QUERY_STRING = "https://www.google.com/search?q=";

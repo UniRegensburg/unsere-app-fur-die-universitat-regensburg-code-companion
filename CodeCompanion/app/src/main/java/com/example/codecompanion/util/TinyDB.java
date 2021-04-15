@@ -46,7 +46,9 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
-
+/**
+ * Implements functionality to use tinyDB
+ */
 public class TinyDB {
 
     private SharedPreferences preferences;

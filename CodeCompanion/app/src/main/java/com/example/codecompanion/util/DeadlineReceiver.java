@@ -6,6 +6,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+/**
+ * Receiver for deadline
+ */
 public class DeadlineReceiver extends BroadcastReceiver {
 
     private static final String NOTIFICATION_CHANNEL_ID = "10001";

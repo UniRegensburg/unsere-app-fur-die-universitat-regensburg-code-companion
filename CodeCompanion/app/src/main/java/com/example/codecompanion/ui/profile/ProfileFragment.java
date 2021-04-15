@@ -34,6 +34,17 @@ import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Profile fragment is displayed upon tapping the "profile" button in the bottom navigation bar
+ * Displays statistics, such as lines of codes, coding time, errors and warnings
+ * Updates in near-real time
+ *
+ * Shows statistics for the <i>current project</i> while connect
+ * Shows statistics for <i>ALL projects</i> while disconnected
+ *
+ * For Project Information see {@link ProjectInformation}
+ * For Document Information see {@link DocumentInformation}
+ */
 public class ProfileFragment extends Fragment implements StatsChangedListener {
 
     private MessageManager messageManager;
