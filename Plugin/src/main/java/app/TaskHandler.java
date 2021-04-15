@@ -8,6 +8,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 
 import java.io.IOException;
 
+/**
+ * Handles and sends taskMessages through WebRTC
+ */
 public class TaskHandler {
     private final ApplicationService manager;
     private Project projects[];

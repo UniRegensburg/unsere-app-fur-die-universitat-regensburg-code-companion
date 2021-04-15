@@ -20,6 +20,9 @@ import java.util.concurrent.Executors;
 
 import static io.socket.client.Socket.*;
 
+/**
+ * Implements all WebRTC functionality
+ */
 public class WebRTC {
 
     public Socket socket;

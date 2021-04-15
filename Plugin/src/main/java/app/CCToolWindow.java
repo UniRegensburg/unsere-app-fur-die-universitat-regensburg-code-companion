@@ -14,6 +14,9 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+/**
+ * Creates toolwindow with QR-Code functionality
+ */
 public class CCToolWindow implements ApplicationService.ApplicationServiceListener {
 
     private JPanel myToolWindowContent;

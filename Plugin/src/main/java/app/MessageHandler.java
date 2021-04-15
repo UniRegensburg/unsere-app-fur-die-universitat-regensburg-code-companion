@@ -24,6 +24,9 @@ import java.net.URISyntaxException;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Handles and sends messages through WebRTC
+ */
 public class MessageHandler {
 
     private final ApplicationService manager;
