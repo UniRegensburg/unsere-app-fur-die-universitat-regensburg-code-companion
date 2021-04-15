@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>org.example.CodeCompanion</id>
     <name>CodeCompanion</name>
-    <vendor email="codecompanionapp@gmail.com" url="uni-regensburg.de">Universität Regensburg</vendor>
+    <vendor email="codecompanionapp@gmail.com" url="https://github.com/UniRegensburg/unsere-app-fur-die-universitat-regensburg-code-companion">Universität Regensburg</vendor>
 
     <description>
         This plugin connects to the Code Companion Android App (Goole Play Link coming soon), which helps coding beginners with their coding tasks.

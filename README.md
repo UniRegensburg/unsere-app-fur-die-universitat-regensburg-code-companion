@@ -14,9 +14,9 @@ This App shows the current tasks, compiler errors and coding statistics.
 ### Installation
 To use the Project, the Android App and the Connection Plugin need to be installed. 
 * [Android App Google Play Store (coming soon)]()
-* [Android App APK Download (coming soon)]()
-* [IntelliJ Plugin Download (Plugin Marketplace) (coming soon)]()
-* [IntelliJ Plugin Download (.zip File) (coming soon)]()
+* [Android App APK Download](https://github.com/UniRegensburg/unsere-app-fur-die-universitat-regensburg-code-companion/releases/download/latest/CodeCompanion-App.apk)
+* [IntelliJ Plugin Download (Plugin Marketplace)](https://plugins.jetbrains.com/plugin/16524-codecompanion)
+* [IntelliJ Plugin Download (.zip File)](https://github.com/UniRegensburg/unsere-app-fur-die-universitat-regensburg-code-companion/releases/download/latest/CodeCompanion-Plugin.zip)
 
 
 
