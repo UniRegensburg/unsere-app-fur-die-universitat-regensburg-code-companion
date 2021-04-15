@@ -1,5 +1,6 @@
 package app.services.application;
 
+import app.CCToolWindowFactory;
 import app.MessageHandler;
 import app.TaskHandler;
 import app.WebRTC;
@@ -32,7 +33,9 @@ public class ApplicationService implements WebRTC.WebRTCListener {
     }
 
     public void startSession() {
-  
+
+        CCToolWindowFactory.ccToolWindow.init();
+
         if (state == ApplicationState.RECORDING) {
             System.out.println("Already Started");
             return;
