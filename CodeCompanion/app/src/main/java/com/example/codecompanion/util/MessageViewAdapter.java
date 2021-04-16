@@ -14,7 +14,7 @@ import java.util.List;
 
 
 /**
- * @author PLACEBOBRO
+ * Adapter for all messages
  */
 public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -30,7 +30,7 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      */
     class ErrorViewHolder extends AbstractCompilerMessageViewHolder {
         public ErrorViewHolder(View view) {
-            super(view, R.id.error_rv_template, R.id.error);
+            super(view, R.id.error_rv_template, R.id.error_line_number, R.id.error);
         }
     }
 
@@ -39,7 +39,7 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      */
     class WarningViewHolder extends AbstractCompilerMessageViewHolder {
         public WarningViewHolder(View view) {
-            super(view, R.id.warning_rv_template, R.id.warning);
+            super(view, R.id.warning_rv_template, R.id.error_line_number, R.id.warning);
         }
     }
 
@@ -92,13 +92,17 @@ public class MessageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         String message = localDataSet.get(position).getDescription();
+        String line = localDataSet.get(position).getLine();
         String shortExplanation = localDataSet.get(position).getShortExplanation();
 
+        String lineNumberText = "Line " + line;
         if(getItemViewType(position) == TYPE_ERROR) {
-            ((ErrorViewHolder) holder).getTextView().setText(message);
+            ((ErrorViewHolder) holder).getErrorMessageTextView().setText(message);
+            ((ErrorViewHolder) holder).getLineNumberTextView().setText(lineNumberText);
             ((ErrorViewHolder) holder).setShortExplanation(shortExplanation);
         } else if (getItemViewType(position) == TYPE_WARNING) {
-            ((WarningViewHolder) holder).getTextView().setText(message);
+            ((WarningViewHolder) holder).getErrorMessageTextView().setText(message);
+            ((WarningViewHolder) holder).getLineNumberTextView().setText(lineNumberText);
             ((WarningViewHolder) holder).setShortExplanation(shortExplanation);
         }
 

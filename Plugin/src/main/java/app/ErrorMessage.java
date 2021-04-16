@@ -3,6 +3,9 @@ package app;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 
+/**
+ * Creates ErrorMessage
+ */
 public class ErrorMessage {
 
     private String shortMessage;

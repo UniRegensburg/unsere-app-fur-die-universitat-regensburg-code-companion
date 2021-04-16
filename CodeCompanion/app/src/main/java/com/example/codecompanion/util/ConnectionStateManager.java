@@ -2,15 +2,21 @@ package com.example.codecompanion.util;
 
 import org.webrtc.PeerConnection;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * ConnectionStateManager which checks the state of the connection
+ */
 public class ConnectionStateManager {
-    private ConnectionStateListener listener;
+    private final List<ConnectionStateListener> listeners = new ArrayList<>();
     private static ConnectionStateManager instance;
     private PeerConnection.PeerConnectionState status;
     private String id;
 
     public interface ConnectionStateListener{
-        public void onConnect();
-        public void onDisconnect();
+        void onConnect();
+        void onDisconnect();
     }
     private ConnectionStateManager() {}
 
@@ -21,12 +27,16 @@ public class ConnectionStateManager {
         return ConnectionStateManager.instance;
     }
 
-    public void setListener(ConnectionStateManager.ConnectionStateListener listener){
-        this.listener = listener;
+    public void addListener(ConnectionStateManager.ConnectionStateListener listener){
+        listeners.add(listener);
     }
 
-    public void removeListener(){
-        this.listener = null;
+    public void removeListener(ConnectionStateManager.ConnectionStateListener listener){
+        listeners.remove(listener);
+    }
+
+    public void removeAllListeners() {
+        listeners.clear();
     }
 
     public PeerConnection.PeerConnectionState getConnectionState() {
@@ -38,12 +48,18 @@ public class ConnectionStateManager {
         status = state;
         if(state == PeerConnection.PeerConnectionState.CONNECTED ||
         state == PeerConnection.PeerConnectionState.CONNECTING) {
-            if(this.listener != null) {
-                listener.onConnect();
+            if(this.listeners != null) {
+                for (ConnectionStateListener listener : listeners) {
+                    listener.onConnect();
+                }
+
             }
         } else {
-            if(this.listener != null) {
-                listener.onDisconnect();
+            if(this.listeners != null) {
+                for (ConnectionStateListener listener : listeners) {
+                    listener.onDisconnect();
+                }
+
             }
         }
 

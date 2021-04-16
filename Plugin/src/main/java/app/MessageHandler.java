@@ -1,27 +1,44 @@
 package app;
 
+import app.data.Const;
 import app.services.application.ApplicationService;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.project.Project;
 import dev.onvoid.webrtc.RTCDataChannelState;
 import dev.onvoid.webrtc.RTCPeerConnectionState;
+import netscape.javascript.JSObject;
+import org.junit.Assert;
 
+import java.awt.*;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
+import java.util.List;
 
+/**
+ * Handles and sends messages through WebRTC
+ */
 public class MessageHandler {
 
     private final ApplicationService manager;
     private WebRTC webRTC;
-    private Map<HighlightInfo, ErrorMessage> alreadyPresentErrors = new HashMap<>();
-    private List<String> messages;
+    private static Map<HighlightInfo, ErrorMessage> alreadyPresentErrors = new HashMap<>();
+    private List<String> errorMessages;
+    private List<String> linesOfCodeMessages;
     private final Gson gson = new Gson();
     private final String ADD_ERROR_TAG = "add";
     private final String REMOVE_ERROR_TAG = "remove";
     private long messageId = 0;
+    private String lastLinesOfCodeMessage = "";
 
     public MessageHandler() {
         manager = ServiceManager.getService(ApplicationService.class);
@@ -33,10 +50,26 @@ public class MessageHandler {
         }
 
         if (webRTC.getConnectionState() == RTCPeerConnectionState.CONNECTED && webRTC.getDataChannelState() == RTCDataChannelState.OPEN) {
-            messages = new ArrayList<>();
+            errorMessages = new ArrayList<>();
             makeString(highlightInfoList, document);
             checkForRemovedErrors(highlightInfoList);
-            send(gson.toJson(messages));
+            send(gson.toJson(errorMessages));
+        }
+    }
+
+    public void handleLinesOfCodeMessage(int lineCount, Document document) throws Exception {
+        if (webRTC == null) {
+            webRTC = manager.getWebRTC();
+        }
+
+        if (webRTC.getConnectionState() == RTCPeerConnectionState.CONNECTED && webRTC.getDataChannelState() == RTCDataChannelState.OPEN) {
+            linesOfCodeMessages = new ArrayList<>();
+            makeLinesOfCodeMessage(lineCount, document);
+
+            if (!linesOfCodeMessages.get(0).equals(lastLinesOfCodeMessage)) {
+                lastLinesOfCodeMessage = linesOfCodeMessages.get(0);
+                send(gson.toJson(linesOfCodeMessages));
+            }
         }
     }
 
@@ -66,7 +99,7 @@ public class MessageHandler {
         message.put("id", "" + alreadyPresentErrors.get(alreadyPresentError).getId());
 
         String json = gson.toJson(message);
-        messages.add(json);
+        errorMessages.add(json);
     }
 
     /**
@@ -94,8 +127,20 @@ public class MessageHandler {
         message.put("id", "" + messageId);
 
         String json = gson.toJson(message);
-        messages.add(json);
+        errorMessages.add(json);
         return errorMessage;
+    }
+
+    private void makeLinesOfCodeMessage(int lineCount, Document document) {
+        Map<String, String> message = new HashMap<>();
+        String fileName = FileEditorManager.getInstance(App.getCurrentProject()).getSelectedEditor().getFile().getName();
+
+        message.put("stats", "linesOfCode");
+        message.put("documentName", fileName);
+        message.put("lineCount", String.valueOf(lineCount));
+
+        String json = gson.toJson(message);
+        linesOfCodeMessages.add(json);
     }
 
     private void makeString(List<HighlightInfo> highlightInfoList, Document document) {
@@ -150,7 +195,31 @@ public class MessageHandler {
 
     }
 
-    public void deleteAlreadyExistingErrors(){
+    public void openGoogleQuery(String message) {
+        Type type = new TypeToken<Map<String, String>>() {}.getType();
+        Map<String, String> map = gson.fromJson(message, type);
+        Assert.assertEquals(1, map.size());
+
+        try {
+            URI url = new URI(map.get(Const.Events.GOOGLE_QUERY_MESSAGE));
+            Desktop.getDesktop().browse(url);
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void sendProjectInformation() throws Exception {
+        Map<String, String> message = new HashMap<>();
+
+        message.put("projectName", App.getCurrentProject().getName());
+        message.put("projectPath", App.getCurrentProject().getPresentableUrl());
+        String json = gson.toJson(message);
+        send(json);
+    }
+
+    public void prepareForReconnect() {
+        lastLinesOfCodeMessage = "";
         alreadyPresentErrors.clear();
     }
 }

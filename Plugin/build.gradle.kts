@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.intellij") version "0.6.5"
+    id("org.jetbrains.intellij") version "0.7.2"
     java
 }
 
@@ -24,8 +24,10 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = "2020.3.2"
-}
-tasks.getByName("patchPluginXml") {
+    version = "2020.3.3"
+    pluginName = "Code Companion"
+    updateSinceUntilBuild = false
 }
 
+tasks.getByName("patchPluginXml") {
+}

@@ -12,6 +12,12 @@ import dev.onvoid.webrtc.RTCPeerConnectionState;
 import icons.PluginIcons;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * Implements functionality for the state icon in the toolbar
+ */
 public class ConnectionStateAction extends AnAction {
 
     private final ApplicationService manager;
@@ -39,7 +45,14 @@ public class ConnectionStateAction extends AnAction {
             if(webRTC.getConnectionState() == RTCPeerConnectionState.CONNECTED && webRTC.getDataChannelState() == RTCDataChannelState.OPEN){
                 if(!connected){
                     e.getPresentation().setIcon(PluginIcons.Connected);
-                    e.getPresentation().setText("Connected to #id");
+                    e.getPresentation().setText("Connected");
+                    try {
+                        manager.getMessageHandler().sendProjectInformation();
+                        System.out.println("Sent project information!");
+                    } catch (Exception exception) {
+                        System.out.println("Could not send project information");
+                        exception.printStackTrace();
+                    }
                     connected = true;
                 }
 

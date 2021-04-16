@@ -1,5 +1,6 @@
 package app.services.application;
 
+import app.CCToolWindowFactory;
 import app.MessageHandler;
 import app.TaskHandler;
 import app.WebRTC;
@@ -32,7 +33,9 @@ public class ApplicationService implements WebRTC.WebRTCListener {
     }
 
     public void startSession() {
-  
+
+        CCToolWindowFactory.ccToolWindow.init();
+
         if (state == ApplicationState.RECORDING) {
             System.out.println("Already Started");
             return;
@@ -84,7 +87,7 @@ public class ApplicationService implements WebRTC.WebRTCListener {
         }
 
         if(state == RTCPeerConnectionState.DISCONNECTED) {
-            messageHandler.deleteAlreadyExistingErrors();
+            messageHandler.prepareForReconnect();
             UUID uuid = UUID.randomUUID();
             String stringId = uuid.toString();
             webRTC.init(stringId);
@@ -100,6 +103,18 @@ public class ApplicationService implements WebRTC.WebRTCListener {
     public void onMessageReceived(String message) {
         if (message.equals(Const.Events.REFRESH_DATA_MESSAGE)) {
             messageHandler.handleRefreshData();
+        }
+
+        if (message.contains(Const.Events.GOOGLE_QUERY_MESSAGE)) {
+            messageHandler.openGoogleQuery(message);
+        }
+
+        if (message.equals(Const.Events.REQUEST_PROJECT_MESSAGE)) {
+            try {
+                messageHandler.sendProjectInformation();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -119,7 +134,7 @@ public class ApplicationService implements WebRTC.WebRTCListener {
             webRTC.closeConnection();
         }
         if(messageHandler != null){
-            messageHandler.deleteAlreadyExistingErrors();
+            messageHandler.prepareForReconnect();
         }
         messageHandler = null;
         webRTC = null;

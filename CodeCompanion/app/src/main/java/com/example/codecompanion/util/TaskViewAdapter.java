@@ -19,6 +19,9 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+/**
+ * ViewAdapter for tasks
+ */
 public class TaskViewAdapter extends RecyclerView.Adapter<TaskViewAdapter.ViewHolder>{
 
     private List<Task> localDataSet;
@@ -52,8 +55,10 @@ public class TaskViewAdapter extends RecyclerView.Adapter<TaskViewAdapter.ViewHo
         System.out.println(localDataSet.get(position).isChecked());
         if(localDataSet.get(position).isChecked()) {
             holder.textView.setPaintFlags(holder.textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.textView.setAlpha(0.5f);
         } else {
             holder.textView.setPaintFlags(holder.textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            holder.textView.setAlpha(1.0f);
         }
     }
 

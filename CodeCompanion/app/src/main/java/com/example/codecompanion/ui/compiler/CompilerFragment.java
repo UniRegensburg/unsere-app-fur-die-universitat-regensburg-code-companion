@@ -23,12 +23,13 @@ import com.example.codecompanion.util.MessageViewAdapter;
 import org.webrtc.PeerConnection;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
+/**
+ * Fragment displayed upon tapping the 'compiler view' button in the bottom navigation bar
+ */
 public class CompilerFragment extends Fragment {
 
     private MessageManager messageManager;
@@ -109,7 +110,7 @@ public class CompilerFragment extends Fragment {
             compilerMessageField.setText(funMessagesEmpty[new Random().nextInt(funMessagesEmpty.length)]);
         }
         super.onResume();
-        messageManager.setListener(() -> getActivity().runOnUiThread(() -> {
+        messageManager.setErrorMessageListener(() -> getActivity().runOnUiThread(() -> {
             data.clear();
             data.addAll(messageManager.getCompilerMessages());
 
@@ -125,6 +126,6 @@ public class CompilerFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        messageManager.removeListener();
+        messageManager.removeErrorMessageListener();
     }
 }

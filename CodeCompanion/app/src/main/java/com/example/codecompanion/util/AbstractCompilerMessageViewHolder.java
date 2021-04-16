@@ -10,25 +10,34 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.codecompanion.R;
 import com.example.codecompanion.ui.compiler.ExpandedMessageFragment;
 
+/**
+ * ViewHolder for error and warning messages
+ */
 public abstract class AbstractCompilerMessageViewHolder extends RecyclerView.ViewHolder {
-	private final TextView textView;
+	private final TextView errorMessageTextView;
+	private final TextView lineNumberTextView;
 	private final ConstraintLayout layout;
 	private ExpandedMessageFragment fragment;
 	private String shortExplanation;
 
-	public AbstractCompilerMessageViewHolder(View view, int textViewId, int layoutId) {
+	public AbstractCompilerMessageViewHolder(View view, int errorMessageViewId, int lineNumberViewId, int layoutId) {
 		super(view);
-		textView = (TextView) view.findViewById(textViewId);
-		layout = (ConstraintLayout) view.findViewById(layoutId);
+		errorMessageTextView = view.findViewById(errorMessageViewId);
+		lineNumberTextView = view.findViewById(lineNumberViewId);
+		layout = view.findViewById(layoutId);
 		layout.setOnClickListener(v -> {
 			AppCompatActivity activity = (AppCompatActivity) view.getContext();
-			fragment = new ExpandedMessageFragment(shortExplanation, textViewId);
+			fragment = new ExpandedMessageFragment(shortExplanation, errorMessageViewId, errorMessageTextView.getText().toString());
 			activity.getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, fragment).addToBackStack("expandedMessage").commit();
 		});
 	}
 
-	public TextView getTextView() {
-		return textView;
+	public TextView getErrorMessageTextView() {
+		return errorMessageTextView;
+	}
+
+	public TextView getLineNumberTextView() {
+		return lineNumberTextView;
 	}
 
 	public ConstraintLayout getLayout() {
