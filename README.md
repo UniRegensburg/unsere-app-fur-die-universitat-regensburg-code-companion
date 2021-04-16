@@ -13,6 +13,14 @@ This App shows the current tasks, compiler errors and coding statistics.
 
 ### Installation
 To use the Project, the Android App and the Connection Plugin need to be installed. 
+To install the Plugin, just follow the [link](https://plugins.jetbrains.com/plugin/16524-codecompanion) to the IntelliJ Marketplace or download it [directly](https://github.com/UniRegensburg/unsere-app-fur-die-universitat-regensburg-code-companion/releases/download/latest/CodeCompanion-Plugin.zip). 
+To install the .zip-File, open IntelliJ and navigate to file->settings->Plugins, select "install from disk" under the settings gear icon (⚙) and follow the instructions to install your downloaded .zip file.  
+
+To install the App, download the [APK File](https://github.com/UniRegensburg/unsere-app-fur-die-universitat-regensburg-code-companion/releases/download/latest/CodeCompanion-App.apk), and install it as described [here](https://www.lifewire.com/install-apk-on-android-4177185).  
+
+A template project for testing can be found [here](https://github.com/UniRegensburg/unsere-app-fur-die-universitat-regensburg-code-companion/tree/main/TemplateProject).
+
+
 * [Android App Google Play Store (coming soon)]()
 * [Android App APK Download](https://github.com/UniRegensburg/unsere-app-fur-die-universitat-regensburg-code-companion/releases/download/latest/CodeCompanion-App.apk)
 * [IntelliJ Plugin Download (Plugin Marketplace)](https://plugins.jetbrains.com/plugin/16524-codecompanion)
@@ -101,8 +109,3 @@ Example:
 
 ## Team
 Code Companion is developed by Fabian (@PLACEBOBRO), Lukas (@RealWhimsy), Mathias (@goetzmat) and Maximilian (@MaximilianSeewald) during the "Advanced Software Engineering" Course of Uni Regensburg.
-
-
-## Template Project
-
-A template project can be found [here](https://github.com/UniRegensburg/unsere-app-fur-die-universitat-regensburg-code-companion/tree/main/TemplateProject).
