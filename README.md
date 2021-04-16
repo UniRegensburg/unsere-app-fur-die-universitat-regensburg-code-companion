@@ -42,7 +42,7 @@ A template project for testing can be found [here](https://github.com/UniRegensb
   </tr>
     <tr>
     <td><div style="width:400px; overflow:hidden"><img src="Screenshots/ConnectionView.png"></div></td>
-    <td>The user can tap on the **connect** button in the home fragment to start the connection process. The app then asks the user for permission to access the device's camera and starts the QR-Code scanner if granted. Upon successfully scanning the QR-Code displayed in the Plugin, the connection will be established.</td>
+    <td>The user can tap on the <b>Connect</b> button in the home fragment to start the connection process. The app then asks the user for permission to access the device's camera and starts the QR-Code scanner if granted. Upon successfully scanning the QR-Code displayed in the Plugin, the connection will be established.</td>
   </tr>
   
 </table><br>
