@@ -9,12 +9,16 @@ This App shows the current tasks, compiler errors and coding statistics.
 ## Requirements
 
 * Android Phone running Android 6.0 (Marshmallow) or later
-* IntelliJ IDEA Version 2020.3.2 or later
+* IntelliJ IDEA Version 2020.3.3
+
+### Compatibility
+The plugin can be built and run for older / newer IntelliJ versions by adjusting the *version* number in [build.gradle.kts](./Plugin/build.gradle.kts) on Line 27.
+Tested to run on Versions 2020.2.3, 2020.3.3 and 2021.1.
 
 ### Installation
 To use the Project, the Android App and the Connection Plugin need to be installed. 
 To install the Plugin, just follow the [link](https://plugins.jetbrains.com/plugin/16524-codecompanion) to the IntelliJ Marketplace or download it [directly](https://github.com/UniRegensburg/unsere-app-fur-die-universitat-regensburg-code-companion/releases/download/latest/CodeCompanion-Plugin.zip). 
-To install the .zip-File, open IntelliJ and navigate to file->settings->Plugins, select "install from disk" under the settings gear icon (⚙) and follow the instructions to install your downloaded .zip file.  
+To install the .zip-File, open IntelliJ and navigate to File -> Settings -> Plugins, select "Install from disk" under the settings gear icon (⚙) and follow the instructions to install your downloaded .zip file.  
 
 To install the App, download the [APK File](https://github.com/UniRegensburg/unsere-app-fur-die-universitat-regensburg-code-companion/releases/download/latest/CodeCompanion-App.apk), and install it as described [here](https://www.lifewire.com/install-apk-on-android-4177185).  
 
